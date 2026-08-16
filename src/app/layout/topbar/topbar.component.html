@@ -1,0 +1,71 @@
+<header class="topbar">
+  <div class="topbar-content">
+    <div class="topbar-left">
+      <!-- Hamburger Menu Button (Mobile Only) -->
+      <button 
+        class="mobile-menu-btn" 
+        (click)="toggleMenu()"
+        aria-label="Alternar menú de navegación"
+        [attr.aria-expanded]="isMenuOpen"
+        aria-controls="mobile-drawer"
+      >
+        <!-- Simple SVG Hamburger Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <h1 class="page-title">{{ currentSection | titlecase }}</h1>
+    </div>
+    
+    <div class="topbar-actions">
+      <app-button variant="secondary" (click)="toggleTheme()" aria-label="Cambiar Tema">
+        Tema
+      </app-button>
+    </div>
+  </div>
+</header>
+
+<!-- Backdrop -->
+<div 
+  class="drawer-backdrop" 
+  *ngIf="isMenuOpen" 
+  (click)="closeMenu()"
+  aria-hidden="true"
+></div>
+
+<!-- Mobile Drawer -->
+<nav 
+  id="mobile-drawer"
+  class="mobile-drawer" 
+  [class.open]="isMenuOpen"
+  aria-label="Mobile Drawer Navigation"
+>
+  <div class="drawer-header">
+    <span class="drawer-brand">NekoPlanner</span>
+    <button 
+      class="close-menu-btn" 
+      (click)="closeMenu()" 
+      aria-label="Cerrar menú de navegación"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+  
+  <ul class="drawer-nav">
+    <li *ngFor="let item of navItems">
+      <a 
+        [routerLink]="item.route" 
+        routerLinkActive="active" 
+        class="drawer-link"
+      >
+        {{ item.label }}
+      </a>
+    </li>
+  </ul>
+</nav>

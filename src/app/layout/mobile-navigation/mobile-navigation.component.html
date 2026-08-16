@@ -1,18 +1,12 @@
-<nav class="mobile-nav-container">
-  <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
-    <lucide-icon [img]="LayoutDashboard" size="24"></lucide-icon>
-    <span>Home</span>
-  </a>
-  <a routerLink="/calendar" routerLinkActive="active" class="nav-item">
-    <lucide-icon [img]="Calendar" size="24"></lucide-icon>
-    <span>Plan</span>
-  </a>
-  <a routerLink="/posts" routerLinkActive="active" class="nav-item">
-    <lucide-icon [img]="FileText" size="24"></lucide-icon>
-    <span>Posts</span>
-  </a>
-  <a routerLink="/settings" routerLinkActive="active" class="nav-item">
-    <lucide-icon [img]="Settings" size="24"></lucide-icon>
-    <span>Settings</span>
-  </a>
+<nav class="mobile-nav" aria-label="Mobile Navigation">
+  <ul>
+    <li *ngFor="let item of navItems">
+      <a [routerLink]="item.route" 
+         routerLinkActive="active" 
+         class="mobile-nav-link">
+        <!-- Optional Icon Slot -->
+        <span class="mobile-nav-label">{{ item.label }}</span>
+      </a>
+    </li>
+  </ul>
 </nav>

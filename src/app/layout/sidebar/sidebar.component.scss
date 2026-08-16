@@ -1,65 +1,66 @@
-.sidebar-container {
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border-subtle);
   display: flex;
   flex-direction: column;
-  height: 100%;
-  padding: 1.5rem 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
 }
 
-.sidebar-header {
-  margin-bottom: 2.5rem;
-  padding: 0 0.5rem;
-  
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    
-    .logo-icon {
-      font-size: 1.5rem;
-    }
-    
-    h1 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--color-text);
-      letter-spacing: -0.025em;
-    }
-  }
-}
-
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-
-  ul {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-}
-
-.nav-spacer {
-  flex: 1;
-}
-
-.nav-item {
+.brand {
+  height: var(--topbar-height);
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  padding: 0 var(--spacing-6);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.brand-text {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  letter-spacing: -0.025em;
+}
+
+.nav-menu {
+  padding: var(--spacing-4) var(--spacing-3);
+  flex-grow: 1;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-3);
+  color: var(--color-text-main);
+  text-decoration: none;
   border-radius: var(--radius-md);
-  color: var(--color-muted);
-  font-weight: 500;
-  transition: all 0.2s ease;
+  font-weight: var(--font-weight-medium);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  outline: none;
 
   &:hover {
-    background-color: var(--color-border); /* using border color as a subtle hover bg */
-    color: var(--color-text);
+    background-color: var(--color-surface-hover);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-primary);
   }
 
   &.active {
-    background-color: var(--color-primary);
-    color: white;
+    background-color: var(--color-primary-muted);
+    color: var(--color-primary);
   }
 }

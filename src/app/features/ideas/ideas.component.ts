@@ -4,11 +4,11 @@ import { CardComponent } from '../../shared/components/ui/card/card.component';
 import { BadgeComponent } from '../../shared/components/ui/badge/badge.component';
 
 @Component({
-  selector: 'app-calendar',
+  selector: 'app-ideas',
   standalone: true,
   imports: [CommonModule, CardComponent, BadgeComponent],
-  templateUrl: './calendar.component.html',
-  styleUrl: './calendar.component.scss'
+  templateUrl: './ideas.component.html',
+  styleUrl: './ideas.component.scss'
 })
-export class CalendarComponent {
+export class IdeasComponent {
 }
