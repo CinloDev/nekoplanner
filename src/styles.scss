@@ -21,10 +21,11 @@
   --color-border-subtle: #f1f5f9;
   --color-border-strong: #e2e8f0;
 
-  /* Brand (Primary) - Vibrant Blue */
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
-  --color-primary-muted: #eff6ff;
+  /* Brand (Primary) - Teal (#14B8A6) */
+  --color-primary: #14b8a6;
+  --color-primary-hover: #0d9488;
+  --color-primary-active: #0f766e;
+  --color-primary-muted: #f0fdfa;
 
   /* Semantic - Success (Green) */
   --color-success: #10b981;
@@ -130,10 +131,11 @@
   --color-border-subtle: #334155;
   --color-border-strong: #475569;
 
-  /* Brand (Primary) */
-  --color-primary: #3b82f6;
-  --color-primary-hover: #60a5fa;
-  --color-primary-muted: rgba(59, 130, 246, 0.15);
+  /* Brand (Primary) - Teal */
+  --color-primary: #14b8a6;
+  --color-primary-hover: #2dd4bf;
+  --color-primary-active: #5eead4;
+  --color-primary-muted: rgba(20, 184, 166, 0.15);
 
   /* Semantic - Success */
   --color-success: #10b981;
@@ -187,13 +189,13 @@ body {
 }
 
 a {
-  color: var(--color-primary);
+  color: var(--color-primary-active); /* Adjusted for contrast on light backgrounds */
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 a:hover {
-  color: var(--color-primary-hover);
+  color: var(--color-primary);
 }
 
 ul, ol {
