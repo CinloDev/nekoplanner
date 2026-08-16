@@ -1,0 +1,65 @@
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem 1rem;
+}
+
+.sidebar-header {
+  margin-bottom: 2.5rem;
+  padding: 0 0.5rem;
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    
+    .logo-icon {
+      font-size: 1.5rem;
+    }
+    
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.025em;
+    }
+  }
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.nav-spacer {
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  color: var(--color-muted);
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--color-border); /* using border color as a subtle hover bg */
+    color: var(--color-text);
+  }
+
+  &.active {
+    background-color: var(--color-primary);
+    color: white;
+  }
+}
