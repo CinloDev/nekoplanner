@@ -1,0 +1,63 @@
+<div style="padding: 2rem; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem;">
+  
+  <div style="display: flex; align-items: center; justify-content: space-between;">
+    <h1 style="margin-bottom: 0;">Design System & Tokens</h1>
+    <app-button variant="secondary" (click)="toggleDarkMode()">Toggle Theme</app-button>
+  </div>
+  
+  <app-card>
+    <h2 style="margin-bottom: 1rem;">Buttons</h2>
+    
+    <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+      <app-button variant="primary">Primary</app-button>
+      <app-button variant="secondary">Secondary</app-button>
+      <app-button variant="ghost">Ghost</app-button>
+      <app-button variant="danger">Danger</app-button>
+      <app-button variant="primary" [disabled]="true">Disabled</app-button>
+    </div>
+  </app-card>
+
+  <app-card>
+    <h2 style="margin-bottom: 1rem;">Badges</h2>
+    
+    <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+      <app-badge variant="solid" color="primary">Idea</app-badge>
+      <app-badge variant="solid" color="success">Published</app-badge>
+      <app-badge variant="solid" color="warning">Draft</app-badge>
+      <app-badge variant="solid" color="danger">Error</app-badge>
+      <app-badge variant="solid" color="info">New</app-badge>
+    </div>
+
+    <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+      <app-badge variant="outline" color="primary">Idea</app-badge>
+      <app-badge variant="outline" color="success">Published</app-badge>
+      <app-badge variant="outline" color="warning">Draft</app-badge>
+      <app-badge variant="outline" color="danger">Error</app-badge>
+      <app-badge variant="outline" color="info">New</app-badge>
+    </div>
+
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+      <app-badge variant="subtle" color="primary">Idea</app-badge>
+      <app-badge variant="subtle" color="success">Published</app-badge>
+      <app-badge variant="subtle" color="warning">Draft</app-badge>
+      <app-badge variant="subtle" color="danger">Error</app-badge>
+      <app-badge variant="subtle" color="info">New</app-badge>
+    </div>
+  </app-card>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+    <app-card>
+      <h3 style="margin-bottom: 0.5rem;">Card 1</h3>
+      <p style="color: var(--color-text-muted);">This is an example of a card component.</p>
+    </app-card>
+    <app-card>
+      <h3 style="margin-bottom: 0.5rem;">Card 2</h3>
+      <p style="color: var(--color-text-muted);">Another card showcasing the layout and spacing tokens.</p>
+      <div style="margin-top: 1rem; display: flex; align-items: center; justify-content: space-between;">
+        <app-badge variant="subtle" color="warning">Draft</app-badge>
+        <app-button variant="secondary">Edit</app-button>
+      </div>
+    </app-card>
+  </div>
+
+</div>
