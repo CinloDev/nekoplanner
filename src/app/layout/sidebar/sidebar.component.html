@@ -1,40 +1,15 @@
-<aside class="sidebar-container">
-  <div class="sidebar-header">
-    <div class="logo">
-      <span class="logo-icon">🐱</span>
-      <h1>NekoPlanner</h1>
-    </div>
+<aside class="sidebar">
+  <div class="brand">
+    <span class="brand-text">NekoPlanner</span>
   </div>
 
-  <nav class="sidebar-nav">
+  <nav class="nav-menu" aria-label="Main Navigation">
     <ul>
-      <li>
-        <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
-          <lucide-icon [img]="LayoutDashboard" size="20"></lucide-icon>
-          <span>Dashboard</span>
-        </a>
-      </li>
-      <li>
-        <a routerLink="/calendar" routerLinkActive="active" class="nav-item">
-          <lucide-icon [img]="Calendar" size="20"></lucide-icon>
-          <span>Calendar</span>
-        </a>
-      </li>
-      <li>
-        <a routerLink="/posts" routerLinkActive="active" class="nav-item">
-          <lucide-icon [img]="FileText" size="20"></lucide-icon>
-          <span>Posts</span>
-        </a>
-      </li>
-    </ul>
-
-    <div class="nav-spacer"></div>
-
-    <ul>
-      <li>
-        <a routerLink="/settings" routerLinkActive="active" class="nav-item">
-          <lucide-icon [img]="Settings" size="20"></lucide-icon>
-          <span>Settings</span>
+      <li *ngFor="let item of navItems">
+        <a [routerLink]="item.route" 
+           routerLinkActive="active" 
+           class="nav-link">
+          <span class="nav-label">{{ item.label }}</span>
         </a>
       </li>
     </ul>

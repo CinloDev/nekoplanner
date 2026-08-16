@@ -1,1 +1,30 @@
-<p>dashboard works!</p>
+<div class="dashboard-header" style="margin-bottom: var(--spacing-6);">
+  <h2 style="margin: 0; font-size: var(--font-size-2xl);">Bienvenido a NekoPlanner</h2>
+  <p style="color: var(--color-text-muted); margin-top: var(--spacing-1);">Este será el panel principal de tu contenido.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-4);">
+  <app-card>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-2);">
+      <h3 style="margin: 0;">Resumen Semanal</h3>
+      <app-badge variant="subtle" color="primary">Próximamente</app-badge>
+    </div>
+    <p style="color: var(--color-text-muted); font-size: var(--font-size-sm);">Las métricas clave sobre tus publicaciones programadas aparecerán aquí.</p>
+  </app-card>
+
+  <app-card>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-2);">
+      <h3 style="margin: 0;">Ideas Recientes</h3>
+      <app-badge variant="subtle" color="primary">Próximamente</app-badge>
+    </div>
+    <p style="color: var(--color-text-muted); font-size: var(--font-size-sm);">Tus ideas de contenido más recientes pendientes de desarrollo.</p>
+  </app-card>
+  
+  <app-card>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-2);">
+      <h3 style="margin: 0;">Próximas Publicaciones</h3>
+      <app-badge variant="subtle" color="primary">Próximamente</app-badge>
+    </div>
+    <p style="color: var(--color-text-muted); font-size: var(--font-size-sm);">El contenido programado más próximo aparecerá listado aquí.</p>
+  </app-card>
+</div>
