@@ -1,12 +1,12 @@
-<div class="app-shell">
-  <!-- Desktop Sidebar -->
-  <app-sidebar class="app-sidebar"></app-sidebar>
-
-  <!-- Main Content -->
-  <main class="app-main-content">
-    <router-outlet></router-outlet>
-  </main>
-
-  <!-- Mobile Navigation -->
-  <app-mobile-navigation class="app-mobile-nav"></app-mobile-navigation>
+<div class="app-layout">
+  <app-sidebar class="app-sidebar-desktop"></app-sidebar>
+  
+  <div class="app-main">
+    <app-topbar></app-topbar>
+    <main class="app-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+  
+  <app-mobile-navigation class="app-sidebar-mobile"></app-mobile-navigation>
 </div>

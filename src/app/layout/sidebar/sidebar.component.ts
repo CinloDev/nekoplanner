@@ -1,17 +1,15 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { LucideAngularModule, LayoutDashboard, Calendar, FileText, Settings } from 'lucide-angular';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { NAVIGATION_ITEMS } from '../navigation.config';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, LucideAngularModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent {
-  readonly LayoutDashboard = LayoutDashboard;
-  readonly Calendar = Calendar;
-  readonly FileText = FileText;
-  readonly Settings = Settings;
+  navItems = NAVIGATION_ITEMS;
 }
