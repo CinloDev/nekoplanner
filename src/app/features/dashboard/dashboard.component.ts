@@ -45,51 +45,27 @@ export class DashboardComponent {
   });
 
   readonly platformDistribution = computed(() => {
-    const posts = this.appState.posts();
-    const distribution: Record<string, number> = {};
-    let total = 0;
-
-    posts.forEach(post => {
-      const p = post.platform || 'other';
-      distribution[p] = (distribution[p] || 0) + 1;
-      total++;
-    });
-
-    return Object.entries(distribution)
-      .map(([platform, count]) => ({
-        platform,
-        count,
-        percentage: total > 0 ? (count / total) * 100 : 0,
-        meta: PLATFORM_META[platform] || { label: platform, color: 'var(--color-text-muted)' }
+    return this.appState.platformDistribution()
+      .map(item => ({
+        ...item,
+        meta: PLATFORM_META[item.platform] || { label: item.platform, color: 'var(--color-text-muted)' }
       }))
       .sort((a, b) => b.count - a.count);
   });
 
   readonly statusDistribution = computed(() => {
-    const posts = this.appState.posts();
-    const distribution: Record<string, number> = {};
-    let total = 0;
-
-    posts.forEach(post => {
-      const s = post.status || 'idea';
-      distribution[s] = (distribution[s] || 0) + 1;
-      total++;
-    });
-
-    return Object.entries(distribution)
-      .map(([status, count]) => {
-        let label = status;
+    return this.appState.statusDistribution()
+      .map(item => {
+        let label: string = item.status;
         let color = 'var(--color-text-muted)';
-        if (status === 'published') { label = 'Publicadas'; color = 'var(--color-success)'; }
-        if (status === 'scheduled') { label = 'Programadas'; color = 'var(--color-primary)'; }
-        if (status === 'draft') { label = 'Borradores'; color = 'var(--color-warning)'; }
-        if (status === 'idea') { label = 'Ideas'; color = 'var(--color-info)'; }
-        if (status === 'archived') { label = 'Archivadas'; color = 'var(--color-text-muted)'; }
+        if (item.status === 'published') { label = 'Publicadas'; color = 'var(--color-success)'; }
+        if (item.status === 'scheduled') { label = 'Programadas'; color = 'var(--color-primary)'; }
+        if (item.status === 'draft') { label = 'Borradores'; color = 'var(--color-warning)'; }
+        if (item.status === 'idea') { label = 'Ideas'; color = 'var(--color-info)'; }
+        if (item.status === 'archived') { label = 'Archivadas'; color = 'var(--color-text-muted)'; }
 
         return {
-          status,
-          count,
-          percentage: total > 0 ? (count / total) * 100 : 0,
+          ...item,
           label,
           color
         };

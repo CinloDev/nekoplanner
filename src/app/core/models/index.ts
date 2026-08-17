@@ -5,3 +5,4 @@ export * from './tag.model';
 export * from './idea.model';
 export * from './post.model';
 export * from './settings.model';
+export * from './distribution.model';

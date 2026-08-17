@@ -18,7 +18,8 @@ describe('StorageService', () => {
     
     // We need to mock localStorage.length and localStorage.key for clear() and exportData()
     Object.defineProperty(localStorage, 'length', {
-      get: () => Object.keys(store).length
+      get: () => Object.keys(store).length,
+      configurable: true
     });
     spyOn(localStorage, 'key').and.callFake((i: number) => Object.keys(store)[i] || null);
   });
