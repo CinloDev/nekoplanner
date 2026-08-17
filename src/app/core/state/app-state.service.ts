@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { Post, Idea, Settings, Platform, PostStatus } from '../models';
+import { Post, Idea, Settings, Platform, PostStatus, PlatformDistribution, StatusDistribution } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -69,6 +69,66 @@ export class AppStateService {
       published: allPosts.filter(p => p.status === 'published').length,
       archived: allPosts.filter(p => p.status === 'archived').length,
     };
+  });
+
+  readonly ideasCount = computed(() => this.ideas().length);
+
+  readonly postsThisMonth = computed(() => {
+    const currentDateStr = this.currentDate();
+    if (!currentDateStr) return 0;
+    
+    const currentDateObj = new Date(currentDateStr);
+    const currentYear = currentDateObj.getFullYear();
+    const currentMonth = currentDateObj.getMonth();
+
+    return this.posts().filter(post => {
+      if (!post.scheduledDate) return false;
+      const scheduledDateObj = new Date(post.scheduledDate);
+      return scheduledDateObj.getFullYear() === currentYear && scheduledDateObj.getMonth() === currentMonth;
+    }).length;
+  });
+
+  readonly platformDistribution = computed<PlatformDistribution[]>(() => {
+    const posts = this.posts();
+    const total = posts.length;
+    const distribution: Record<string, number> = {};
+
+    posts.forEach(post => {
+      const p = post.platform || 'other';
+      distribution[p] = (distribution[p] || 0) + 1;
+    });
+
+    return Object.entries(distribution).map(([platform, count]) => ({
+      platform: platform as Platform,
+      count,
+      percentage: total > 0 ? (count / total) * 100 : 0
+    }));
+  });
+
+  readonly statusDistribution = computed<StatusDistribution[]>(() => {
+    const posts = this.posts();
+    const total = posts.length;
+    
+    // Initialize with all possible statuses to ensure they are always present
+    const distribution: Record<PostStatus, number> = {
+      idea: 0,
+      draft: 0,
+      scheduled: 0,
+      published: 0,
+      archived: 0
+    };
+
+    posts.forEach(post => {
+      if (post.status && distribution[post.status] !== undefined) {
+        distribution[post.status]++;
+      }
+    });
+
+    return Object.entries(distribution).map(([status, count]) => ({
+      status: status as PostStatus,
+      count: count as number,
+      percentage: total > 0 ? ((count as number) / total) * 100 : 0
+    }));
   });
 
   // --- Modifiers ---

@@ -1,30 +1,109 @@
-<div class="dashboard-header" style="margin-bottom: var(--spacing-6);">
-  <h2 style="margin: 0; font-size: var(--font-size-2xl);">Bienvenido a NekoPlanner</h2>
-  <p style="color: var(--color-text-muted); margin-top: var(--spacing-1);">Este será el panel principal de tu contenido.</p>
+<div class="dashboard-header">
+  <div class="dashboard-header-text">
+    <h2>Panel</h2>
+    <p>Una vista general de tu contenido y planificación.</p>
+  </div>
+  <app-button variant="primary" [disabled]="true">Nueva publicación</app-button>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-4);">
-  <app-card>
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-2);">
-      <h3 style="margin: 0;">Resumen Semanal</h3>
-      <app-badge variant="subtle" color="primary">Próximamente</app-badge>
+<div class="dashboard-metrics">
+  <app-card class="metric-card">
+    <div class="metric-content">
+      <span class="metric-label">Total de publicaciones</span>
+      <span class="metric-value">{{ appState.postCounts().total }}</span>
     </div>
-    <p style="color: var(--color-text-muted); font-size: var(--font-size-sm);">Las métricas clave sobre tus publicaciones programadas aparecerán aquí.</p>
   </app-card>
+  <app-card class="metric-card">
+    <div class="metric-content">
+      <span class="metric-label">Programadas</span>
+      <span class="metric-value" style="color: var(--color-primary);">{{ appState.postCounts().scheduled }}</span>
+    </div>
+  </app-card>
+  <app-card class="metric-card">
+    <div class="metric-content">
+      <span class="metric-label">Publicadas</span>
+      <span class="metric-value" style="color: var(--color-success);">{{ appState.postCounts().published }}</span>
+    </div>
+  </app-card>
+  <app-card class="metric-card">
+    <div class="metric-content">
+      <span class="metric-label">Ideas</span>
+      <span class="metric-value" style="color: var(--color-info);">{{ appState.ideasCount() }}</span>
+    </div>
+  </app-card>
+  <app-card class="metric-card">
+    <div class="metric-content">
+      <span class="metric-label">Publicaciones este mes</span>
+      <span class="metric-value">{{ appState.postsThisMonth() }}</span>
+    </div>
+  </app-card>
+</div>
 
-  <app-card>
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-2);">
-      <h3 style="margin: 0;">Ideas Recientes</h3>
-      <app-badge variant="subtle" color="primary">Próximamente</app-badge>
+<div class="dashboard-main">
+  <section class="dashboard-section upcoming-section">
+    <div class="section-header">
+      <h3>Próximas publicaciones</h3>
+      <a routerLink="/posts" class="section-link">Ver todas</a>
     </div>
-    <p style="color: var(--color-text-muted); font-size: var(--font-size-sm);">Tus ideas de contenido más recientes pendientes de desarrollo.</p>
-  </app-card>
-  
-  <app-card>
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-2);">
-      <h3 style="margin: 0;">Próximas Publicaciones</h3>
-      <app-badge variant="subtle" color="primary">Próximamente</app-badge>
+    
+    @if (upcomingPosts().length > 0) {
+      <div class="upcoming-list">
+        @for (post of upcomingPosts(); track post.id) {
+          <app-upcoming-post-card [post]="post"></app-upcoming-post-card>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <p>No hay publicaciones programadas.</p>
+      </div>
+    }
+  </section>
+
+  <section class="dashboard-section overview-section">
+    <div class="section-header">
+      <h3>Resumen de contenido</h3>
     </div>
-    <p style="color: var(--color-text-muted); font-size: var(--font-size-sm);">El contenido programado más próximo aparecerá listado aquí.</p>
-  </app-card>
+    
+    @if (appState.postCounts().total > 0) {
+      <app-card class="overview-card">
+        <div class="overview-group">
+          <h4>Por plataforma</h4>
+          <div class="distribution-list">
+            @for (item of platformDistribution(); track item.platform) {
+              <div class="distribution-item">
+                <div class="dist-header">
+                  <span>{{ item.meta.label }}</span>
+                  <span>{{ item.count }}</span>
+                </div>
+                <div class="dist-bar-track">
+                  <div class="dist-bar-fill" [style.width.%]="item.percentage" [style.background-color]="item.meta.color"></div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="overview-group">
+          <h4>Por estado</h4>
+          <div class="distribution-list">
+            @for (item of statusDistribution(); track item.status) {
+              <div class="distribution-item">
+                <div class="dist-header">
+                  <span>{{ item.label }}</span>
+                  <span>{{ item.count }}</span>
+                </div>
+                <div class="dist-bar-track">
+                  <div class="dist-bar-fill" [style.width.%]="item.percentage" [style.background-color]="item.color"></div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </app-card>
+    } @else {
+      <div class="empty-state">
+        <p>Todavía no hay contenido para mostrar.</p>
+      </div>
+    }
+  </section>
 </div>
