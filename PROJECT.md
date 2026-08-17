@@ -155,15 +155,16 @@ v0.1 — Foundation
 - [x] #002 Design System
 - [x] #003 App Shell & Navigation
 - [x] #004 Project Documentation
-- [ ] #005 Core & State
-- [ ] #006 Dashboard
-- [ ] #007 Calendar
-- [ ] #008 Posts
-- [ ] #009 Settings & Data
-- [ ] #010 Responsive
-- [ ] #011 Quality
-- [ ] #012 Testing
-- [ ] #013 Release
+- [ ] #005 Domain Models
+- [ ] #006 Core & State
+- [ ] #007 Dashboard
+- [ ] #008 Calendar
+- [ ] #009 Posts
+- [ ] #010 Settings & Data
+- [ ] #011 Responsive
+- [ ] #012 Quality
+- [ ] #013 Testing
+- [ ] #014 Release
 
 ---
 
@@ -215,4 +216,4 @@ Issue → Create branch → Implementation → Verification → Review → Commi
 - **Current version**: v0.1
 - **Current phase**: Foundation
 - **Completed issues**: #001, #002, #003, #004
-- **Current focus**: Core & State
+- **Current focus**: Domain Models
