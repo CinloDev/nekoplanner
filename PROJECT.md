@@ -155,8 +155,8 @@ v0.1 — Foundation
 - [x] #002 Design System
 - [x] #003 App Shell & Navigation
 - [x] #004 Project Documentation
-- [ ] #005 Domain Models
-- [ ] #006 Core & State
+- [x] #005 Domain Models
+- [x] #006 Core & State
 - [ ] #007 Dashboard
 - [ ] #008 Calendar
 - [ ] #009 Posts
@@ -215,5 +215,5 @@ Issue → Create branch → Implementation → Verification → Review → Commi
 ## 19. Current Project Status
 - **Current version**: v0.1
 - **Current phase**: Foundation
-- **Completed issues**: #001, #002, #003, #004
-- **Current focus**: Domain Models
+- **Completed issues**: #001, #002, #003, #004, #005, #006
+- **Current focus**: Dashboard
