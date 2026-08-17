@@ -1,0 +1,23 @@
+<div class="upcoming-item">
+  <div class="upcoming-media" *ngIf="post().media && post().media!.length > 0; else noMedia">
+    <img [src]="post().media![0].url" [alt]="post().title" class="media-preview">
+  </div>
+  <ng-template #noMedia>
+    <div class="upcoming-media placeholder">
+      <span class="media-placeholder">Img</span>
+    </div>
+  </ng-template>
+  
+  <div class="upcoming-details">
+    <h4>{{ post().title }}</h4>
+    <p class="upcoming-meta">
+      <span [style.color]="platformMeta[post().platform] ? platformMeta[post().platform].color : 'var(--color-text-main)'">
+        {{ platformMeta[post().platform] ? platformMeta[post().platform].label : post().platform }}
+      </span>
+      <ng-container *ngIf="post().scheduledDate">
+        &middot; {{ post().scheduledDate | date:'mediumDate' }} &middot; {{ post().scheduledDate | date:'shortTime' }}
+      </ng-container>
+    </p>
+    <app-badge variant="subtle" [color]="statusColor()">{{ statusLabel() }}</app-badge>
+  </div>
+</div>
