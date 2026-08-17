@@ -155,17 +155,19 @@ v0.1 — Foundation
 - [x] #002 Design System
 - [x] #003 App Shell & Navigation
 - [x] #004 Project Documentation
+v0.1 — Core & State
 - [x] #005 Domain Models
 - [x] #006 Core & State
 - [x] #007 StorageService
-- [ ] #008 Dashboard
-- [ ] #009 Calendar
-- [ ] #010 Posts
-- [ ] #011 Settings & Data
-- [ ] #012 Responsive
-- [ ] #013 Quality
-- [ ] #014 Testing
-- [ ] #015 Release
+- [x] #008 Demo Dataset
+- [ ] #009 Dashboard
+- [ ] #010 Calendar
+- [ ] #011 Posts
+- [ ] #012 Settings & Data
+- [ ] #013 Responsive
+- [ ] #014 Quality
+- [ ] #015 Testing
+- [ ] #016 Release
 
 ---
 
@@ -216,5 +218,5 @@ Issue → Create branch → Implementation → Verification → Review → Commi
 ## 19. Current Project Status
 - **Current version**: v0.1
 - **Current phase**: Foundation
-- **Completed issues**: #001, #002, #003, #004, #005, #006, #007
+- **Completed issues**: #001, #002, #003, #004, #005, #006, #007, #008
 - **Current focus**: Dashboard
