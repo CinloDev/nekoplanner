@@ -157,14 +157,15 @@ v0.1 — Foundation
 - [x] #004 Project Documentation
 - [x] #005 Domain Models
 - [x] #006 Core & State
-- [ ] #007 Dashboard
-- [ ] #008 Calendar
-- [ ] #009 Posts
-- [ ] #010 Settings & Data
-- [ ] #011 Responsive
-- [ ] #012 Quality
-- [ ] #013 Testing
-- [ ] #014 Release
+- [x] #007 StorageService
+- [ ] #008 Dashboard
+- [ ] #009 Calendar
+- [ ] #010 Posts
+- [ ] #011 Settings & Data
+- [ ] #012 Responsive
+- [ ] #013 Quality
+- [ ] #014 Testing
+- [ ] #015 Release
 
 ---
 
@@ -215,5 +216,5 @@ Issue → Create branch → Implementation → Verification → Review → Commi
 ## 19. Current Project Status
 - **Current version**: v0.1
 - **Current phase**: Foundation
-- **Completed issues**: #001, #002, #003, #004, #005, #006
+- **Completed issues**: #001, #002, #003, #004, #005, #006, #007
 - **Current focus**: Dashboard
