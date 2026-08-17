@@ -7,24 +7,14 @@ import { ButtonComponent } from '../../shared/components/ui/button/button.compon
 import { AppStateService } from '../../core/state/app-state.service';
 import { Platform } from '../../core/models';
 
-export interface PlatformMeta {
-  label: string;
-  color: string;
-}
+import { PLATFORM_META } from './dashboard.constants';
 
-export const PLATFORM_META: Record<Platform, PlatformMeta> = {
-  instagram: { label: 'Instagram', color: '#E1306C' },
-  facebook: { label: 'Facebook', color: '#1877F2' },
-  x: { label: 'X', color: 'var(--color-text-main)' },
-  linkedin: { label: 'LinkedIn', color: '#0A66C2' },
-  tiktok: { label: 'TikTok', color: '#00f2fe' },
-  youtube: { label: 'YouTube', color: '#FF0000' },
-};
+import { UpcomingPostCardComponent } from './components/upcoming-post-card/upcoming-post-card.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, CardComponent, BadgeComponent, ButtonComponent],
+  imports: [CommonModule, RouterModule, CardComponent, BadgeComponent, ButtonComponent, UpcomingPostCardComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

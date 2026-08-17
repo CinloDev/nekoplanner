@@ -49,19 +49,7 @@
     @if (upcomingPosts().length > 0) {
       <div class="upcoming-list">
         @for (post of upcomingPosts(); track post.id) {
-          <div class="upcoming-item">
-            <div class="upcoming-media" *ngIf="post.media && post.media.length > 0">
-              <span class="media-placeholder">Img</span>
-            </div>
-            <div class="upcoming-details">
-              <h4>{{ post.title }}</h4>
-              <p class="upcoming-meta">
-                <span [style.color]="platformMeta[post.platform] ? platformMeta[post.platform].color : 'var(--color-text-main)'">{{ platformMeta[post.platform] ? platformMeta[post.platform].label : post.platform }}</span>
-                &middot; {{ post.scheduledDate | date:'mediumDate' }} &middot; {{ post.scheduledDate | date:'shortTime' }}
-              </p>
-              <app-badge variant="subtle" color="primary">Programada</app-badge>
-            </div>
-          </div>
+          <app-upcoming-post-card [post]="post"></app-upcoming-post-card>
         }
       </div>
     } @else {
