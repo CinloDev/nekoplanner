@@ -5,7 +5,7 @@
       <p class="text-muted">Explora y filtra tus publicaciones.</p>
     </div>
     <div class="posts-header-actions">
-      <app-button variant="primary" [disabled]="true">Nueva publicación</app-button>
+      <app-button variant="primary" (click)="openDrawer()">Nueva publicación</app-button>
     </div>
   </div>
 
@@ -110,3 +110,22 @@
     </ng-template>
   </div>
 </div>
+
+<!-- Drawer / Modal for Post Form -->
+@if (isDrawerOpen()) {
+  <div class="drawer-backdrop" (click)="closeDrawer()"></div>
+  <div class="side-drawer" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+    <div class="drawer-header">
+      <h2>Nueva publicación</h2>
+      <app-button variant="ghost" (click)="closeDrawer()" aria-label="Cerrar modal" title="Cerrar">
+        <lucide-icon [img]="X" size="20"></lucide-icon>
+      </app-button>
+    </div>
+    <div class="drawer-body">
+      <app-post-form
+        (cancel)="closeDrawer()"
+        (save)="onSavePost($event)"
+      ></app-post-form>
+    </div>
+  </div>
+}

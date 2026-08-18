@@ -1,15 +1,18 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, LayoutGrid, List, FileText, Search } from 'lucide-angular';
+import { LucideAngularModule, LayoutGrid, List, FileText, Search, X } from 'lucide-angular';
+import { A11yModule } from '@angular/cdk/a11y';
 import { CardComponent } from '../../shared/components/ui/card/card.component';
-import { BadgeComponent } from '../../shared/components/ui/badge/badge.component';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { InputComponent } from '../../shared/components/ui/input/input.component';
 import { SelectComponent, SelectOption } from '../../shared/components/ui/select/select.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
+import { PostFormComponent, PostFormValue } from './components/post-form/post-form.component';
 import { AppStateService } from '../../core/state/app-state.service';
-import { Platform, PostStatus } from '../../core/models';
+import { StorageService } from '../../core/storage/storage.service';
+import { StorageKeys } from '../../core/storage/storage-keys';
+import { Platform, PostStatus, Post } from '../../core/models';
 import { PLATFORM_META } from '../../core/config/platforms.config';
 
 const STATUS_PRIORITY: Record<PostStatus, number> = {
@@ -27,17 +30,22 @@ const STATUS_PRIORITY: Record<PostStatus, number> = {
     CommonModule, 
     FormsModule,
     LucideAngularModule,
+    A11yModule,
     CardComponent, 
     ButtonComponent, 
     InputComponent, 
     SelectComponent,
-    PostCardComponent
+    PostCardComponent,
+    PostFormComponent
   ],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.scss'
 })
 export class PostsComponent {
   private readonly appState = inject(AppStateService);
+  private readonly storageService = inject(StorageService);
+
+  readonly isDrawerOpen = signal(false);
 
   // State Signals
   readonly searchQuery = signal<string>('');
@@ -151,6 +159,7 @@ export class PostsComponent {
   readonly List = List;
   readonly FileText = FileText;
   readonly Search = Search;
+  readonly X = X;
 
   clearFilters(): void {
     this.searchQuery.set('');
@@ -162,5 +171,40 @@ export class PostsComponent {
 
   toggleViewMode(mode: 'grid' | 'list'): void {
     this.viewMode.set(mode);
+  }
+
+  openDrawer(): void {
+    this.isDrawerOpen.set(true);
+  }
+
+  closeDrawer(): void {
+    this.isDrawerOpen.set(false);
+  }
+
+  onSavePost(formValue: PostFormValue): void {
+    const now = new Date().toISOString();
+    
+    // Generate new Post object
+    const newPost: Post = {
+      id: crypto.randomUUID(),
+      title: formValue.title,
+      content: formValue.content,
+      platform: formValue.platform,
+      status: formValue.status,
+      scheduledDate: formValue.scheduledDate,
+      tags: formValue.tags || [],
+      media: formValue.media || [],
+      createdAt: now,
+      updatedAt: now
+    };
+
+    // Update state
+    this.appState.createPost(newPost);
+    
+    // Persist
+    this.storageService.save(StorageKeys.POSTS, this.appState.posts());
+
+    // Close drawer
+    this.closeDrawer();
   }
 }
