@@ -121,6 +121,17 @@ describe('PostCardComponent', () => {
     expect(component.delete.emit).toHaveBeenCalledWith(mockPost);
   });
 
+  it('should emit duplicate event when duplicate button is clicked', () => {
+    fixture.componentRef.setInput('post', mockPost);
+    fixture.detectChanges();
+    spyOn(component.duplicate, 'emit');
+    
+    const duplicateBtn = fixture.debugElement.query(By.css('.duplicate-btn')).nativeElement;
+    duplicateBtn.click();
+    
+    expect(component.duplicate.emit).toHaveBeenCalledWith(mockPost);
+  });
+
   it('should max 3 tags and +N for the rest', () => {
     fixture.componentRef.setInput('post', mockPost);
     fixture.detectChanges();

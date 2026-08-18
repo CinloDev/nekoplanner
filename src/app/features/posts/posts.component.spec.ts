@@ -302,4 +302,17 @@ describe('PostsComponent', () => {
       expect(mockStorageService.save).not.toHaveBeenCalled();
     });
   });
+
+  describe('Duplicate Flow', () => {
+    beforeEach(() => {
+      mockAppState.duplicatePost = jasmine.createSpy('duplicatePost');
+    });
+
+    it('should call duplicatePost on appState and save to storage', () => {
+      component.duplicatePost(mockPosts[0]);
+      
+      expect(mockAppState.duplicatePost).toHaveBeenCalledWith(mockPosts[0].id);
+      expect(mockStorageService.save).toHaveBeenCalled();
+    });
+  });
 });

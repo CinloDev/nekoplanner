@@ -91,6 +91,77 @@ describe('AppStateService', () => {
     });
   });
 
+  describe('duplicatePost', () => {
+    it('should create a duplicate with new ID, timestamps, draft status, and clear scheduledDate', () => {
+      const original: Post = {
+        id: '1',
+        title: 'Original Post',
+        content: 'Content',
+        platform: 'x',
+        status: 'published',
+        scheduledDate: '2026-08-20T10:00:00Z',
+        createdAt: '2026-08-01T10:00:00Z',
+        updatedAt: '2026-08-01T10:00:00Z',
+        tags: [{ id: 't1', name: 'tag', color: 'blue' }],
+        media: [{ id: 'm1', url: 'img.jpg', type: 'image', name: 'img' }]
+      };
+      
+      service.setPosts([original]);
+      service.duplicatePost('1');
+
+      const posts = service.posts();
+      expect(posts.length).toBe(2);
+      
+      // Duplicated post is inserted at the beginning
+      const duplicate = posts[0];
+      const originalPostAfter = posts[1];
+
+      // Original unchanged
+      expect(originalPostAfter).toEqual(original);
+
+      // Duplicate validations
+      expect(duplicate.id).not.toBe(original.id);
+      expect(duplicate.id).toBeTruthy();
+      expect(duplicate.title).toBe('Original Post (copia)');
+      expect(duplicate.status).toBe('draft');
+      expect(duplicate.scheduledDate).toBeUndefined();
+      
+      // Check new timestamps
+      expect(duplicate.createdAt).not.toBe(original.createdAt);
+      expect(duplicate.updatedAt).not.toBe(original.updatedAt);
+      
+      // Arrays should be independent copies
+      expect(duplicate.tags).toEqual(original.tags);
+      expect(duplicate.tags).not.toBe(original.tags);
+      
+      expect(duplicate.media).toEqual(original.media);
+      expect(duplicate.media).not.toBe(original.media);
+      
+      // Keep other content
+      expect(duplicate.content).toBe(original.content);
+      expect(duplicate.platform).toBe(original.platform);
+    });
+
+    it('should do nothing if post ID does not exist', () => {
+      const initialPosts = [{ id: '1', title: 'Post 1' } as Post];
+      service.setPosts(initialPosts);
+      service.duplicatePost('999');
+      expect(service.posts().length).toBe(1);
+    });
+
+    it('should duplicate multiple times independently', () => {
+      service.setPosts([{ id: '1', title: 'Post', status: 'published' } as Post]);
+      service.duplicatePost('1');
+      service.duplicatePost('1');
+      
+      const posts = service.posts();
+      expect(posts.length).toBe(3);
+      expect(posts[0].id).not.toBe(posts[1].id);
+      expect(posts[0].title).toBe('Post (copia)');
+      expect(posts[1].title).toBe('Post (copia)');
+    });
+  });
+
   describe('updatePostScheduledDate', () => {
     it('should update scheduledDate preserving original local time', () => {
       // Configuramos una fecha base: 2026-08-15 14:30:00 (local time)
