@@ -140,6 +140,41 @@ export class AppStateService {
     this._ideas.set(ideas);
   }
 
+  updatePostScheduledDate(postId: string, newDateIso: string): void {
+    const posts = this._posts();
+    const postIndex = posts.findIndex(p => p.id === postId);
+
+    if (postIndex === -1) return;
+    
+    const post = posts[postIndex];
+    if (!post.scheduledDate) return; // Ignore if it doesn't have an original scheduledDate
+
+    const originalDate = new Date(post.scheduledDate);
+    const targetDate = new Date(newDateIso);
+
+    // Create a new date that merges the target date's YYYY-MM-DD 
+    // with the original date's local hours, minutes, seconds and ms.
+    const mergedDate = new Date(
+      targetDate.getFullYear(),
+      targetDate.getMonth(),
+      targetDate.getDate(),
+      originalDate.getHours(),
+      originalDate.getMinutes(),
+      originalDate.getSeconds(),
+      originalDate.getMilliseconds()
+    );
+
+    const updatedPost: Post = {
+      ...post,
+      scheduledDate: mergedDate.toISOString()
+    };
+
+    const newPosts = [...posts];
+    newPosts[postIndex] = updatedPost;
+    
+    this._posts.set(newPosts);
+  }
+
   setSelectedPlatform(platform: Platform | null): void {
     this._selectedPlatform.set(platform);
   }

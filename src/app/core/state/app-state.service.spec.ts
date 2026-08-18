@@ -61,6 +61,66 @@ describe('AppStateService', () => {
     });
   });
 
+  describe('updatePostScheduledDate', () => {
+    it('should update scheduledDate preserving original local time', () => {
+      // Configuramos una fecha base: 2026-08-15 14:30:00 (local time)
+      // Como dependemos de timezone local para `new Date(string)`,
+      // creamos un date objeto inicial para saber exactamente que hora local debe tener.
+      const baseDate = new Date(2026, 7, 15, 14, 30, 45, 123);
+      const post: Post = { 
+        id: '1', title: 'Test', content: '', platform: 'x', 
+        status: 'scheduled', createdAt: '2026-08-10', updatedAt: '2026-08-10',
+        scheduledDate: baseDate.toISOString(), tags: [] 
+      };
+      
+      service.setPosts([post]);
+      
+      // Destino: un nuevo día
+      const targetDate = new Date(2026, 7, 21, 0, 0, 0); // 21 de agosto
+      
+      service.updatePostScheduledDate('1', targetDate.toISOString());
+      
+      const updatedPost = service.posts()[0];
+      const updatedDateObj = new Date(updatedPost.scheduledDate!);
+      
+      expect(updatedDateObj.getFullYear()).toBe(2026);
+      expect(updatedDateObj.getMonth()).toBe(7); // Agosto
+      expect(updatedDateObj.getDate()).toBe(21);
+      
+      // La hora local debe permanecer igual
+      expect(updatedDateObj.getHours()).toBe(14);
+      expect(updatedDateObj.getMinutes()).toBe(30);
+      expect(updatedDateObj.getSeconds()).toBe(45);
+      expect(updatedDateObj.getMilliseconds()).toBe(123);
+    });
+
+    it('should ignore if post is not found', () => {
+      const post: Post = { 
+        id: '1', title: 'Test', content: '', platform: 'x', 
+        status: 'scheduled', createdAt: '2026-08-10', updatedAt: '2026-08-10',
+        scheduledDate: new Date().toISOString(), tags: [] 
+      };
+      service.setPosts([post]);
+      
+      service.updatePostScheduledDate('nonexistent', new Date().toISOString());
+      
+      expect(service.posts()[0]).toEqual(post); // Unchanged
+    });
+
+    it('should ignore if post does not have a scheduledDate initially', () => {
+      const post: Post = { 
+        id: '1', title: 'Test', content: '', platform: 'x', 
+        status: 'draft', createdAt: '2026-08-10', updatedAt: '2026-08-10',
+        tags: [] 
+      };
+      service.setPosts([post]);
+      
+      service.updatePostScheduledDate('1', new Date().toISOString());
+      
+      expect(service.posts()[0]).toEqual(post); // Unchanged
+    });
+  });
+
   describe('postsThisMonth', () => {
     beforeEach(() => {
       service.setCurrentDate('2026-08-17T12:00:00Z');

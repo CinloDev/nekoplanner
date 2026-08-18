@@ -2,7 +2,10 @@
      [class.is-other-month]="isOtherMonth()" 
      [class.is-today]="isToday()"
      [class.is-weekend]="isWeekend()"
-     [class.is-current-week]="isCurrentWeek()">
+     [class.is-current-week]="isCurrentWeek()"
+     cdkDropList
+     [cdkDropListData]="date"
+     (cdkDropListDropped)="onDrop($event)">
   
   <div class="day-header">
     <span class="day-number">{{ dayNumber }}</span>

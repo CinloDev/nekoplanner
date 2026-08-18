@@ -18,6 +18,11 @@
        mantener la grilla nítida ya que el finde es clave para creadores. */
   }
 
+  &.cdk-drop-list-receiving {
+    background-color: var(--color-primary-muted);
+    box-shadow: inset 0 0 0 2px var(--color-primary);
+  }
+
   &.is-other-month {
     background-color: var(--color-background);
     /* Inset shadow ensures the border remains visible even if the grid gap blends with the background */

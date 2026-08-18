@@ -1,5 +1,6 @@
-import { Component, Input, computed } from '@angular/core';
+import { Component, Input, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DragDropModule, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Post } from '../../../../core/models';
 import { CalendarPostComponent } from '../calendar-post/calendar-post.component';
 import { isCurrentMonth, isSameDay } from '../../../../core/utils/calendar';
@@ -8,7 +9,7 @@ import { isSameWeek } from 'date-fns';
 @Component({
   selector: 'app-calendar-day',
   standalone: true,
-  imports: [CommonModule, CalendarPostComponent],
+  imports: [CommonModule, DragDropModule, CalendarPostComponent],
   templateUrl: './calendar-day.component.html',
   styleUrl: './calendar-day.component.scss'
 })
@@ -37,5 +38,13 @@ export class CalendarDayComponent {
 
   get dayNumber(): number {
     return this.date.getDate();
+  }
+
+  readonly postDropped = output<{ post: Post, targetDate: Date }>();
+
+  onDrop(event: CdkDragDrop<Date>) {
+    const post = event.item.data as Post;
+    const targetDate = event.container.data as Date;
+    this.postDropped.emit({ post, targetDate });
   }
 }

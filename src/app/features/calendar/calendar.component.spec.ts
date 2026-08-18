@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CalendarComponent } from './calendar.component';
 import { AppStateService } from '../../core/state/app-state.service';
+import { StorageService } from '../../core/storage/storage.service';
 import { Post } from '../../core/models';
 import { signal } from '@angular/core';
 
@@ -8,6 +9,7 @@ describe('CalendarComponent', () => {
   let component: CalendarComponent;
   let fixture: ComponentFixture<CalendarComponent>;
   let mockAppState: jasmine.SpyObj<AppStateService>;
+  let mockStorageService: jasmine.SpyObj<StorageService>;
 
   beforeEach(async () => {
     // Mocks manuales
@@ -46,14 +48,17 @@ describe('CalendarComponent', () => {
       }
     ]);
 
-    mockAppState = jasmine.createSpyObj('AppStateService', [], {
+    mockAppState = jasmine.createSpyObj('AppStateService', ['updatePostScheduledDate'], {
       posts: mockPosts
     });
+    
+    mockStorageService = jasmine.createSpyObj('StorageService', ['save']);
 
     await TestBed.configureTestingModule({
       imports: [CalendarComponent],
       providers: [
-        { provide: AppStateService, useValue: mockAppState }
+        { provide: AppStateService, useValue: mockAppState },
+        { provide: StorageService, useValue: mockStorageService }
       ]
     }).compileComponents();
 
@@ -159,6 +164,21 @@ describe('CalendarComponent', () => {
       expect(component.selectedStatus()).toBeNull();
       expect(component.searchQuery()).toBe('');
       expect(component.filteredPosts().length).toBe(2);
+    });
+  });
+  describe('Drag & Drop', () => {
+    it('should update post scheduledDate and persist state on drop', () => {
+      const mockPost: Post = {
+        id: '1', title: 'Post 1', content: '', platform: 'x', 
+        status: 'published', createdAt: '2026-08-10T10:00:00Z', updatedAt: '2026-08-10T10:00:00Z',
+        scheduledDate: '2026-08-15T10:30:00Z', tags: []
+      };
+      const targetDate = new Date('2026-08-20T00:00:00Z');
+      
+      component.onPostDropped({ post: mockPost, targetDate });
+      
+      expect(mockAppState.updatePostScheduledDate).toHaveBeenCalledWith('1', targetDate.toISOString());
+      expect(mockStorageService.save).toHaveBeenCalled();
     });
   });
 });
