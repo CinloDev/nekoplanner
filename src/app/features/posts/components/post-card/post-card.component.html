@@ -1,0 +1,47 @@
+<app-card class="post-card" [class]="'variant-' + variant()">
+  <div class="post-card-media">
+    @if (post().media?.length) {
+      <img [src]="post().media![0].url" [alt]="post().title">
+    } @else {
+      <div class="media-fallback">
+        <lucide-icon [img]="ImageIcon" size="48"></lucide-icon>
+      </div>
+    }
+  </div>
+  
+  <div class="post-card-content">
+    <div class="post-card-header">
+      <div class="platform-info">
+        <img class="platform-icon" [src]="PLATFORM_META[post().platform].icon" [alt]="PLATFORM_META[post().platform].label">
+        <span>{{ PLATFORM_META[post().platform].label }}</span>
+      </div>
+      <app-badge [variant]="post().status === 'published' ? 'solid' : 'subtle'" [color]="post().status === 'published' ? 'success' : 'primary'">
+        {{ STATUS_LABELS[post().status] }}
+      </app-badge>
+    </div>
+    
+    <h3 class="post-card-title">{{ post().title }}</h3>
+    
+    <div class="post-card-meta">
+      @if (post().scheduledDate) {
+        <div class="datetime">
+          <span class="date">{{ post().scheduledDate | date:'d MMM yyyy' }}</span>
+          <span class="time">{{ post().scheduledDate | date:'HH:mm' }}</span>
+        </div>
+      } @else {
+        <span class="date empty">Sin fecha programada</span>
+      }
+    </div>
+    
+    @if (displayTags().visible.length > 0) {
+      <div class="post-card-tags">
+        @for (tag of displayTags().visible; track tag.id) {
+          <span class="tag">#{{ tag.name }}</span>
+        }
+        @if (displayTags().extraCount > 0) {
+          <span class="tag extra">+{{ displayTags().extraCount }}</span>
+        }
+      </div>
+    }
+  </div>
+</app-card>

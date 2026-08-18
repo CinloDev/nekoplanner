@@ -82,41 +82,7 @@
       <ng-container *ngIf="visiblePosts().length > 0; else noResults">
         <div class="posts-view" [ngClass]="viewMode()">
           @for (post of visiblePosts(); track post.id) {
-            <app-card class="post-item">
-              <div class="post-item-media">
-                <img *ngIf="post.media?.length; else fallbackMedia" [src]="post.media![0].url" [alt]="post.title">
-                <ng-template #fallbackMedia>
-                  <div class="media-fallback">
-                    <img [src]="platformMeta[post.platform].icon" [alt]="platformMeta[post.platform].label">
-                  </div>
-                </ng-template>
-              </div>
-              
-              <div class="post-item-content">
-                <div class="post-item-header">
-                  <div class="platform-info">
-                    <img class="platform-icon" [src]="platformMeta[post.platform].icon" [alt]="platformMeta[post.platform].label">
-                    <span>{{ platformMeta[post.platform].label }}</span>
-                  </div>
-                  <app-badge [variant]="post.status === 'published' ? 'solid' : 'subtle'" [color]="post.status === 'published' ? 'success' : 'primary'">
-                    {{ post.status | titlecase }}
-                  </app-badge>
-                </div>
-                
-                <h3 class="post-item-title">{{ post.title }}</h3>
-                
-                <div class="post-item-meta">
-                  <span class="date" *ngIf="post.scheduledDate">{{ post.scheduledDate | date:'medium' }}</span>
-                  <span class="date empty" *ngIf="!post.scheduledDate">Sin fecha</span>
-                </div>
-                
-                <div class="post-item-tags" *ngIf="post.tags?.length">
-                  @for (tag of post.tags; track tag.id) {
-                    <span class="tag">#{{ tag.name }}</span>
-                  }
-                </div>
-              </div>
-            </app-card>
+            <app-post-card [post]="post" [variant]="viewMode()"></app-post-card>
           }
         </div>
       </ng-container>
