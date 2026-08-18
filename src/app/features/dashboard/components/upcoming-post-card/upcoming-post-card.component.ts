@@ -2,7 +2,7 @@ import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Post } from '../../../../core/models';
 import { BadgeComponent } from '../../../../shared/components/ui/badge/badge.component';
-import { PLATFORM_META } from '../../dashboard.constants';
+import { PLATFORM_META } from '../../../../core/config/platforms.config';
 
 @Component({
   selector: 'app-upcoming-post-card',
@@ -35,7 +35,7 @@ export class UpcomingPostCardComponent {
       case 'scheduled': return 'primary';
       case 'draft': return 'warning';
       case 'idea': return 'info';
-      case 'archived': return 'secondary';
+      case 'archived': return 'primary';
       default: return 'primary';
     }
   });

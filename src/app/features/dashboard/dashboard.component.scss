@@ -105,8 +105,18 @@
           display: flex;
           justify-content: space-between;
           font-size: var(--font-size-sm);
-          margin-bottom: var(--spacing-1);
           color: var(--color-text-main);
+
+          .platform-label {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            
+            .platform-icon-small {
+              width: 16px;
+              height: 16px;
+            }
+          }
         }
 
         .dist-bar-track {

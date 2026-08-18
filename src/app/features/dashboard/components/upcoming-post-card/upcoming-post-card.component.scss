@@ -52,6 +52,21 @@
       margin: 0 0 var(--spacing-1) 0;
       font-size: var(--font-size-sm);
       color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      flex-wrap: wrap;
+
+      .platform-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-1);
+
+        .platform-icon {
+          width: 16px;
+          height: 16px;
+        }
+      }
     }
   }
 }
