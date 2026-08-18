@@ -1,7 +1,141 @@
-<app-card>
-  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-4);">
-    <h2 style="margin: 0;">Publicaciones</h2>
-    <app-badge variant="subtle" color="primary">Próximamente</app-badge>
+<div class="posts-container">
+  <div class="posts-header">
+    <div class="posts-header-text">
+      <h2>Publicaciones</h2>
+      <p class="text-muted">Explora y filtra tus publicaciones.</p>
+    </div>
+    <div class="posts-header-actions">
+      <app-button variant="primary" (click)="openDrawer()">Nueva publicación</app-button>
+    </div>
   </div>
-  <p style="color: var(--color-text-muted);">La gestión y programación de publicaciones estará disponible aquí.</p>
-</app-card>
+
+  <app-card class="posts-toolbar-card">
+    <div class="posts-toolbar">
+      <div class="toolbar-search">
+        <app-input
+          [value]="searchQuery()"
+          (valueChange)="searchQuery.set($event)"
+          placeholder="Buscar publicaciones..."
+          icon="search"
+        ></app-input>
+      </div>
+      
+      <div class="toolbar-filters">
+        <app-select
+          [options]="platformOptions"
+          [value]="selectedPlatform()"
+          (valueChange)="selectedPlatform.set($event)"
+          placeholder="Plataforma"
+        ></app-select>
+
+        <app-select
+          [options]="statusOptions"
+          [value]="selectedStatus()"
+          (valueChange)="selectedStatus.set($event)"
+          placeholder="Estado"
+        ></app-select>
+
+        <app-select
+          [options]="sortOptions"
+          [value]="sortBy()"
+          (valueChange)="$event && sortBy.set($event)"
+          placeholder="Ordenar por"
+        ></app-select>
+
+        <app-select
+          [options]="directionOptions"
+          [value]="sortDirection()"
+          (valueChange)="$event && sortDirection.set($event)"
+          placeholder="Dirección"
+        ></app-select>
+      </div>
+
+      <div class="toolbar-actions">
+        <div class="view-toggles">
+          <app-button 
+            variant="ghost" 
+            [class.active]="viewMode() === 'grid'"
+            (click)="toggleViewMode('grid')"
+            aria-label="Vista en cuadrícula"
+            title="Cuadrícula">
+            <!-- Grid icon svg -->
+            <lucide-icon [img]="LayoutGrid" size="20"></lucide-icon>
+          </app-button>
+          <app-button 
+            variant="ghost" 
+            [class.active]="viewMode() === 'list'"
+            (click)="toggleViewMode('list')"
+            aria-label="Vista en lista"
+            title="Lista">
+            <!-- List icon svg -->
+            <lucide-icon [img]="List" size="20"></lucide-icon>
+          </app-button>
+        </div>
+        
+        <app-button variant="secondary" (click)="clearFilters()">Limpiar filtros</app-button>
+      </div>
+    </div>
+  </app-card>
+
+  <div class="posts-content">
+    @if (visiblePosts().length > 0) {
+      <div class="posts-view" [ngClass]="viewMode()">
+        @for (post of visiblePosts(); track post.id) {
+          <app-post-card 
+            [post]="post" 
+            [variant]="viewMode()"
+            (duplicate)="duplicatePost(post)"
+            (edit)="editPost(post)"
+            (delete)="confirmDelete(post)"
+          ></app-post-card>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <lucide-icon [img]="hasPosts() ? Search : FileText" size="48"></lucide-icon>
+        </div>
+        @if (hasPosts()) {
+          <h3>No se encontraron resultados</h3>
+          <p class="text-muted">No hay publicaciones que coincidan con los filtros aplicados. Intentá modificarlos o limpiar la búsqueda.</p>
+          <app-button variant="secondary" (click)="clearFilters()">Limpiar filtros</app-button>
+        } @else {
+          <h3>Todavía no hay publicaciones.</h3>
+          <p class="text-muted">Empieza creando tu primera publicación para organizar tu contenido.</p>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Create/Edit Drawer -->
+  @if (isDrawerOpen()) {
+    <div class="drawer-backdrop" (click)="closeDrawer()"></div>
+    <div class="side-drawer" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+      <div class="drawer-header">
+        <h2>{{ editingPost() ? 'Editar publicación' : 'Nueva publicación' }}</h2>
+        <app-button variant="ghost" size="sm" (click)="closeDrawer()" aria-label="Cerrar">
+          <lucide-icon [img]="X" size="20"></lucide-icon>
+        </app-button>
+      </div>
+      <div class="drawer-body">
+        <app-post-form
+          [initialPost]="editingPost()"
+          (save)="onSavePost($event)"
+          (cancel)="closeDrawer()"
+        ></app-post-form>
+      </div>
+    </div>
+  }
+
+  <!-- Delete Confirmation Dialog -->
+  <app-confirm-dialog
+    [isOpen]="postToDelete() !== null"
+    title="Eliminar publicación"
+    message="¿Querés eliminar esta publicación? Esta acción no se puede deshacer."
+    confirmText="Eliminar"
+    cancelText="Cancelar"
+    [isDestructive]="true"
+    (confirm)="executeDelete()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-dialog>
+</div>
