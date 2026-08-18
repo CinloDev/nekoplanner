@@ -46,6 +46,7 @@ export class PostsComponent {
   private readonly storageService = inject(StorageService);
 
   readonly isDrawerOpen = signal(false);
+  readonly editingPost = signal<Post | null>(null);
 
   // State Signals
   readonly searchQuery = signal<string>('');
@@ -174,32 +175,57 @@ export class PostsComponent {
   }
 
   openDrawer(): void {
+    this.editingPost.set(null);
+    this.isDrawerOpen.set(true);
+  }
+
+  editPost(post: Post): void {
+    this.editingPost.set(post);
     this.isDrawerOpen.set(true);
   }
 
   closeDrawer(): void {
     this.isDrawerOpen.set(false);
+    // Allow animation to finish before clearing
+    setTimeout(() => this.editingPost.set(null), 300);
   }
 
   onSavePost(formValue: PostFormValue): void {
     const now = new Date().toISOString();
+    const editing = this.editingPost();
     
-    // Generate new Post object
-    const newPost: Post = {
-      id: crypto.randomUUID(),
-      title: formValue.title,
-      content: formValue.content,
-      platform: formValue.platform,
-      status: formValue.status,
-      scheduledDate: formValue.scheduledDate,
-      tags: formValue.tags || [],
-      media: formValue.media || [],
-      createdAt: now,
-      updatedAt: now
-    };
-
-    // Update state
-    this.appState.createPost(newPost);
+    if (editing) {
+      // Generate updated Post object
+      const updatedPost: Post = {
+        ...editing,
+        title: formValue.title,
+        content: formValue.content,
+        platform: formValue.platform,
+        status: formValue.status,
+        scheduledDate: formValue.scheduledDate,
+        tags: formValue.tags || editing.tags || [],
+        media: formValue.media || editing.media || [],
+        updatedAt: now
+      };
+      
+      this.appState.updatePost(updatedPost);
+    } else {
+      // Generate new Post object
+      const newPost: Post = {
+        id: crypto.randomUUID(),
+        title: formValue.title,
+        content: formValue.content,
+        platform: formValue.platform,
+        status: formValue.status,
+        scheduledDate: formValue.scheduledDate,
+        tags: formValue.tags || [],
+        media: formValue.media || [],
+        createdAt: now,
+        updatedAt: now
+      };
+      
+      this.appState.createPost(newPost);
+    }
     
     // Persist
     this.storageService.save(StorageKeys.POSTS, this.appState.posts());

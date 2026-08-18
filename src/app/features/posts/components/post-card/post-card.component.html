@@ -1,13 +1,9 @@
 <app-card class="post-card" [class]="'variant-' + variant()">
-  <div class="post-card-media">
-    @if (post().media?.length) {
+  @if (post().media?.length) {
+    <div class="post-card-media">
       <img [src]="post().media![0].url" [alt]="post().title">
-    } @else {
-      <div class="media-fallback">
-        <lucide-icon [img]="ImageIcon" size="48"></lucide-icon>
-      </div>
-    }
-  </div>
+    </div>
+  }
   
   <div class="post-card-content">
     <div class="post-card-header">
@@ -15,23 +11,14 @@
         <img class="platform-icon" [src]="PLATFORM_META[post().platform].icon" [alt]="PLATFORM_META[post().platform].label">
         <span>{{ PLATFORM_META[post().platform].label }}</span>
       </div>
-      <app-badge [variant]="post().status === 'published' ? 'solid' : 'subtle'" [color]="post().status === 'published' ? 'success' : 'primary'">
-        {{ STATUS_LABELS[post().status] }}
-      </app-badge>
+      <div class="header-actions">
+        <app-button variant="ghost" size="sm" class="edit-btn" (click)="edit.emit()" aria-label="Editar publicación" title="Editar">
+          <lucide-icon [img]="EditIcon" size="18"></lucide-icon>
+        </app-button>
+      </div>
     </div>
     
     <h3 class="post-card-title">{{ post().title }}</h3>
-    
-    <div class="post-card-meta">
-      @if (post().scheduledDate) {
-        <div class="datetime">
-          <span class="date">{{ post().scheduledDate | date:'d MMM yyyy' }}</span>
-          <span class="time">{{ post().scheduledDate | date:'HH:mm' }}</span>
-        </div>
-      } @else {
-        <span class="date empty">Sin fecha programada</span>
-      }
-    </div>
     
     @if (displayTags().visible.length > 0) {
       <div class="post-card-tags">
@@ -43,5 +30,22 @@
         }
       </div>
     }
+
+    <div class="post-card-footer">
+      <app-badge [variant]="post().status === 'published' ? 'solid' : 'subtle'" [color]="post().status === 'published' ? 'success' : 'primary'">
+        {{ STATUS_LABELS[post().status] }}
+      </app-badge>
+      
+      <div class="post-card-meta">
+        @if (post().scheduledDate) {
+          <div class="datetime">
+            <span class="date">{{ post().scheduledDate | date:'d MMM yyyy' }}</span>
+            <span class="time">{{ post().scheduledDate | date:'HH:mm' }}</span>
+          </div>
+        } @else {
+          <span class="date empty">Sin fecha programada</span>
+        }
+      </div>
+    </div>
   </div>
 </app-card>

@@ -78,54 +78,50 @@
   </app-card>
 
   <div class="posts-content">
-    <ng-container *ngIf="hasPosts(); else noPosts">
-      <ng-container *ngIf="visiblePosts().length > 0; else noResults">
-        <div class="posts-view" [ngClass]="viewMode()">
-          @for (post of visiblePosts(); track post.id) {
-            <app-post-card [post]="post" [variant]="viewMode()"></app-post-card>
-          }
-        </div>
-      </ng-container>
-    </ng-container>
-
-    <ng-template #noPosts>
+    @if (visiblePosts().length > 0) {
+      <div class="posts-view" [ngClass]="viewMode()">
+        @for (post of visiblePosts(); track post.id) {
+          <app-post-card 
+            [post]="post" 
+            [variant]="viewMode()"
+            (edit)="editPost(post)"
+          ></app-post-card>
+        }
+      </div>
+    } @else {
       <div class="empty-state">
         <div class="empty-state-icon">
-          <lucide-icon [img]="FileText" size="48"></lucide-icon>
+          <lucide-icon [img]="hasPosts() ? Search : FileText" size="48"></lucide-icon>
         </div>
-        <h3>Todavía no hay publicaciones.</h3>
-        <p class="text-muted">Empieza creando tu primera publicación para organizar tu contenido.</p>
+        @if (hasPosts()) {
+          <h3>No se encontraron resultados</h3>
+          <p class="text-muted">No hay publicaciones que coincidan con los filtros aplicados. Intentá modificarlos o limpiar la búsqueda.</p>
+          <app-button variant="secondary" (click)="clearFilters()">Limpiar filtros</app-button>
+        } @else {
+          <h3>Todavía no hay publicaciones.</h3>
+          <p class="text-muted">Empieza creando tu primera publicación para organizar tu contenido.</p>
+        }
       </div>
-    </ng-template>
-
-    <ng-template #noResults>
-      <div class="empty-state">
-        <div class="empty-state-icon">
-          <lucide-icon [img]="Search" size="48"></lucide-icon>
-        </div>
-        <h3>No se encontraron publicaciones con los filtros actuales.</h3>
-        <p class="text-muted">Intenta cambiar los términos de búsqueda o los filtros seleccionados.</p>
-        <app-button variant="secondary" (click)="clearFilters()">Limpiar filtros</app-button>
-      </div>
-    </ng-template>
+    }
   </div>
+
+  <!-- Create/Edit Drawer -->
+  @if (isDrawerOpen()) {
+    <div class="drawer-backdrop" (click)="closeDrawer()"></div>
+    <div class="side-drawer" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+      <div class="drawer-header">
+        <h2>{{ editingPost() ? 'Editar publicación' : 'Nueva publicación' }}</h2>
+        <app-button variant="ghost" size="sm" (click)="closeDrawer()" aria-label="Cerrar">
+          <lucide-icon [img]="X" size="20"></lucide-icon>
+        </app-button>
+      </div>
+      <div class="drawer-body">
+        <app-post-form
+          [initialPost]="editingPost()"
+          (save)="onSavePost($event)"
+          (cancel)="closeDrawer()"
+        ></app-post-form>
+      </div>
+    </div>
+  }
 </div>
-
-<!-- Drawer / Modal for Post Form -->
-@if (isDrawerOpen()) {
-  <div class="drawer-backdrop" (click)="closeDrawer()"></div>
-  <div class="side-drawer" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
-    <div class="drawer-header">
-      <h2>Nueva publicación</h2>
-      <app-button variant="ghost" (click)="closeDrawer()" aria-label="Cerrar modal" title="Cerrar">
-        <lucide-icon [img]="X" size="20"></lucide-icon>
-      </app-button>
-    </div>
-    <div class="drawer-body">
-      <app-post-form
-        (cancel)="closeDrawer()"
-        (save)="onSavePost($event)"
-      ></app-post-form>
-    </div>
-  </div>
-}
