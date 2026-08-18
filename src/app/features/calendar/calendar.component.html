@@ -1,7 +1,27 @@
-<app-card>
-  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-4);">
-    <h2 style="margin: 0;">Calendario</h2>
-    <app-badge variant="subtle" color="primary">Próximamente</app-badge>
-  </div>
-  <p style="color: var(--color-text-muted);">La gestión de tu calendario estará disponible aquí.</p>
-</app-card>
+<div class="calendar-container">
+  
+  <app-calendar-header
+    [currentMonth]="currentMonth()"
+    (previous)="goToPreviousMonth()"
+    (next)="goToNextMonth()"
+    (today)="goToToday()">
+  </app-calendar-header>
+
+  <app-calendar-grid>
+    @for (cell of gridData(); track cell.date.toISOString()) {
+      <app-calendar-day
+        [date]="cell.date"
+        [referenceMonth]="currentMonth()"
+        [today]="todayDate"
+        [posts]="cell.posts">
+      </app-calendar-day>
+    }
+  </app-calendar-grid>
+
+  @if (!hasAnyPosts) {
+    <div class="empty-state">
+      <p>No hay publicaciones programadas. ¡Empezá a planificar tu contenido!</p>
+    </div>
+  }
+
+</div>

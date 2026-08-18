@@ -1,0 +1,30 @@
+<header class="calendar-header">
+  <div class="title-group">
+    <h1>Calendario</h1>
+    <p class="subtitle">Gestioná tu contenido mensual</p>
+  </div>
+
+  <div class="controls-group">
+    <div class="month-navigation">
+      <app-button 
+        variant="ghost" 
+        aria-label="Mes anterior"
+        (click)="previous.emit()">
+        <lucide-icon [img]="ChevronLeft" size="20"></lucide-icon>
+      </app-button>
+      
+      <h2>{{ formattedMonth }}</h2>
+
+      <app-button 
+        variant="ghost" 
+        aria-label="Mes siguiente"
+        (click)="next.emit()">
+        <lucide-icon [img]="ChevronRight" size="20"></lucide-icon>
+      </app-button>
+    </div>
+
+    <div class="actions">
+      <app-button variant="secondary" (click)="today.emit()">Hoy</app-button>
+    </div>
+  </div>
+</header>
