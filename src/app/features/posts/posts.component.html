@@ -84,6 +84,7 @@
           <app-post-card 
             [post]="post" 
             [variant]="viewMode()"
+            (duplicate)="duplicatePost(post)"
             (edit)="editPost(post)"
             (delete)="confirmDelete(post)"
           ></app-post-card>

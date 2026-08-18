@@ -154,6 +154,28 @@ export class AppStateService {
     this._posts.update(posts => posts.filter(post => post.id !== postId));
   }
 
+  duplicatePost(postId: string): void {
+    const posts = this._posts();
+    const originalPost = posts.find(p => p.id === postId);
+    if (!originalPost) return;
+
+    const now = new Date().toISOString();
+    
+    const duplicate: Post = {
+      ...originalPost,
+      id: crypto.randomUUID(),
+      title: `${originalPost.title} (copia)`,
+      status: 'draft',
+      scheduledDate: undefined,
+      createdAt: now,
+      updatedAt: now,
+      tags: originalPost.tags ? [...originalPost.tags] : undefined,
+      media: originalPost.media ? [...originalPost.media] : undefined
+    };
+
+    this._posts.update(posts => [duplicate, ...posts]);
+  }
+
   updatePostScheduledDate(postId: string, newDateIso: string): void {
     const posts = this._posts();
     const postIndex = posts.findIndex(p => p.id === postId);

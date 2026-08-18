@@ -63,12 +63,14 @@
       gap: var(--spacing-2);
 
       .edit-btn,
+      .duplicate-btn,
       .delete-btn {
         color: var(--color-text-muted);
         transition: color 0.2s ease, background-color 0.2s ease;
       }
       
-      .edit-btn:hover {
+      .edit-btn:hover,
+      .duplicate-btn:hover {
         color: var(--color-primary);
         background-color: var(--color-surface-hover);
       }

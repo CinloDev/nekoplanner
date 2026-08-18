@@ -210,6 +210,11 @@ export class PostsComponent {
     this.postToDelete.set(null);
   }
 
+  duplicatePost(post: Post): void {
+    this.appState.duplicatePost(post.id);
+    this.storageService.save(StorageKeys.POSTS, this.appState.posts());
+  }
+
   onSavePost(formValue: PostFormValue): void {
     const now = new Date().toISOString();
     const editing = this.editingPost();

@@ -12,6 +12,9 @@
         <span>{{ PLATFORM_META[post().platform].label }}</span>
       </div>
       <div class="header-actions">
+        <app-button variant="ghost" size="sm" class="duplicate-btn" (click)="duplicate.emit(post())" aria-label="Duplicar publicación" title="Duplicar">
+          <lucide-icon [img]="CopyIcon" size="18"></lucide-icon>
+        </app-button>
         <app-button variant="ghost" size="sm" class="edit-btn" (click)="edit.emit()" aria-label="Editar publicación" title="Editar">
           <lucide-icon [img]="EditIcon" size="18"></lucide-icon>
         </app-button>
