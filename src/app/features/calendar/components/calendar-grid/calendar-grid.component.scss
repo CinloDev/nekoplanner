@@ -1,0 +1,46 @@
+.calendar-grid-container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-top: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  overflow: hidden;
+
+  .week-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border-subtle);
+
+    .week-day {
+      padding: var(--spacing-3);
+      text-align: center;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-muted);
+      border-right: 1px solid var(--color-border-subtle);
+      
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    /* Las filas dependerán de la cantidad de días (generalmente 5 o 6 semanas) */
+  }
+}
+
+@media (max-width: 768px) {
+  .calendar-grid-container {
+    .week-header .week-day {
+      padding: var(--spacing-2) var(--spacing-1);
+      font-size: var(--font-size-xs);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

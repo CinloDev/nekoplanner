@@ -1,0 +1,44 @@
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-4);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+
+  .month-navigation {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+
+    h2 {
+      margin: 0;
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-main);
+      min-width: 160px;
+      text-align: center;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .calendar-header {
+    flex-direction: column;
+    gap: var(--spacing-4);
+    
+    .month-navigation {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .actions {
+      width: 100%;
+      app-button {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
+}

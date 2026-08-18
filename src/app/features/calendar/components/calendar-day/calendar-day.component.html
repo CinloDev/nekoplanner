@@ -1,0 +1,15 @@
+<div class="calendar-day" 
+     [class.is-other-month]="isOtherMonth()" 
+     [class.is-today]="isToday()">
+  
+  <div class="day-header">
+    <span class="day-number">{{ dayNumber }}</span>
+  </div>
+
+  <div class="day-posts">
+    @for (post of posts; track post.id) {
+      <app-calendar-post [post]="post"></app-calendar-post>
+    }
+  </div>
+
+</div>

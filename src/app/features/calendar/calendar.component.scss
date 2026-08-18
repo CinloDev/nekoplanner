@@ -1,0 +1,23 @@
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .empty-state {
+    margin-top: var(--spacing-6);
+    text-align: center;
+    padding: var(--spacing-6);
+    background-color: var(--color-surface);
+    border: 1px dashed var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-muted);
+  }
+}
+
+@media (max-width: 768px) {
+  .calendar-container {
+    padding-bottom: var(--spacing-6);
+  }
+}
