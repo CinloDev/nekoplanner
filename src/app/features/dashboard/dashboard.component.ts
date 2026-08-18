@@ -5,16 +5,14 @@ import { CardComponent } from '../../shared/components/ui/card/card.component';
 import { BadgeComponent } from '../../shared/components/ui/badge/badge.component';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { AppStateService } from '../../core/state/app-state.service';
-import { Platform } from '../../core/models';
-
-import { PLATFORM_META } from './dashboard.constants';
+import { PLATFORM_META } from '../../core/config/platforms.config';
 
 import { UpcomingPostCardComponent } from './components/upcoming-post-card/upcoming-post-card.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, CardComponent, BadgeComponent, ButtonComponent, UpcomingPostCardComponent],
+  imports: [CommonModule, RouterModule, CardComponent, ButtonComponent, UpcomingPostCardComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
