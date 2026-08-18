@@ -15,6 +15,9 @@
         <app-button variant="ghost" size="sm" class="edit-btn" (click)="edit.emit()" aria-label="Editar publicación" title="Editar">
           <lucide-icon [img]="EditIcon" size="18"></lucide-icon>
         </app-button>
+        <app-button variant="ghost" size="sm" class="delete-btn" (click)="delete.emit(post())" aria-label="Eliminar publicación" title="Eliminar">
+          <lucide-icon [img]="TrashIcon" size="18"></lucide-icon>
+        </app-button>
       </div>
     </div>
     

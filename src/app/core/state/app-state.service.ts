@@ -150,6 +150,10 @@ export class AppStateService {
     );
   }
 
+  deletePost(postId: string): void {
+    this._posts.update(posts => posts.filter(post => post.id !== postId));
+  }
+
   updatePostScheduledDate(postId: string, newDateIso: string): void {
     const posts = this._posts();
     const postIndex = posts.findIndex(p => p.id === postId);

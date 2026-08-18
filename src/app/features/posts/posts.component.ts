@@ -9,6 +9,7 @@ import { InputComponent } from '../../shared/components/ui/input/input.component
 import { SelectComponent, SelectOption } from '../../shared/components/ui/select/select.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { PostFormComponent, PostFormValue } from './components/post-form/post-form.component';
+import { ConfirmDialogComponent } from '../../shared/components/ui/confirm-dialog/confirm-dialog.component';
 import { AppStateService } from '../../core/state/app-state.service';
 import { StorageService } from '../../core/storage/storage.service';
 import { StorageKeys } from '../../core/storage/storage-keys';
@@ -36,7 +37,8 @@ const STATUS_PRIORITY: Record<PostStatus, number> = {
     InputComponent, 
     SelectComponent,
     PostCardComponent,
-    PostFormComponent
+    PostFormComponent,
+    ConfirmDialogComponent
   ],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.scss'
@@ -47,6 +49,7 @@ export class PostsComponent {
 
   readonly isDrawerOpen = signal(false);
   readonly editingPost = signal<Post | null>(null);
+  readonly postToDelete = signal<Post | null>(null);
 
   // State Signals
   readonly searchQuery = signal<string>('');
@@ -188,6 +191,23 @@ export class PostsComponent {
     this.isDrawerOpen.set(false);
     // Allow animation to finish before clearing
     setTimeout(() => this.editingPost.set(null), 300);
+  }
+
+  confirmDelete(post: Post): void {
+    this.postToDelete.set(post);
+  }
+
+  cancelDelete(): void {
+    this.postToDelete.set(null);
+  }
+
+  executeDelete(): void {
+    const post = this.postToDelete();
+    if (!post) return;
+    
+    this.appState.deletePost(post.id);
+    this.storageService.save(StorageKeys.POSTS, this.appState.posts());
+    this.postToDelete.set(null);
   }
 
   onSavePost(formValue: PostFormValue): void {

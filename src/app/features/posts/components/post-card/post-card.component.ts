@@ -5,7 +5,7 @@ import { BadgeComponent } from '../../../../shared/components/ui/badge/badge.com
 import { ButtonComponent } from '../../../../shared/components/ui/button/button.component';
 import { Post, PostStatus } from '../../../../core/models';
 import { PLATFORM_META } from '../../../../core/config/platforms.config';
-import { LucideAngularModule, Image as ImageIcon, Edit as EditIcon } from 'lucide-angular';
+import { LucideAngularModule, Image as ImageIcon, Edit as EditIcon, Trash2 as TrashIcon } from 'lucide-angular';
 
 @Component({
   selector: 'app-post-card',
@@ -19,10 +19,12 @@ export class PostCardComponent {
   readonly variant = input<'grid' | 'list'>('grid');
 
   readonly edit = output<void>();
+  readonly delete = output<Post>();
 
   readonly PLATFORM_META = PLATFORM_META;
   readonly ImageIcon = ImageIcon;
   readonly EditIcon = EditIcon;
+  readonly TrashIcon = TrashIcon;
   
   readonly STATUS_LABELS: Record<PostStatus, string> = {
     idea: 'Idea',

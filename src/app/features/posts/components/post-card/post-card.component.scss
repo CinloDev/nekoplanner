@@ -62,14 +62,20 @@
       align-items: center;
       gap: var(--spacing-2);
 
-      .edit-btn {
+      .edit-btn,
+      .delete-btn {
         color: var(--color-text-muted);
         transition: color 0.2s ease, background-color 0.2s ease;
-        
-        &:hover {
-          color: var(--color-primary);
-          background-color: var(--color-surface-hover);
-        }
+      }
+      
+      .edit-btn:hover {
+        color: var(--color-primary);
+        background-color: var(--color-surface-hover);
+      }
+
+      .delete-btn:hover {
+        color: var(--color-danger);
+        background-color: var(--color-danger-muted);
       }
     }
     

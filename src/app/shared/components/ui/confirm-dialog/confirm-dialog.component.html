@@ -1,0 +1,29 @@
+@if (isOpen()) {
+  <div class="dialog-backdrop" (click)="onBackdropClick()"></div>
+  <div 
+    class="confirm-dialog" 
+    role="alertdialog" 
+    aria-modal="true" 
+    aria-labelledby="dialog-title" 
+    aria-describedby="dialog-message"
+    cdkTrapFocus 
+    [cdkTrapFocusAutoCapture]="true"
+    (click)="onDialogClick($event)">
+    
+    <div class="dialog-content">
+      <h2 id="dialog-title">{{ title() }}</h2>
+      <p id="dialog-message">{{ message() }}</p>
+    </div>
+    
+    <div class="dialog-actions">
+      <app-button variant="ghost" (click)="onCancel()">
+        {{ cancelText() }}
+      </app-button>
+      <app-button 
+        [variant]="isDestructive() ? 'danger' : 'primary'" 
+        (click)="onConfirm()">
+        {{ confirmText() }}
+      </app-button>
+    </div>
+  </div>
+}

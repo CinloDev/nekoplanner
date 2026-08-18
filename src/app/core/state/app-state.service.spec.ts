@@ -61,6 +61,36 @@ describe('AppStateService', () => {
     });
   });
 
+  describe('deletePost', () => {
+    it('should remove existing post and leave others intact', () => {
+      service.setPosts([
+        { id: '1', title: 'Post 1' } as Post,
+        { id: '2', title: 'Post 2' } as Post,
+        { id: '3', title: 'Post 3' } as Post
+      ]);
+      service.deletePost('2');
+      expect(service.posts().length).toBe(2);
+      expect(service.posts().map(p => p.id)).toEqual(['1', '3']);
+    });
+
+    it('should do nothing if post ID does not exist', () => {
+      const initialPosts = [
+        { id: '1', title: 'Post 1' } as Post,
+        { id: '2', title: 'Post 2' } as Post
+      ];
+      service.setPosts(initialPosts);
+      service.deletePost('3');
+      expect(service.posts().length).toBe(2);
+      expect(service.posts()).toEqual(initialPosts);
+    });
+
+    it('should handle deleting the only post', () => {
+      service.setPosts([{ id: '1', title: 'Post 1' } as Post]);
+      service.deletePost('1');
+      expect(service.posts().length).toBe(0);
+    });
+  });
+
   describe('updatePostScheduledDate', () => {
     it('should update scheduledDate preserving original local time', () => {
       // Configuramos una fecha base: 2026-08-15 14:30:00 (local time)
