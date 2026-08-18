@@ -6,21 +6,29 @@
   border-top: none;
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   overflow: hidden;
+  box-shadow: var(--shadow-sm);
 
   .week-header {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    background-color: var(--color-background);
+    background-color: var(--color-surface);
     border-bottom: 1px solid var(--color-border-subtle);
 
     .week-day {
       padding: var(--spacing-3);
       text-align: center;
       font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-medium);
-      color: var(--color-text-muted);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-main);
       border-right: 1px solid var(--color-border-subtle);
       
+      /* Weekend slight differentiation */
+      &:nth-child(6),
+      &:nth-child(7) {
+        color: var(--color-text-muted);
+        /* Mantenemos el mismo background de los demas dias */
+      }
+
       &:last-child {
         border-right: none;
       }
@@ -30,7 +38,8 @@
   .days-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    /* Las filas dependerán de la cantidad de días (generalmente 5 o 6 semanas) */
+    background-color: var(--color-border-subtle); /* act as 1px border between cells */
+    gap: 1px; /* Creates inner borders automatically */
   }
 }
 

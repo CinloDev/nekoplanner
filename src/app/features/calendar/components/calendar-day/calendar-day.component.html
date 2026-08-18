@@ -1,6 +1,8 @@
 <div class="calendar-day" 
      [class.is-other-month]="isOtherMonth()" 
-     [class.is-today]="isToday()">
+     [class.is-today]="isToday()"
+     [class.is-weekend]="isWeekend()"
+     [class.is-current-week]="isCurrentWeek()">
   
   <div class="day-header">
     <span class="day-number">{{ dayNumber }}</span>

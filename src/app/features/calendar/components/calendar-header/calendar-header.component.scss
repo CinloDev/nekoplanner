@@ -1,24 +1,49 @@
 .calendar-header {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  padding: var(--spacing-4);
+  padding: var(--spacing-6) var(--spacing-4) var(--spacing-4);
   background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 
-  .month-navigation {
+  .title-group {
+    h1 {
+      margin: 0;
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-main);
+      line-height: 1.2;
+    }
+    .subtitle {
+      margin: var(--spacing-1) 0 0 0;
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+    }
+  }
+
+  .controls-group {
     display: flex;
     align-items: center;
-    gap: var(--spacing-4);
+    gap: var(--spacing-6);
 
-    h2 {
-      margin: 0;
-      font-size: var(--font-size-xl);
-      font-weight: var(--font-weight-semibold);
-      color: var(--color-text-main);
-      min-width: 160px;
-      text-align: center;
+    .month-navigation {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      background-color: var(--color-background);
+      padding: var(--spacing-1);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--color-border-subtle);
+
+      h2 {
+        margin: 0;
+        font-size: var(--font-size-base);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-text-main);
+        min-width: 140px;
+        text-align: center;
+      }
     }
   }
 }
@@ -26,18 +51,28 @@
 @media (max-width: 768px) {
   .calendar-header {
     flex-direction: column;
+    align-items: stretch;
     gap: var(--spacing-4);
     
-    .month-navigation {
-      width: 100%;
-      justify-content: space-between;
+    .title-group {
+      text-align: center;
     }
-    
-    .actions {
-      width: 100%;
-      app-button {
-        display: block;
+
+    .controls-group {
+      flex-direction: column;
+      gap: var(--spacing-3);
+      
+      .month-navigation {
         width: 100%;
+        justify-content: space-between;
+      }
+      
+      .actions {
+        width: 100%;
+        app-button {
+          display: block;
+          width: 100%;
+        }
       }
     }
   }

@@ -19,6 +19,7 @@ describe('CalendarComponent', () => {
         platform: 'x',
         status: 'published',
         createdAt: '2026-08-10T10:00:00Z',
+        updatedAt: '2026-08-10T10:00:00Z',
         scheduledDate: '2026-08-15T10:30:00Z', // Agosto
         tags: []
       },
@@ -29,6 +30,7 @@ describe('CalendarComponent', () => {
         platform: 'x',
         status: 'draft',
         createdAt: '2026-08-10T10:00:00Z',
+        updatedAt: '2026-08-10T10:00:00Z',
         tags: []
       },
       {
@@ -38,6 +40,7 @@ describe('CalendarComponent', () => {
         platform: 'x',
         status: 'scheduled',
         createdAt: '2026-08-10T10:00:00Z',
+        updatedAt: '2026-08-10T10:00:00Z',
         scheduledDate: '2026-08-15T18:00:00Z', // Mismo dia, despues
         tags: []
       }
