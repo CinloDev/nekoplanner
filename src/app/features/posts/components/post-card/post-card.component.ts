@@ -1,15 +1,16 @@
-import { Component, input, computed } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { Component, input, output, computed } from '@angular/core';
+import { DatePipe, CommonModule } from '@angular/common';
 import { CardComponent } from '../../../../shared/components/ui/card/card.component';
 import { BadgeComponent } from '../../../../shared/components/ui/badge/badge.component';
+import { ButtonComponent } from '../../../../shared/components/ui/button/button.component';
 import { Post, PostStatus } from '../../../../core/models';
 import { PLATFORM_META } from '../../../../core/config/platforms.config';
-import { LucideAngularModule, Image as ImageIcon } from 'lucide-angular';
+import { LucideAngularModule, Image as ImageIcon, Edit as EditIcon } from 'lucide-angular';
 
 @Component({
   selector: 'app-post-card',
   standalone: true,
-  imports: [DatePipe, CardComponent, BadgeComponent, LucideAngularModule],
+  imports: [DatePipe, CommonModule, CardComponent, BadgeComponent, ButtonComponent, LucideAngularModule],
   templateUrl: './post-card.component.html',
   styleUrl: './post-card.component.scss'
 })
@@ -17,8 +18,11 @@ export class PostCardComponent {
   readonly post = input.required<Post>();
   readonly variant = input<'grid' | 'list'>('grid');
 
+  readonly edit = output<void>();
+
   readonly PLATFORM_META = PLATFORM_META;
   readonly ImageIcon = ImageIcon;
+  readonly EditIcon = EditIcon;
   
   readonly STATUS_LABELS: Record<PostStatus, string> = {
     idea: 'Idea',

@@ -57,17 +57,34 @@
     justify-content: space-between;
     align-items: center;
     
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+
+      .edit-btn {
+        color: var(--color-text-muted);
+        transition: color 0.2s ease, background-color 0.2s ease;
+        
+        &:hover {
+          color: var(--color-primary);
+          background-color: var(--color-surface-hover);
+        }
+      }
+    }
+    
     .platform-info {
       display: flex;
       align-items: center;
       gap: var(--spacing-2);
-      font-size: var(--font-size-sm);
+      font-size: var(--font-size-base);
       font-weight: 500;
-      color: var(--color-text-muted);
+      color: var(--color-text-main);
       
       .platform-icon {
-        width: 16px;
-        height: 16px;
+        width: 24px;
+        height: 24px;
+        border-radius: var(--radius-sm);
       }
     }
   }
@@ -83,32 +100,10 @@
     overflow: hidden;
   }
   
-  .post-card-meta {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    
-    .datetime {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      
-      .time {
-        font-weight: 500;
-        color: var(--color-text-main);
-      }
-    }
-    
-    .date.empty {
-      font-style: italic;
-      opacity: 0.7;
-    }
-  }
-  
   .post-card-tags {
     display: flex;
     flex-wrap: wrap;
     gap: var(--spacing-2);
-    margin-top: auto;
     
     .tag {
       font-size: var(--font-size-xs);
@@ -120,6 +115,37 @@
       &.extra {
         color: var(--color-text-muted);
         background: var(--color-surface-hover);
+      }
+    }
+  }
+
+  .post-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: var(--spacing-3);
+    border-top: 1px solid var(--color-border-subtle);
+
+    .post-card-meta {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+      text-align: right;
+      
+      .datetime {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        
+        .time {
+          font-weight: 500;
+          color: var(--color-text-main);
+        }
+      }
+      
+      .date.empty {
+        font-style: italic;
+        opacity: 0.7;
       }
     }
   }

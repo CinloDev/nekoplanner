@@ -60,7 +60,7 @@ export class PostFormComponent implements OnInit {
           content: post.content,
           platform: post.platform,
           status: post.status,
-          scheduledDate: post.scheduledDate ? post.scheduledDate.substring(0, 16) : '' // format for datetime-local
+          scheduledDate: post.scheduledDate || ''
         });
       }
     });

@@ -144,6 +144,12 @@ export class AppStateService {
     this._posts.set([...this._posts(), post]);
   }
 
+  updatePost(updatedPost: Post): void {
+    this._posts.update(posts => 
+      posts.map(post => post.id === updatedPost.id ? updatedPost : post)
+    );
+  }
+
   updatePostScheduledDate(postId: string, newDateIso: string): void {
     const posts = this._posts();
     const postIndex = posts.findIndex(p => p.id === postId);
