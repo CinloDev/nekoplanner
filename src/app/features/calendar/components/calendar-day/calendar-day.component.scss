@@ -24,7 +24,7 @@
   }
 
   &.is-other-month {
-    background-color: var(--color-background);
+    background-color: var(--color-bg);
     /* Inset shadow ensures the border remains visible even if the grid gap blends with the background */
     box-shadow: inset 0 0 0 1px var(--color-border-subtle);
     
