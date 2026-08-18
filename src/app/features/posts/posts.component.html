@@ -85,6 +85,7 @@
             [post]="post" 
             [variant]="viewMode()"
             (edit)="editPost(post)"
+            (delete)="confirmDelete(post)"
           ></app-post-card>
         }
       </div>
@@ -124,4 +125,16 @@
       </div>
     </div>
   }
+
+  <!-- Delete Confirmation Dialog -->
+  <app-confirm-dialog
+    [isOpen]="postToDelete() !== null"
+    title="Eliminar publicación"
+    message="¿Querés eliminar esta publicación? Esta acción no se puede deshacer."
+    confirmText="Eliminar"
+    cancelText="Cancelar"
+    [isDestructive]="true"
+    (confirm)="executeDelete()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-dialog>
 </div>

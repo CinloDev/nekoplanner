@@ -269,4 +269,37 @@ describe('PostsComponent', () => {
       expect(component.isDrawerOpen()).toBeFalse();
     });
   });
+
+  describe('Delete Flow', () => {
+    beforeEach(() => {
+      mockAppState.deletePost = jasmine.createSpy('deletePost');
+    });
+
+    it('should set postToDelete when confirmDelete is called', () => {
+      expect(component.postToDelete()).toBeNull();
+      component.confirmDelete(mockPosts[0]);
+      expect(component.postToDelete()).toEqual(mockPosts[0]);
+    });
+
+    it('should clear postToDelete when cancelDelete is called', () => {
+      component.confirmDelete(mockPosts[0]);
+      component.cancelDelete();
+      expect(component.postToDelete()).toBeNull();
+    });
+
+    it('should call deletePost, save to storage and clear postToDelete on executeDelete', () => {
+      component.confirmDelete(mockPosts[0]);
+      component.executeDelete();
+      
+      expect(mockAppState.deletePost).toHaveBeenCalledWith(mockPosts[0].id);
+      expect(mockStorageService.save).toHaveBeenCalled();
+      expect(component.postToDelete()).toBeNull();
+    });
+
+    it('should do nothing on executeDelete if postToDelete is null', () => {
+      component.executeDelete();
+      expect(mockAppState.deletePost).not.toHaveBeenCalled();
+      expect(mockStorageService.save).not.toHaveBeenCalled();
+    });
+  });
 });

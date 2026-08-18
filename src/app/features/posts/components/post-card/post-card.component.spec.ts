@@ -101,16 +101,27 @@ describe('PostCardComponent', () => {
     expect(imgEl.nativeElement.src).toBe('https://example.com/image.jpg');
   });
 
-  it('should render media fallback when media is empty', () => {
+  it('should not render media container when media is empty', () => {
     const postWithoutMedia = { ...mockPost, media: [] };
     fixture.componentRef.setInput('post', postWithoutMedia);
     fixture.detectChanges();
     
-    const fallbackEl = fixture.debugElement.query(By.css('.media-fallback lucide-icon'));
-    expect(fallbackEl).toBeTruthy();
+    const mediaEl = fixture.debugElement.query(By.css('.post-card-media'));
+    expect(mediaEl).toBeNull();
   });
 
-  it('should render max 3 tags and +N for the rest', () => {
+  it('should emit delete event when delete button is clicked', () => {
+    fixture.componentRef.setInput('post', mockPost);
+    fixture.detectChanges();
+    spyOn(component.delete, 'emit');
+    
+    const deleteBtn = fixture.debugElement.query(By.css('.delete-btn')).nativeElement;
+    deleteBtn.click();
+    
+    expect(component.delete.emit).toHaveBeenCalledWith(mockPost);
+  });
+
+  it('should max 3 tags and +N for the rest', () => {
     fixture.componentRef.setInput('post', mockPost);
     fixture.detectChanges();
     
