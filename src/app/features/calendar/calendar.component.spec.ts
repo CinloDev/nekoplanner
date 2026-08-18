@@ -104,4 +104,61 @@ describe('CalendarComponent', () => {
     component.goToPreviousMonth();
     expect(component.currentMonth().getMonth()).toBe(7); // Agosto
   });
+
+  describe('Filters', () => {
+    it('should have initial state with no filters', () => {
+      expect(component.selectedPlatform()).toBeNull();
+      expect(component.selectedStatus()).toBeNull();
+      expect(component.searchQuery()).toBe('');
+      expect(component.filteredPosts().length).toBe(2);
+    });
+
+    it('should filter by platform', () => {
+      component.selectedPlatform.set('x');
+      expect(component.filteredPosts().length).toBe(2);
+      
+      component.selectedPlatform.set('instagram');
+      expect(component.filteredPosts().length).toBe(0);
+    });
+
+    it('should filter by status', () => {
+      component.selectedStatus.set('published');
+      expect(component.filteredPosts().length).toBe(1);
+      expect(component.filteredPosts()[0].id).toBe('1');
+    });
+
+    it('should filter by search query (case-insensitive title/content)', () => {
+      component.searchQuery.set(' TARDE ');
+      expect(component.filteredPosts().length).toBe(1);
+      expect(component.filteredPosts()[0].id).toBe('3');
+
+      component.searchQuery.set('NoExisto');
+      expect(component.filteredPosts().length).toBe(0);
+      
+      component.searchQuery.set('');
+      expect(component.filteredPosts().length).toBe(2);
+    });
+
+    it('should combine multiple filters', () => {
+      component.selectedPlatform.set('x');
+      component.selectedStatus.set('published');
+      expect(component.filteredPosts().length).toBe(1);
+
+      component.searchQuery.set('Tarde'); // No coincide con el post 'published'
+      expect(component.filteredPosts().length).toBe(0);
+    });
+
+    it('should clear all filters', () => {
+      component.selectedPlatform.set('instagram');
+      component.selectedStatus.set('scheduled');
+      component.searchQuery.set('Test');
+      
+      component.clearFilters();
+      
+      expect(component.selectedPlatform()).toBeNull();
+      expect(component.selectedStatus()).toBeNull();
+      expect(component.searchQuery()).toBe('');
+      expect(component.filteredPosts().length).toBe(2);
+    });
+  });
 });

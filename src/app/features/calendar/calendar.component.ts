@@ -4,13 +4,17 @@ import { AppStateService } from '../../core/state/app-state.service';
 import { CalendarHeaderComponent } from './components/calendar-header/calendar-header.component';
 import { CalendarGridComponent } from './components/calendar-grid/calendar-grid.component';
 import { CalendarDayComponent } from './components/calendar-day/calendar-day.component';
+import { InputComponent } from '../../shared/components/ui/input/input.component';
+import { SelectComponent, SelectOption } from '../../shared/components/ui/select/select.component';
+import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { getMonthDays, getPreviousMonth, getNextMonth, getToday, formatCalendarDate } from '../../core/utils/calendar';
-import { Post } from '../../core/models';
+import { Post, Platform, PostStatus } from '../../core/models';
+import { PLATFORM_META } from '../../core/config/platforms.config';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, CalendarHeaderComponent, CalendarGridComponent, CalendarDayComponent],
+  imports: [CommonModule, CalendarHeaderComponent, CalendarGridComponent, CalendarDayComponent, InputComponent, SelectComponent, ButtonComponent],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss'
 })
@@ -19,6 +23,25 @@ export class CalendarComponent {
 
   readonly currentMonth = signal<Date>(getToday());
   readonly todayDate = getToday();
+
+  // Filters state
+  readonly selectedPlatform = signal<Platform | null>(null);
+  readonly selectedStatus = signal<PostStatus | null>(null);
+  readonly searchQuery = signal<string>('');
+
+  // Options for UI
+  readonly platformOptions: SelectOption<Platform>[] = (Object.keys(PLATFORM_META) as Platform[]).map(key => ({
+    label: PLATFORM_META[key].label,
+    value: key
+  }));
+
+  readonly statusOptions: SelectOption<PostStatus>[] = [
+    { value: 'idea', label: 'Idea' },
+    { value: 'draft', label: 'Borrador' },
+    { value: 'scheduled', label: 'Programada' },
+    { value: 'published', label: 'Publicada' },
+    { value: 'archived', label: 'Archivada' }
+  ];
 
   readonly calendarDays = computed(() => {
     return getMonthDays(this.currentMonth());
@@ -30,9 +53,33 @@ export class CalendarComponent {
       .sort((a, b) => new Date(a.scheduledDate!).getTime() - new Date(b.scheduledDate!).getTime());
   });
 
+  readonly filteredPosts = computed(() => {
+    let posts = this.calendarPosts();
+    const platform = this.selectedPlatform();
+    const status = this.selectedStatus();
+    const search = this.searchQuery().trim().toLowerCase();
+
+    if (platform) {
+      posts = posts.filter(p => p.platform === platform);
+    }
+    
+    if (status) {
+      posts = posts.filter(p => p.status === status);
+    }
+
+    if (search) {
+      posts = posts.filter(p => 
+        p.title.toLowerCase().includes(search) || 
+        p.content.toLowerCase().includes(search)
+      );
+    }
+
+    return posts;
+  });
+
   readonly postsByDay = computed(() => {
     const map = new Map<string, Post[]>();
-    const posts = this.calendarPosts();
+    const posts = this.filteredPosts();
     
     for (const post of posts) {
       const dayKey = formatCalendarDate(post.scheduledDate!, 'yyyy-MM-dd');
@@ -73,5 +120,17 @@ export class CalendarComponent {
 
   goToToday() {
     this.currentMonth.set(getToday());
+  }
+
+  get isAnyFilterActive(): boolean {
+    return this.selectedPlatform() !== null || 
+           this.selectedStatus() !== null || 
+           this.searchQuery().trim() !== '';
+  }
+
+  clearFilters() {
+    this.selectedPlatform.set(null);
+    this.selectedStatus.set(null);
+    this.searchQuery.set('');
   }
 }
