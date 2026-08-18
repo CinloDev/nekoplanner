@@ -9,6 +9,8 @@ describe('StorageService', () => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(StorageService);
 
+    spyOn(console, 'error'); // Suppress expected error logs from the test output
+
     // Mock localStorage
     let store: Record<string, string> = {};
     spyOn(localStorage, 'getItem').and.callFake((key: string) => store[key] || null);

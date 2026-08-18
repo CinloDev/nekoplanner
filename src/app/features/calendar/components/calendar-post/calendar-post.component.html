@@ -1,0 +1,18 @@
+<div class="calendar-post" [class]="'status-' + post.status" cdkDrag [cdkDragData]="post" [cdkDragStartDelay]="200">
+  
+  <div class="post-header">
+    <div class="platform-icon">
+      <img [src]="platformMeta().icon" [alt]="platformMeta().label" />
+    </div>
+    <span class="time">{{ time() }}</span>
+  </div>
+
+  <div class="post-body">
+    <span class="title">{{ post.title }}</span>
+  </div>
+
+  <div class="post-footer">
+    <div class="status-indicator" [class]="statusColor"></div>
+    <app-badge [color]="statusColor" class="status-badge">{{ statusLabel }}</app-badge>
+  </div>
+</div>

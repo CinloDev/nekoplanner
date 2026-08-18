@@ -1,7 +1,69 @@
-<app-card>
-  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-4);">
-    <h2 style="margin: 0;">Calendario</h2>
-    <app-badge variant="subtle" color="primary">Próximamente</app-badge>
+<div class="calendar-container">
+  
+  <div class="calendar-filters">
+    <div class="filter-group">
+      <app-select
+        label="Plataforma"
+        placeholder="Todas las plataformas"
+        [options]="platformOptions"
+        [value]="selectedPlatform()"
+        (valueChange)="selectedPlatform.set($event)"
+      ></app-select>
+    </div>
+
+    <div class="filter-group">
+      <app-select
+        label="Estado"
+        placeholder="Todos los estados"
+        [options]="statusOptions"
+        [value]="selectedStatus()"
+        (valueChange)="selectedStatus.set($event)"
+      ></app-select>
+    </div>
+
+    <div class="filter-group search-group">
+      <app-input
+        label="Búsqueda"
+        placeholder="Buscar publicaciones..."
+        type="search"
+        [value]="searchQuery()"
+        (valueChange)="searchQuery.set($event)"
+      ></app-input>
+    </div>
+
+    @if (isAnyFilterActive) {
+      <app-button variant="secondary" (click)="clearFilters()">Limpiar filtros</app-button>
+    }
   </div>
-  <p style="color: var(--color-text-muted);">La gestión de tu calendario estará disponible aquí.</p>
-</app-card>
+
+  <app-calendar-header
+    [currentMonth]="currentMonth()"
+    (previous)="goToPreviousMonth()"
+    (next)="goToNextMonth()"
+    (today)="goToToday()">
+  </app-calendar-header>
+
+  <app-calendar-grid>
+    @for (cell of gridData(); track cell.date.toISOString()) {
+      <app-calendar-day
+        [date]="cell.date"
+        [referenceMonth]="currentMonth()"
+        [today]="todayDate"
+        [posts]="cell.posts"
+        (postDropped)="onPostDropped($event)">
+      </app-calendar-day>
+    }
+  </app-calendar-grid>
+
+  @if (calendarPosts().length === 0) {
+    <div class="empty-state">
+      <p>No hay publicaciones programadas. ¡Empezá a planificar tu contenido!</p>
+    </div>
+  } @else if (filteredPosts().length === 0) {
+    <div class="empty-state">
+      <p>No se encontraron publicaciones con los filtros actuales.</p>
+      <app-button variant="primary" (click)="clearFilters()">Limpiar filtros</app-button>
+    </div>
+  }
+
+</div>

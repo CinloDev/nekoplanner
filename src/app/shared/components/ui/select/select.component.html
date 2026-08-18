@@ -1,0 +1,64 @@
+<div class="select-container" [class.is-disabled]="disabled()" [class.has-error]="error()">
+  @if (label()) {
+    <label class="select-label" [id]="'select-label-' + label()">
+      {{ label() }}
+    </label>
+  }
+
+  <div class="select-wrapper">
+    <button 
+      type="button" 
+      class="select-trigger" 
+      [class.is-open]="isOpen()"
+      [disabled]="disabled()"
+      [attr.aria-haspopup]="'listbox'"
+      [attr.aria-expanded]="isOpen()"
+      [attr.aria-labelledby]="label() ? 'select-label-' + label() : null"
+      [attr.aria-invalid]="!!error()"
+      (click)="toggleOpen()"
+    >
+      <span class="selected-text" [class.is-placeholder]="value() === null">
+        {{ selectedOptionLabel() }}
+      </span>
+      <span class="select-icon">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </span>
+    </button>
+
+    @if (isOpen()) {
+      <ul class="select-dropdown" role="listbox" [attr.aria-activedescendant]="focusedIndex() >= 0 ? 'option-' + focusedIndex() : null">
+        @for (option of options(); track option.value; let i = $index) {
+          <li 
+            [id]="'option-' + i"
+            role="option" 
+            class="select-option" 
+            [class.is-selected]="value() === option.value"
+            [class.is-focused]="focusedIndex() === i"
+            [attr.aria-selected]="value() === option.value"
+            (click)="selectOption(option)"
+          >
+            {{ option.label }}
+            @if (value() === option.value) {
+              <span class="check-icon">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+            }
+          </li>
+        }
+        @if (options().length === 0) {
+          <li class="select-option is-empty" role="presentation">
+            Sin opciones
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  @if (error()) {
+    <span class="select-error" role="alert">{{ error() }}</span>
+  }
+</div>

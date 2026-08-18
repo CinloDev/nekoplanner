@@ -1,0 +1,13 @@
+<div class="calendar-grid-container">
+  
+  <div class="week-header">
+    @for (day of weekDays; track day) {
+      <div class="week-day" [attr.aria-label]="day + 'es'">{{ day }}</div>
+    }
+  </div>
+
+  <div class="days-grid" cdkDropListGroup>
+    <ng-content></ng-content>
+  </div>
+  
+</div>
