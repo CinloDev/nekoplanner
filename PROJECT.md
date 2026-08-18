@@ -140,8 +140,8 @@ La persistencia inicial utilizará almacenamiento local del navegador.
 ---
 
 ## 13. Features
-- **Dashboard**: Placeholder (Solo UI preliminar)
-- **Calendar**: Placeholder
+- **Dashboard**: Implementado (Métricas, Upcoming Posts, Distribución).
+- **Calendar**: En progreso (Domain Utilities).
 - **Posts**: Placeholder
 - **Ideas**: Placeholder
 - **Analytics**: Placeholder
@@ -160,14 +160,20 @@ v0.1 — Core & State
 - [x] #006 Core & State
 - [x] #007 StorageService
 - [x] #008 Demo Dataset
-- [ ] #009 Dashboard
-- [ ] #010 Calendar
-- [ ] #011 Posts
-- [ ] #012 Settings & Data
-- [ ] #013 Responsive
-- [ ] #014 Quality
-- [ ] #015 Testing
-- [ ] #016 Release
+v1.0 — Dashboard
+- [x] #009 Dashboard Layout
+- [x] #010 Dashboard Computed Metrics
+- [x] #011 UpcomingPostCard Extraction
+- [x] #012 NekoPlanner Branding & Platform Metadata
+v1.1 — Calendar
+- [x] #013 Calendar Domain Utilities
+- [ ] #014 Calendar UI
+- [ ] #015 Posts
+- [ ] #016 Ideas
+- [ ] #017 Analytics
+- [ ] #018 Settings & Data
+- [ ] #019 Responsive & Quality
+- [ ] #020 Release
 
 ---
 
@@ -217,6 +223,6 @@ Issue → Create branch → Implementation → Verification → Review → Commi
 
 ## 19. Current Project Status
 - **Current version**: v0.1
-- **Current phase**: Foundation
-- **Completed issues**: #001, #002, #003, #004, #005, #006, #007, #008
-- **Current focus**: Dashboard
+- **Current phase**: Implementation
+- **Completed issues**: #001 to #013
+- **Current focus**: Calendar UI
