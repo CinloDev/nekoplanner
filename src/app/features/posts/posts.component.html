@@ -1,7 +1,146 @@
-<app-card>
-  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-4);">
-    <h2 style="margin: 0;">Publicaciones</h2>
-    <app-badge variant="subtle" color="primary">Próximamente</app-badge>
+<div class="posts-container">
+  <div class="posts-header">
+    <div class="posts-header-text">
+      <h2>Publicaciones</h2>
+      <p class="text-muted">Explora y filtra tus publicaciones.</p>
+    </div>
+    <div class="posts-header-actions">
+      <app-button variant="primary" [disabled]="true">Nueva publicación</app-button>
+    </div>
   </div>
-  <p style="color: var(--color-text-muted);">La gestión y programación de publicaciones estará disponible aquí.</p>
-</app-card>
+
+  <app-card class="posts-toolbar-card">
+    <div class="posts-toolbar">
+      <div class="toolbar-search">
+        <app-input
+          [value]="searchQuery()"
+          (valueChange)="searchQuery.set($event)"
+          placeholder="Buscar publicaciones..."
+          icon="search"
+        ></app-input>
+      </div>
+      
+      <div class="toolbar-filters">
+        <app-select
+          [options]="platformOptions"
+          [value]="selectedPlatform()"
+          (valueChange)="selectedPlatform.set($event)"
+          placeholder="Plataforma"
+        ></app-select>
+
+        <app-select
+          [options]="statusOptions"
+          [value]="selectedStatus()"
+          (valueChange)="selectedStatus.set($event)"
+          placeholder="Estado"
+        ></app-select>
+
+        <app-select
+          [options]="sortOptions"
+          [value]="sortBy()"
+          (valueChange)="$event && sortBy.set($event)"
+          placeholder="Ordenar por"
+        ></app-select>
+
+        <app-select
+          [options]="directionOptions"
+          [value]="sortDirection()"
+          (valueChange)="$event && sortDirection.set($event)"
+          placeholder="Dirección"
+        ></app-select>
+      </div>
+
+      <div class="toolbar-actions">
+        <div class="view-toggles">
+          <app-button 
+            variant="ghost" 
+            [class.active]="viewMode() === 'grid'"
+            (click)="toggleViewMode('grid')"
+            aria-label="Vista en cuadrícula"
+            title="Cuadrícula">
+            <!-- Grid icon svg -->
+            <lucide-icon [img]="LayoutGrid" size="20"></lucide-icon>
+          </app-button>
+          <app-button 
+            variant="ghost" 
+            [class.active]="viewMode() === 'list'"
+            (click)="toggleViewMode('list')"
+            aria-label="Vista en lista"
+            title="Lista">
+            <!-- List icon svg -->
+            <lucide-icon [img]="List" size="20"></lucide-icon>
+          </app-button>
+        </div>
+        
+        <app-button variant="secondary" (click)="clearFilters()">Limpiar filtros</app-button>
+      </div>
+    </div>
+  </app-card>
+
+  <div class="posts-content">
+    <ng-container *ngIf="hasPosts(); else noPosts">
+      <ng-container *ngIf="visiblePosts().length > 0; else noResults">
+        <div class="posts-view" [ngClass]="viewMode()">
+          @for (post of visiblePosts(); track post.id) {
+            <app-card class="post-item">
+              <div class="post-item-media">
+                <img *ngIf="post.media?.length; else fallbackMedia" [src]="post.media![0].url" [alt]="post.title">
+                <ng-template #fallbackMedia>
+                  <div class="media-fallback">
+                    <img [src]="platformMeta[post.platform].icon" [alt]="platformMeta[post.platform].label">
+                  </div>
+                </ng-template>
+              </div>
+              
+              <div class="post-item-content">
+                <div class="post-item-header">
+                  <div class="platform-info">
+                    <img class="platform-icon" [src]="platformMeta[post.platform].icon" [alt]="platformMeta[post.platform].label">
+                    <span>{{ platformMeta[post.platform].label }}</span>
+                  </div>
+                  <app-badge [variant]="post.status === 'published' ? 'solid' : 'subtle'" [color]="post.status === 'published' ? 'success' : 'primary'">
+                    {{ post.status | titlecase }}
+                  </app-badge>
+                </div>
+                
+                <h3 class="post-item-title">{{ post.title }}</h3>
+                
+                <div class="post-item-meta">
+                  <span class="date" *ngIf="post.scheduledDate">{{ post.scheduledDate | date:'medium' }}</span>
+                  <span class="date empty" *ngIf="!post.scheduledDate">Sin fecha</span>
+                </div>
+                
+                <div class="post-item-tags" *ngIf="post.tags?.length">
+                  @for (tag of post.tags; track tag.id) {
+                    <span class="tag">#{{ tag.name }}</span>
+                  }
+                </div>
+              </div>
+            </app-card>
+          }
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #noPosts>
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <lucide-icon [img]="FileText" size="48"></lucide-icon>
+        </div>
+        <h3>Todavía no hay publicaciones.</h3>
+        <p class="text-muted">Empieza creando tu primera publicación para organizar tu contenido.</p>
+      </div>
+    </ng-template>
+
+    <ng-template #noResults>
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <lucide-icon [img]="Search" size="48"></lucide-icon>
+        </div>
+        <h3>No se encontraron publicaciones con los filtros actuales.</h3>
+        <p class="text-muted">Intenta cambiar los términos de búsqueda o los filtros seleccionados.</p>
+        <app-button variant="secondary" (click)="clearFilters()">Limpiar filtros</app-button>
+      </div>
+    </ng-template>
+  </div>
+</div>
