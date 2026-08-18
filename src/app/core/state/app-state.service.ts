@@ -140,6 +140,10 @@ export class AppStateService {
     this._ideas.set(ideas);
   }
 
+  createPost(post: Post): void {
+    this._posts.set([...this._posts(), post]);
+  }
+
   updatePostScheduledDate(postId: string, newDateIso: string): void {
     const posts = this._posts();
     const postIndex = posts.findIndex(p => p.id === postId);

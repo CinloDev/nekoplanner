@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { PostsComponent } from './posts.component';
 import { AppStateService } from '../../core/state/app-state.service';
-import { Post } from '../../core/models';
+import { StorageService } from '../../core/storage/storage.service';
+import { Post, Platform, PostStatus } from '../../core/models';
 
 describe('PostsComponent', () => {
   let component: PostsComponent;
@@ -43,16 +44,24 @@ describe('PostsComponent', () => {
     }
   ];
 
+  let mockStorageService: any;
+
   beforeEach(async () => {
     mockPostsSignal = signal(mockPosts);
     mockAppState = {
-      posts: mockPostsSignal
+      posts: mockPostsSignal,
+      createPost: jasmine.createSpy('createPost')
+    };
+
+    mockStorageService = {
+      save: jasmine.createSpy('save')
     };
 
     await TestBed.configureTestingModule({
       imports: [PostsComponent],
       providers: [
-        { provide: AppStateService, useValue: mockAppState }
+        { provide: AppStateService, useValue: mockAppState },
+        { provide: StorageService, useValue: mockStorageService }
       ]
     })
     .compileComponents();
@@ -223,6 +232,41 @@ describe('PostsComponent', () => {
       expect(component.hasPosts()).toBeTrue();
       mockPostsSignal.set([]);
       expect(component.hasPosts()).toBeFalse();
+    });
+  });
+
+  describe('Drawer and Create Post', () => {
+    it('should open and close drawer', () => {
+      expect(component.isDrawerOpen()).toBeFalse();
+      component.openDrawer();
+      expect(component.isDrawerOpen()).toBeTrue();
+      component.closeDrawer();
+      expect(component.isDrawerOpen()).toBeFalse();
+    });
+
+    it('should save post and call appState and storageService', () => {
+      component.openDrawer();
+      
+      const formValue = {
+        title: 'New Post',
+        content: 'Content',
+        platform: 'instagram' as Platform,
+        status: 'draft' as PostStatus,
+        scheduledDate: undefined,
+        tags: [],
+        media: []
+      };
+
+      component.onSavePost(formValue);
+
+      expect(mockAppState.createPost).toHaveBeenCalled();
+      const createdPost = mockAppState.createPost.calls.mostRecent().args[0];
+      expect(createdPost.title).toBe('New Post');
+      expect(createdPost.id).toBeTruthy();
+      expect(createdPost.createdAt).toBeTruthy();
+
+      expect(mockStorageService.save).toHaveBeenCalled();
+      expect(component.isDrawerOpen()).toBeFalse();
     });
   });
 });
