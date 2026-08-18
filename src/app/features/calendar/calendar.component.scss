@@ -5,6 +5,51 @@
   max-width: 1200px;
   margin: 0 auto;
 
+  .calendar-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+    padding: var(--spacing-3);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 180px;
+
+      &.search-group {
+        flex: 2;
+        min-width: 200px;
+      }
+    }
+
+    .clear-filters-btn {
+      align-self: flex-end;
+      padding: var(--spacing-2) var(--spacing-4);
+      font-size: var(--font-size-sm);
+      color: var(--color-danger);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      white-space: nowrap;
+
+      &:hover {
+        background-color: var(--color-danger-muted);
+      }
+      
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--color-danger);
+      }
+    }
+  }
+
   .empty-state {
     margin-top: var(--spacing-6);
     text-align: center;
@@ -13,6 +58,31 @@
     border: 1px dashed var(--color-border-subtle);
     border-radius: var(--radius-lg);
     color: var(--color-text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-3);
+
+    .clear-filters-action {
+      padding: var(--spacing-2) var(--spacing-4);
+      background-color: var(--color-primary);
+      color: var(--color-on-primary);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: var(--color-primary-hover);
+      }
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--color-primary-muted);
+      }
+    }
   }
 }
 
