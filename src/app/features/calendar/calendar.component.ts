@@ -1,6 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppStateService } from '../../core/state/app-state.service';
+import { StorageService } from '../../core/storage/storage.service';
+import { StorageKeys } from '../../core/storage/storage-keys';
 import { CalendarHeaderComponent } from './components/calendar-header/calendar-header.component';
 import { CalendarGridComponent } from './components/calendar-grid/calendar-grid.component';
 import { CalendarDayComponent } from './components/calendar-day/calendar-day.component';
@@ -20,6 +22,7 @@ import { PLATFORM_META } from '../../core/config/platforms.config';
 })
 export class CalendarComponent {
   private readonly appState = inject(AppStateService);
+  private readonly storageService = inject(StorageService);
 
   readonly currentMonth = signal<Date>(getToday());
   readonly todayDate = getToday();
@@ -132,5 +135,10 @@ export class CalendarComponent {
     this.selectedPlatform.set(null);
     this.selectedStatus.set(null);
     this.searchQuery.set('');
+  }
+
+  onPostDropped(event: { post: Post, targetDate: Date }) {
+    this.appState.updatePostScheduledDate(event.post.id, event.targetDate.toISOString());
+    this.storageService.save(StorageKeys.POSTS, this.appState.posts());
   }
 }

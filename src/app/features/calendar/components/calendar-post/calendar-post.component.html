@@ -1,4 +1,4 @@
-<div class="calendar-post" [class]="'status-' + post.status">
+<div class="calendar-post" [class]="'status-' + post.status" cdkDrag [cdkDragData]="post" [cdkDragStartDelay]="200">
   
   <div class="post-header">
     <div class="platform-icon">

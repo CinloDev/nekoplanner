@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 
 import { TopbarComponent } from './topbar.component';
 
@@ -8,7 +9,10 @@ describe('TopbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TopbarComponent]
+      imports: [TopbarComponent],
+      providers: [
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => null } } } }
+      ]
     })
     .compileComponents();
 
