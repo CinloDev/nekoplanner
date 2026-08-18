@@ -11,7 +11,8 @@
   <div class="upcoming-details">
     <h4>{{ post().title }}</h4>
     <p class="upcoming-meta">
-      <span [style.color]="platformMeta[post().platform] ? platformMeta[post().platform].color : 'var(--color-text-main)'">
+      <span class="platform-badge">
+        <img *ngIf="platformMeta[post().platform]" [src]="platformMeta[post().platform].icon" alt="" class="platform-icon" aria-hidden="true">
         {{ platformMeta[post().platform] ? platformMeta[post().platform].label : post().platform }}
       </span>
       <ng-container *ngIf="post().scheduledDate">

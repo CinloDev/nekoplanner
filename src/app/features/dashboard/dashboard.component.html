@@ -72,11 +72,14 @@
             @for (item of platformDistribution(); track item.platform) {
               <div class="distribution-item">
                 <div class="dist-header">
-                  <span>{{ item.meta.label }}</span>
+                  <span class="platform-label">
+                    <img [src]="item.meta.icon" alt="" class="platform-icon-small" aria-hidden="true">
+                    {{ item.meta.label }}
+                  </span>
                   <span>{{ item.count }}</span>
                 </div>
                 <div class="dist-bar-track">
-                  <div class="dist-bar-fill" [style.width.%]="item.percentage" [style.background-color]="item.meta.color"></div>
+                  <div class="dist-bar-fill" [style.width.%]="item.percentage" style="background-color: var(--color-primary);"></div>
                 </div>
               </div>
             }
