@@ -7,6 +7,7 @@ import { BadgeComponent } from '../../shared/components/ui/badge/badge.component
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { InputComponent } from '../../shared/components/ui/input/input.component';
 import { SelectComponent, SelectOption } from '../../shared/components/ui/select/select.component';
+import { PostCardComponent } from './components/post-card/post-card.component';
 import { AppStateService } from '../../core/state/app-state.service';
 import { Platform, PostStatus } from '../../core/models';
 import { PLATFORM_META } from '../../core/config/platforms.config';
@@ -27,10 +28,10 @@ const STATUS_PRIORITY: Record<PostStatus, number> = {
     FormsModule,
     LucideAngularModule,
     CardComponent, 
-    BadgeComponent, 
     ButtonComponent, 
     InputComponent, 
-    SelectComponent
+    SelectComponent,
+    PostCardComponent
   ],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.scss'
