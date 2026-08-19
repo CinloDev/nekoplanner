@@ -33,23 +33,6 @@
     text-align: center;
     padding: var(--spacing-6);
 
-    .icon-container {
-      width: 56px;
-      height: 56px;
-      border-radius: var(--radius-full);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: var(--spacing-5);
-      background-color: var(--color-primary-muted);
-      color: var(--color-primary);
-
-      &.destructive {
-        background-color: var(--color-danger-muted);
-        color: var(--color-danger);
-      }
-    }
-
     h2 {
       margin: 0 0 var(--spacing-3);
       font-size: var(--font-size-xl);

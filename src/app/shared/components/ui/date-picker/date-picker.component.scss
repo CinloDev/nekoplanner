@@ -104,10 +104,10 @@
   top: calc(100% + 4px);
   left: 0;
   width: 320px;
-  background: var(--color-surface-elevated);
+  background: var(--color-surface);
   border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   overflow: hidden;
   display: flex;
@@ -125,8 +125,9 @@
 }
 
 .calendar-section {
-  padding: var(--spacing-4);
-  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-4) var(--spacing-5);
+  background: var(--color-surface-elevated);
+  border-bottom: 1px solid var(--color-border-subtle);
 
   .calendar-header {
     display: flex;
@@ -141,20 +142,21 @@
     }
 
     .nav-button {
-      background: transparent;
-      border: 1px solid transparent;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
       border-radius: var(--radius-sm);
-      color: var(--color-text-muted);
+      color: var(--color-text-main);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px;
+      padding: 6px;
       transition: all 0.2s;
 
       &:hover {
         background: var(--color-surface-hover);
-        color: var(--color-text-main);
+        border-color: var(--color-primary-muted);
+        color: var(--color-primary);
       }
     }
   }
@@ -162,7 +164,7 @@
   .calendar-grid {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-2);
+    gap: var(--spacing-3);
 
     .weekdays-row {
       display: grid;
@@ -174,46 +176,52 @@
         font-weight: 600;
         color: var(--color-text-muted);
         text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
     }
 
     .days-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 2px;
+      gap: 4px;
 
       .day-cell {
         aspect-ratio: 1;
         background: transparent;
         border: 1px solid transparent;
-        border-radius: var(--radius-sm);
+        border-radius: var(--radius-md);
         font-size: var(--font-size-sm);
+        font-weight: 500;
         color: var(--color-text-main);
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.2s;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
         &:hover:not(.is-selected) {
           background: var(--color-surface-hover);
+          transform: translateY(-1px);
         }
 
         &.is-other-month {
           color: var(--color-text-muted);
-          opacity: 0.5;
+          opacity: 0.4;
         }
 
         &.is-today {
-          font-weight: 700;
+          border-color: var(--color-primary);
           color: var(--color-primary);
+          background: var(--color-primary-muted);
+          font-weight: 700;
         }
 
         &.is-selected {
           background: var(--color-primary);
-          color: white;
-          font-weight: 600;
-          box-shadow: var(--shadow-sm);
+          color: var(--color-text-on-primary);
+          font-weight: 700;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+          transform: scale(1.05);
         }
       }
     }
@@ -221,8 +229,8 @@
 }
 
 .time-section {
-  padding: var(--spacing-4);
-  background: color-mix(in srgb, var(--color-surface-hover) 30%, transparent);
+  padding: var(--spacing-4) var(--spacing-5);
+  background: var(--color-surface);
 
   .time-header {
     font-size: var(--font-size-sm);

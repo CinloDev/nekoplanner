@@ -8,10 +8,10 @@ import { ButtonComponent } from '@shared/components/ui/button/button.component';
 import { InputComponent } from '@shared/components/ui/input/input.component';
 import { SelectComponent, SelectOption } from '@shared/components/ui/select/select.component';
 import { ConfirmDialogComponent } from '@shared/components/ui/confirm-dialog/confirm-dialog.component';
+import { SideDrawerComponent } from '@shared/components/ui/side-drawer/side-drawer.component';
 import { IdeaCardComponent } from './components/idea-card/idea-card.component';
 import { IdeaFormComponent, IdeaFormValue } from './components/idea-form/idea-form.component';
 import { LucideAngularModule, Search as SearchIcon, X as XIcon, Plus as PlusIcon, Lightbulb as IdeaIcon } from 'lucide-angular';
-import { A11yModule } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-ideas',
@@ -22,10 +22,10 @@ import { A11yModule } from '@angular/cdk/a11y';
     InputComponent, 
     SelectComponent, 
     ConfirmDialogComponent,
+    SideDrawerComponent,
     IdeaCardComponent,
     IdeaFormComponent,
-    LucideAngularModule,
-    A11yModule
+    LucideAngularModule
   ],
   templateUrl: './ideas.component.html',
   styleUrl: './ideas.component.scss'
