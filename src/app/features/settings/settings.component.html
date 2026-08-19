@@ -25,4 +25,22 @@
       </div>
     </div>
   </app-card>
+
+  <app-card>
+    <div class="settings-section">
+      <div class="section-header">
+        <h3>Datos</h3>
+        <p>Gestiona la información de NekoPlanner.</p>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-label">Exportar datos</div>
+        <div class="setting-control">
+          <app-button variant="primary" (clicked)="exportData()">
+            Exportar Backup
+          </app-button>
+        </div>
+      </div>
+    </div>
+  </app-card>
 </div>
