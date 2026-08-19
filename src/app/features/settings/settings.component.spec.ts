@@ -3,6 +3,8 @@ import { SettingsComponent } from './settings.component';
 import { ThemeService } from '../../core/services/theme.service';
 import { DataExportService } from '../../core/services/data-export.service';
 import { DataImportService } from '../../core/services/data-import.service';
+import { AppStateService } from '../../core/state/app-state.service';
+import { StorageService } from '../../core/storage/storage.service';
 import { signal } from '@angular/core';
 import { ThemePreference } from '../../core/models/settings.model';
 import { By } from '@angular/platform-browser';
@@ -13,20 +15,27 @@ describe('SettingsComponent', () => {
   let mockThemeService: jasmine.SpyObj<ThemeService>;
   let mockDataExportService: jasmine.SpyObj<DataExportService>;
   let mockDataImportService: jasmine.SpyObj<DataImportService>;
+  let mockAppState: jasmine.SpyObj<AppStateService>;
+  let mockStorage: jasmine.SpyObj<StorageService>;
 
   beforeEach(async () => {
-    mockThemeService = jasmine.createSpyObj('ThemeService', ['setPreference'], {
+    mockThemeService = jasmine.createSpyObj('ThemeService', ['setPreference', 'recalculateTheme'], {
       preference: signal<ThemePreference>('system')
     });
     mockDataExportService = jasmine.createSpyObj('DataExportService', ['export']);
     mockDataImportService = jasmine.createSpyObj('DataImportService', ['parseAndValidate', 'import']);
+    mockAppState = jasmine.createSpyObj('AppStateService', ['clearAllData', 'settings']);
+    mockAppState.settings.and.returnValue({ theme: 'system', navigation: 'sidebar' });
+    mockStorage = jasmine.createSpyObj('StorageService', ['save']);
 
     await TestBed.configureTestingModule({
       imports: [SettingsComponent],
       providers: [
         { provide: ThemeService, useValue: mockThemeService },
         { provide: DataExportService, useValue: mockDataExportService },
-        { provide: DataImportService, useValue: mockDataImportService }
+        { provide: DataImportService, useValue: mockDataImportService },
+        { provide: AppStateService, useValue: mockAppState },
+        { provide: StorageService, useValue: mockStorage }
       ]
     }).compileComponents();
 
@@ -112,5 +121,31 @@ describe('SettingsComponent', () => {
     expect(mockDataImportService.import).not.toHaveBeenCalled();
     expect(component.isConfirmDialogOpen).toBeFalse();
     expect(component.pendingBackup).toBeNull();
+  });
+
+  it('should open clear all dialog when requestClearAll is called', () => {
+    expect(component.isClearAllDialogOpen).toBeFalse();
+    component.requestClearAll();
+    expect(component.isClearAllDialogOpen).toBeTrue();
+  });
+
+  it('should clear data, persist defaults, and recalculate theme on confirm clear all', () => {
+    component.isClearAllDialogOpen = true;
+
+    component.onConfirmClearAll();
+
+    expect(component.isClearAllDialogOpen).toBeFalse();
+    expect(mockAppState.clearAllData).toHaveBeenCalled();
+    expect(mockStorage.save).toHaveBeenCalledTimes(3);
+    expect(mockThemeService.recalculateTheme).toHaveBeenCalled();
+  });
+
+  it('should close clear all dialog on cancel clear all', () => {
+    component.isClearAllDialogOpen = true;
+    
+    component.onCancelClearAll();
+    
+    expect(component.isClearAllDialogOpen).toBeFalse();
+    expect(mockAppState.clearAllData).not.toHaveBeenCalled();
   });
 });

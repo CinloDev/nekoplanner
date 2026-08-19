@@ -72,6 +72,20 @@ describe('AppStateService', () => {
       expect(service.settings()).toEqual({ theme: 'system', navigation: 'sidebar' });
     });
 
+    it('should reset state on clearAllData', () => {
+      // First set some state
+      service.setPosts([{ id: '1', title: 'Test Post' } as any]);
+      service.setIdeas([{ id: '1', title: 'Test Idea' } as any]);
+      service.updateSettings({ theme: 'dark', navigation: 'drawer' });
+
+      // Clear all
+      service.clearAllData();
+
+      expect(service.posts()).toEqual([]);
+      expect(service.ideas()).toEqual([]);
+      expect(service.settings()).toEqual({ theme: 'system', navigation: 'sidebar' });
+    });
+
     it('should count ideas correctly', () => {
       service.setIdeas([{ id: 'i1', title: 'Idea 1' } as Idea]);
       expect(service.ideasCount()).toBe(1);
