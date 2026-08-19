@@ -9,7 +9,7 @@ import {
   isCurrentMonth, 
   formatCalendarDate,
   getToday
-} from '../../../../core/utils/calendar/calendar.utils';
+} from '@core/utils/calendar/calendar.utils';
 
 @Component({
   selector: 'app-date-picker',

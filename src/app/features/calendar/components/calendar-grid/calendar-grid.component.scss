@@ -3,8 +3,7 @@
   flex-direction: column;
   background-color: var(--color-surface);
   border: 1px solid var(--color-border-subtle);
-  border-top: none;
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
 

@@ -7,46 +7,50 @@
      ========================================================================== */
 
   /* Backgrounds & Surfaces */
-  --color-bg: #f8fafc;
-  --color-surface: #ffffff;
-  --color-surface-elevated: #ffffff;
-  --color-surface-hover: #f1f5f9;
+  --color-bg: #E0EBE9;
+  --color-surface: #EFF5F4;
+  --color-surface-elevated: #F7FAF9;
+  --color-surface-hover: #E6F0ED;
 
   /* Text */
-  --color-text-main: #0f172a;
-  --color-text-muted: #64748b;
-  --color-text-inverse: #ffffff;
+  --color-text-main: #172522;
+  --color-text-muted: #5F706B;
+  --color-text-inverse: #F7FFFD;
 
   /* Borders */
-  --color-border-subtle: #f1f5f9;
-  --color-border-strong: #e2e8f0;
+  --color-border-subtle: #CBDAD7;
+  --color-border-strong: #B2C7C3;
 
   /* Brand (Primary) - Teal (#14B8A6) */
   --color-primary: #14b8a6;
   --color-primary-hover: #0d9488;
   --color-primary-active: #0f766e;
-  --color-primary-muted: #f0fdfa;
+  --color-primary-muted: #CDEEE9;
 
   /* Semantic - Success (Green) */
   --color-success: #10b981;
   --color-success-hover: #059669;
-  --color-success-muted: #ecfdf5;
+  --color-success-muted: #DCF5ED;
 
   /* Semantic - Warning (Orange/Yellow) */
   --color-warning: #f59e0b;
   --color-warning-hover: #d97706;
-  --color-warning-muted: #fffbeb;
+  --color-warning-muted: #FCECD4;
 
   /* Semantic - Danger (Red) */
   --color-danger: #ef4444;
   --color-danger-hover: #dc2626;
-  --color-danger-muted: #fef2f2;
+  --color-danger-muted: #FAE1E1;
 
   /* Semantic - Info (Blue/Cyan) */
   --color-info: #0ea5e9;
   --color-info-hover: #0284c7;
-  --color-info-muted: #f0f9ff;
+  --color-info-muted: #DCEDF7;
 
+  /* Shared / Structural Tokens */
+  --color-text-on-primary: #FFFFFF;
+  --color-focus-ring: rgba(20, 184, 166, 0.4);
+  --color-overlay: rgba(23, 37, 34, 0.4);
 
   /* ==========================================================================
      TYPOGRAPHY TOKENS
@@ -99,9 +103,9 @@
   /* ==========================================================================
      SHADOWS & ELEVATION TOKENS
      ========================================================================== */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 1px 2px 0 rgb(23 37 34 / 0.06);
+  --shadow-md: 0 4px 6px -1px rgb(23 37 34 / 0.08), 0 2px 4px -2px rgb(23 37 34 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(23 37 34 / 0.1), 0 4px 6px -4px rgb(23 37 34 / 0.05);
 
 
   /* ==========================================================================
@@ -157,6 +161,11 @@
   --color-info-hover: #38bdf8;
   --color-info-muted: rgba(14, 165, 233, 0.15);
   
+  /* Shared / Structural Tokens (Dark Mode) */
+  --color-text-on-primary: #0f172a; /* Assuming we want contrast, but maybe primary is light enough. Wait, teal is light. White is better usually? No, let's keep it as is, or #1E293B. Let's use #0f172a for consistency. Actually user requested #ffffff for light, let's keep #0f172a for dark text-on-primary if primary is 5eead4 or #14b8a6 */
+  --color-focus-ring: rgba(45, 212, 191, 0.4);
+  --color-overlay: rgba(15, 23, 42, 0.7);
+
   /* Shadows adapt for dark mode */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);

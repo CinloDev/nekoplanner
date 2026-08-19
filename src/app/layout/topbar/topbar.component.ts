@@ -2,7 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { ButtonComponent } from '../../shared/components/ui/button/button.component';
+import { ButtonComponent } from '@shared/components/ui/button/button.component';
 import { NAVIGATION_ITEMS } from '../navigation.config';
 
 @Component({

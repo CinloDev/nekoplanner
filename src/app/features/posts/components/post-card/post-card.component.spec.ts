@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PostCardComponent } from './post-card.component';
 import { By } from '@angular/platform-browser';
-import { Post } from '../../../../core/models';
-import { PLATFORM_META } from '../../../../core/config/platforms.config';
+import { Post } from '@core/models';
+import { PLATFORM_META } from '@core/config/platforms.config';
 
 describe('PostCardComponent', () => {
   let component: PostCardComponent;

@@ -1,17 +1,17 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppStateService } from '../../core/state/app-state.service';
-import { StorageService } from '../../core/storage/storage.service';
-import { StorageKeys } from '../../core/storage/storage-keys';
+import { AppStateService } from '@core/state/app-state.service';
+import { StorageService } from '@core/storage/storage.service';
+import { StorageKeys } from '@core/storage/storage-keys';
 import { CalendarHeaderComponent } from './components/calendar-header/calendar-header.component';
 import { CalendarGridComponent } from './components/calendar-grid/calendar-grid.component';
 import { CalendarDayComponent } from './components/calendar-day/calendar-day.component';
-import { InputComponent } from '../../shared/components/ui/input/input.component';
-import { SelectComponent, SelectOption } from '../../shared/components/ui/select/select.component';
-import { ButtonComponent } from '../../shared/components/ui/button/button.component';
-import { getMonthDays, getPreviousMonth, getNextMonth, getToday, formatCalendarDate } from '../../core/utils/calendar';
-import { Post, Platform, PostStatus } from '../../core/models';
-import { PLATFORM_META } from '../../core/config/platforms.config';
+import { InputComponent } from '@shared/components/ui/input/input.component';
+import { SelectComponent, SelectOption } from '@shared/components/ui/select/select.component';
+import { ButtonComponent } from '@shared/components/ui/button/button.component';
+import { getMonthDays, getPreviousMonth, getNextMonth, getToday, formatCalendarDate } from '@core/utils/calendar';
+import { Post, Platform, PostStatus } from '@core/models';
+import { PLATFORM_META } from '@core/config/platforms.config';
 
 @Component({
   selector: 'app-calendar',
