@@ -1,10 +1,10 @@
 import { Component, Input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { Post } from '../../../../core/models';
-import { PLATFORM_META } from '../../../../core/config/platforms.config';
-import { formatCalendarDate } from '../../../../core/utils/calendar';
-import { BadgeComponent } from '../../../../shared/components/ui/badge/badge.component';
+import { Post } from '@core/models';
+import { PLATFORM_META } from '@core/config/platforms.config';
+import { formatCalendarDate } from '@core/utils/calendar';
+import { BadgeComponent } from '@shared/components/ui/badge/badge.component';
 
 @Component({
   selector: 'app-calendar-post',

@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CalendarComponent } from './calendar.component';
-import { AppStateService } from '../../core/state/app-state.service';
-import { StorageService } from '../../core/storage/storage.service';
-import { Post } from '../../core/models';
+import { AppStateService } from '@core/state/app-state.service';
+import { StorageService } from '@core/storage/storage.service';
+import { Post } from '@core/models';
 import { signal } from '@angular/core';
 
 describe('CalendarComponent', () => {

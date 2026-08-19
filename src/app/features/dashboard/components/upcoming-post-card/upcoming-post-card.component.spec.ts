@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, input } from '@angular/core';
 import { UpcomingPostCardComponent } from './upcoming-post-card.component';
-import { Post } from '../../../../core/models';
+import { Post } from '@core/models';
 
 describe('UpcomingPostCardComponent', () => {
   let component: UpcomingPostCardComponent;

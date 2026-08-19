@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { PostsComponent } from './posts.component';
-import { AppStateService } from '../../core/state/app-state.service';
-import { StorageService } from '../../core/storage/storage.service';
-import { Post, Platform, PostStatus } from '../../core/models';
+import { AppStateService } from '@core/state/app-state.service';
+import { StorageService } from '@core/storage/storage.service';
+import { Post, Platform, PostStatus } from '@core/models';
 
 describe('PostsComponent', () => {
   let component: PostsComponent;

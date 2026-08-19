@@ -1,11 +1,11 @@
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { CardComponent } from '../../shared/components/ui/card/card.component';
-import { BadgeComponent } from '../../shared/components/ui/badge/badge.component';
-import { ButtonComponent } from '../../shared/components/ui/button/button.component';
-import { AppStateService } from '../../core/state/app-state.service';
-import { PLATFORM_META } from '../../core/config/platforms.config';
+import { CardComponent } from '@shared/components/ui/card/card.component';
+import { BadgeComponent } from '@shared/components/ui/badge/badge.component';
+import { ButtonComponent } from '@shared/components/ui/button/button.component';
+import { AppStateService } from '@core/state/app-state.service';
+import { PLATFORM_META } from '@core/config/platforms.config';
 
 import { UpcomingPostCardComponent } from './components/upcoming-post-card/upcoming-post-card.component';
 

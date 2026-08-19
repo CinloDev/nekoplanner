@@ -1,10 +1,10 @@
 import { Component, input, output, computed } from '@angular/core';
 import { DatePipe, CommonModule } from '@angular/common';
-import { CardComponent } from '../../../../shared/components/ui/card/card.component';
-import { BadgeComponent } from '../../../../shared/components/ui/badge/badge.component';
-import { ButtonComponent } from '../../../../shared/components/ui/button/button.component';
-import { Post, PostStatus } from '../../../../core/models';
-import { PLATFORM_META } from '../../../../core/config/platforms.config';
+import { CardComponent } from '@shared/components/ui/card/card.component';
+import { BadgeComponent } from '@shared/components/ui/badge/badge.component';
+import { ButtonComponent } from '@shared/components/ui/button/button.component';
+import { Post, PostStatus } from '@core/models';
+import { PLATFORM_META } from '@core/config/platforms.config';
 import { LucideAngularModule, Image as ImageIcon, Edit as EditIcon, Trash2 as TrashIcon, Copy as CopyIcon } from 'lucide-angular';
 
 @Component({
