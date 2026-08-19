@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PostFormComponent } from './post-form.component';
 import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Post } from '../../../../core/models';
+import { Post } from '@core/models';
 
 describe('PostFormComponent', () => {
   let component: PostFormComponent;

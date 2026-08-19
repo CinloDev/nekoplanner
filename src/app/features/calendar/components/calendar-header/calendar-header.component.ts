@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { formatCalendarDate } from '../../../../core/utils/calendar';
-import { ButtonComponent } from '../../../../shared/components/ui/button/button.component';
+import { formatCalendarDate } from '@core/utils/calendar';
+import { ButtonComponent } from '@shared/components/ui/button/button.component';
 import { LucideAngularModule, ChevronLeft, ChevronRight } from 'lucide-angular';
 
 @Component({

@@ -1,12 +1,12 @@
 import { Component, effect, input, output, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Platform, PostStatus, Post } from '../../../../core/models';
-import { PLATFORM_META } from '../../../../core/config/platforms.config';
-import { ButtonComponent } from '../../../../shared/components/ui/button/button.component';
-import { InputComponent } from '../../../../shared/components/ui/input/input.component';
-import { SelectComponent, SelectOption } from '../../../../shared/components/ui/select/select.component';
-import { DatePickerComponent } from '../../../../shared/components/ui/date-picker/date-picker.component';
+import { Platform, PostStatus, Post } from '@core/models';
+import { PLATFORM_META } from '@core/config/platforms.config';
+import { ButtonComponent } from '@shared/components/ui/button/button.component';
+import { InputComponent } from '@shared/components/ui/input/input.component';
+import { SelectComponent, SelectOption } from '@shared/components/ui/select/select.component';
+import { DatePickerComponent } from '@shared/components/ui/date-picker/date-picker.component';
 
 export interface PostFormValue {
   title: string;

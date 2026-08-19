@@ -3,18 +3,18 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, LayoutGrid, List, FileText, Search, X } from 'lucide-angular';
 import { A11yModule } from '@angular/cdk/a11y';
-import { CardComponent } from '../../shared/components/ui/card/card.component';
-import { ButtonComponent } from '../../shared/components/ui/button/button.component';
-import { InputComponent } from '../../shared/components/ui/input/input.component';
-import { SelectComponent, SelectOption } from '../../shared/components/ui/select/select.component';
+import { CardComponent } from '@shared/components/ui/card/card.component';
+import { ButtonComponent } from '@shared/components/ui/button/button.component';
+import { InputComponent } from '@shared/components/ui/input/input.component';
+import { SelectComponent, SelectOption } from '@shared/components/ui/select/select.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { PostFormComponent, PostFormValue } from './components/post-form/post-form.component';
-import { ConfirmDialogComponent } from '../../shared/components/ui/confirm-dialog/confirm-dialog.component';
-import { AppStateService } from '../../core/state/app-state.service';
-import { StorageService } from '../../core/storage/storage.service';
-import { StorageKeys } from '../../core/storage/storage-keys';
-import { Platform, PostStatus, Post } from '../../core/models';
-import { PLATFORM_META } from '../../core/config/platforms.config';
+import { ConfirmDialogComponent } from '@shared/components/ui/confirm-dialog/confirm-dialog.component';
+import { AppStateService } from '@core/state/app-state.service';
+import { StorageService } from '@core/storage/storage.service';
+import { StorageKeys } from '@core/storage/storage-keys';
+import { Platform, PostStatus, Post } from '@core/models';
+import { PLATFORM_META } from '@core/config/platforms.config';
 
 const STATUS_PRIORITY: Record<PostStatus, number> = {
   idea: 1,

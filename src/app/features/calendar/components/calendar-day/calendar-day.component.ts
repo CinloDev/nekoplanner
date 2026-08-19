@@ -1,9 +1,9 @@
 import { Component, Input, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DragDropModule, CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Post } from '../../../../core/models';
+import { Post } from '@core/models';
 import { CalendarPostComponent } from '../calendar-post/calendar-post.component';
-import { isCurrentMonth, isSameDay } from '../../../../core/utils/calendar';
+import { isCurrentMonth, isSameDay } from '@core/utils/calendar';
 import { isSameWeek } from 'date-fns';
 
 @Component({
