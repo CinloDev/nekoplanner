@@ -10,6 +10,7 @@ import { SelectComponent, SelectOption } from '@shared/components/ui/select/sele
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { PostFormComponent, PostFormValue } from './components/post-form/post-form.component';
 import { ConfirmDialogComponent } from '@shared/components/ui/confirm-dialog/confirm-dialog.component';
+import { SideDrawerComponent } from '@shared/components/ui/side-drawer/side-drawer.component';
 import { AppStateService } from '@core/state/app-state.service';
 import { StorageService } from '@core/storage/storage.service';
 import { StorageKeys } from '@core/storage/storage-keys';
@@ -38,7 +39,8 @@ const STATUS_PRIORITY: Record<PostStatus, number> = {
     SelectComponent,
     PostCardComponent,
     PostFormComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    SideDrawerComponent
   ],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.scss'

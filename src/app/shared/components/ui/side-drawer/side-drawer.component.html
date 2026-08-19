@@ -1,0 +1,12 @@
+<div class="drawer-backdrop" (click)="onBackdropClick()"></div>
+<div class="side-drawer" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+  <div class="drawer-header">
+    <h2>{{ title() }}</h2>
+    <app-button variant="ghost" size="sm" (click)="close.emit()" aria-label="Cerrar">
+      <lucide-icon [img]="XIcon" size="20"></lucide-icon>
+    </app-button>
+  </div>
+  <div class="drawer-body">
+    <ng-content></ng-content>
+  </div>
+</div>

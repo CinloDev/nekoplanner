@@ -140,6 +140,20 @@ export class AppStateService {
     this._ideas.set(ideas);
   }
 
+  createIdea(idea: Idea): void {
+    this._ideas.set([idea, ...this._ideas()]);
+  }
+
+  updateIdea(updatedIdea: Idea): void {
+    this._ideas.update(ideas =>
+      ideas.map(idea => idea.id === updatedIdea.id ? updatedIdea : idea)
+    );
+  }
+
+  deleteIdea(ideaId: string): void {
+    this._ideas.update(ideas => ideas.filter(idea => idea.id !== ideaId));
+  }
+
   createPost(post: Post): void {
     this._posts.set([...this._posts(), post]);
   }

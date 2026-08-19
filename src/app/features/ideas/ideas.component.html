@@ -1,7 +1,110 @@
-<app-card>
-  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-4);">
-    <h2 style="margin: 0;">Ideas</h2>
-    <app-badge variant="subtle" color="primary">Próximamente</app-badge>
+<div class="ideas-container">
+  <div class="ideas-header">
+    <div class="title-area">
+      <h1>
+        <lucide-icon [img]="IdeaIcon" size="28" class="title-icon"></lucide-icon>
+        Ideas
+      </h1>
+      <p class="subtitle">Capturá conceptos y contenido para desarrollar más adelante.</p>
+    </div>
+    <app-button variant="primary" (click)="openCreateForm()">
+      <lucide-icon [img]="PlusIcon" size="20"></lucide-icon>
+      Nueva idea
+    </app-button>
+
+    <!-- Toolbar: Search & Filters -->
+    @if (hasIdeas || isAnyFilterActive) {
+      <div class="toolbar">
+        <div class="search-box">
+          <app-input
+            type="text"
+            placeholder="Buscar ideas..."
+            [value]="searchQuery()"
+            (valueChange)="searchQuery.set($event)"
+          ></app-input>
+        </div>
+        
+        <div class="filters">
+          <app-select
+            [options]="tagOptions()"
+            placeholder="Todas las tags"
+            [value]="selectedTag()"
+            (valueChange)="selectedTag.set($event)"
+            [disabled]="tagOptions().length === 0"
+          ></app-select>
+          
+          @if (isAnyFilterActive) {
+            <app-button variant="ghost" (click)="clearFilters()" class="clear-btn">
+              <lucide-icon [img]="XIcon" size="16"></lucide-icon>
+              Limpiar
+            </app-button>
+          }
+        </div>
+      </div>
+    }
   </div>
-  <p style="color: var(--color-text-muted);">La gestión de ideas y tormenta de ideas estará disponible aquí.</p>
-</app-card>
+
+  <div class="ideas-content">
+    @if (!hasIdeas && !isAnyFilterActive) {
+      <!-- Empty State: No ideas at all -->
+      <div class="empty-state">
+        <div class="empty-icon-wrapper">
+          <lucide-icon [img]="IdeaIcon" size="48"></lucide-icon>
+        </div>
+        <h3>Todavía no hay ideas</h3>
+        <p>Empezá a capturar contenido para futuras publicaciones.</p>
+        <app-button variant="primary" (click)="openCreateForm()">
+          Crear mi primera idea
+        </app-button>
+      </div>
+    } @else if (visibleIdeas().length === 0) {
+      <!-- Empty State: No results for filters -->
+      <div class="empty-state">
+        <div class="empty-icon-wrapper">
+          <lucide-icon [img]="SearchIcon" size="48"></lucide-icon>
+        </div>
+        <h3>No hay coincidencias</h3>
+        <p>No se encontraron ideas con los filtros actuales.</p>
+        <app-button variant="secondary" (click)="clearFilters()">
+          Limpiar filtros
+        </app-button>
+      </div>
+    } @else {
+      <!-- Ideas Grid -->
+      <div class="ideas-grid">
+        @for (idea of visibleIdeas(); track idea.id) {
+          <app-idea-card
+            [idea]="idea"
+            (edit)="openEditForm($event)"
+            (delete)="requestDelete($event)"
+          ></app-idea-card>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+  <!-- Create/Edit Drawer -->
+  @if (isFormOpen()) {
+    <app-side-drawer 
+      [title]="editingIdea() ? 'Editar idea' : 'Nueva idea'" 
+      (close)="closeForm()">
+      <app-idea-form
+        [initialIdea]="editingIdea()"
+        (save)="saveIdea($event)"
+        (cancel)="closeForm()"
+      ></app-idea-form>
+    </app-side-drawer>
+  }
+
+<!-- Delete Confirmation Dialog -->
+<app-confirm-dialog
+  [isOpen]="ideaToDelete() !== null"
+  title="Eliminar idea"
+  [message]="'¿Estás seguro que querés eliminar la idea \'' + ideaToDelete()?.title + '\'? Esta acción no se puede deshacer.'"
+  confirmText="Eliminar"
+  cancelText="Cancelar"
+  [isDestructive]="true"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()"
+></app-confirm-dialog>

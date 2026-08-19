@@ -1,0 +1,60 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="idea-form">
+  
+  <div class="form-body">
+    <!-- Title -->
+    <div class="form-group">
+      <app-input
+        type="text"
+        id="title"
+        label="Título"
+        placeholder="Ej: 5 tips para Angular..."
+        [value]="getControlValue('title')"
+        (valueChange)="updateControlValue('title', $event)"
+        [error]="hasError('title', 'required') ? 'El título es requerido' : (hasError('title', 'minlength') ? 'Debe tener al menos 3 caracteres' : '')"
+      ></app-input>
+    </div>
+
+    <!-- Tags -->
+    <div class="form-group">
+      <app-input
+        type="text"
+        id="tags"
+        label="Etiquetas (opcional)"
+        placeholder="Separadas por coma (ej: tutorial, angular, frontend)"
+        [value]="getControlValue('tags')"
+        (valueChange)="updateControlValue('tags', $event)"
+      ></app-input>
+      <small class="help-text">Ingresá etiquetas separadas por comas.</small>
+    </div>
+
+    <!-- Content -->
+    <div class="form-group">
+      <label for="content" class="form-label">Contenido o notas (opcional)</label>
+      <textarea 
+        id="content" 
+        formControlName="content" 
+        class="form-textarea"
+        placeholder="Anotá tus ideas principales acá..."
+        rows="8"
+      ></textarea>
+      @if (hasError('content', 'maxlength')) {
+        <span class="error-text">El contenido es demasiado largo.</span>
+      }
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <app-button 
+      type="button" 
+      variant="secondary" 
+      (click)="onCancel()">
+      Cancelar
+    </app-button>
+    <app-button 
+      type="submit" 
+      variant="primary"
+      [disabled]="form.invalid">
+      {{ initialIdea() ? 'Guardar cambios' : 'Crear idea' }}
+    </app-button>
+  </div>
+</form>
