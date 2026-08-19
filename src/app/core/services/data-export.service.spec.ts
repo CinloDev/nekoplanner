@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { DataExportService } from './data-export.service';
 import { AppStateService } from '../state/app-state.service';
 import { signal } from '@angular/core';
@@ -33,23 +33,31 @@ describe('DataExportService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should create a correctly structured backup and trigger download', () => {
+  it('should create a correctly structured backup and trigger download', fakeAsync(() => {
     // Spy on document.createElement and appendChild/click
     const aElement = document.createElement('a');
     spyOn(document, 'createElement').and.returnValue(aElement);
     spyOn(document.body, 'appendChild');
-    spyOn(document.body, 'removeChild');
+    spyOn(aElement, 'remove');
     spyOn(aElement, 'click');
 
     service.export();
 
     expect(URL.createObjectURL).toHaveBeenCalled();
     expect(document.createElement).toHaveBeenCalledWith('a');
-    expect(aElement.href).toBe('http://localhost:9876/blob:fake-url'); // Depending on test runner base
+    expect(aElement.href).toContain('blob:fake-url');
     expect(aElement.download).toBe('neko-planner-backup.json');
     expect(document.body.appendChild).toHaveBeenCalledWith(aElement);
     expect(aElement.click).toHaveBeenCalled();
-    expect(document.body.removeChild).toHaveBeenCalledWith(aElement);
+    expect(aElement.remove).toHaveBeenCalled();
+    
+    // Check that revokeObjectURL is NOT called immediately
+    expect(URL.revokeObjectURL).not.toHaveBeenCalled();
+
+    // Fast-forward timers
+    tick(200);
+
+    // Now it should be called
     expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:fake-url');
 
     // We can also intercept the Blob to check the content and MIME type
@@ -69,5 +77,5 @@ describe('DataExportService', () => {
       // Verify pretty-printed format by checking if it contains newlines and spaces
       expect(text).toContain('{\n  "version": 1,\n');
     });
-  });
+  }));
 });

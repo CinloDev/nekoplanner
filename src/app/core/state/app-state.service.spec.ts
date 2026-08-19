@@ -52,6 +52,26 @@ describe('AppStateService', () => {
       expect(service.ideasCount()).toBe(0);
     });
 
+    it('should update settings', () => {
+      service.updateSettings({ theme: 'dark', navigation: 'sidebar' } as any);
+      expect(service.settings()).toEqual({ theme: 'dark', navigation: 'sidebar' } as any);
+    });
+
+    it('should completely replace state on importData', () => {
+      const backup: any = {
+        version: 1,
+        posts: [{ id: '1', title: 'Imported Post' }],
+        ideas: [{ id: '1', title: 'Imported Idea' }],
+        settings: { theme: 'system', navigation: 'sidebar' }
+      };
+
+      service.importData(backup);
+
+      expect(service.posts()).toEqual([{ id: '1', title: 'Imported Post' } as any]);
+      expect(service.ideas()).toEqual([{ id: '1', title: 'Imported Idea' } as any]);
+      expect(service.settings()).toEqual({ theme: 'system', navigation: 'sidebar' });
+    });
+
     it('should count ideas correctly', () => {
       service.setIdeas([{ id: 'i1', title: 'Idea 1' } as Idea]);
       expect(service.ideasCount()).toBe(1);

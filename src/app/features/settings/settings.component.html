@@ -36,11 +36,41 @@
       <div class="setting-item">
         <div class="setting-label">Exportar datos</div>
         <div class="setting-control">
-          <app-button variant="primary" (clicked)="exportData()">
+          <app-button variant="primary" (click)="exportData()">
             Exportar Backup
           </app-button>
         </div>
       </div>
+
+      <div class="setting-item">
+        <div class="setting-label">Importar datos</div>
+        <div class="setting-control import-control">
+          <input 
+            type="file" 
+            accept=".json" 
+            #fileInput 
+            style="display: none" 
+            (change)="onFileSelected($event)">
+          <app-button variant="secondary" (click)="fileInput.click()">
+            Importar backup
+          </app-button>
+        </div>
+      </div>
+      
+      @if (importError) {
+        <div class="import-error-banner">
+          {{ importError }}
+        </div>
+      }
     </div>
   </app-card>
 </div>
+
+<app-confirm-dialog
+  [isOpen]="isConfirmDialogOpen"
+  title="Importar datos"
+  [message]="confirmMessage"
+  confirmText="Importar datos"
+  (confirm)="onConfirmImport()"
+  (cancel)="onCancelImport()">
+</app-confirm-dialog>

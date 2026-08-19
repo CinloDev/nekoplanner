@@ -71,6 +71,10 @@ export class ThemeService {
     this.updateResolvedTheme(preference);
   }
 
+  recalculateTheme(): void {
+    this.updateResolvedTheme(this.preference());
+  }
+
   private updateResolvedTheme(preference: ThemePreference): void {
     let resolved: 'light' | 'dark' = 'light';
 
