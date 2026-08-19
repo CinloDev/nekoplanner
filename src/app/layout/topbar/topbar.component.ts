@@ -1,9 +1,10 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ButtonComponent } from '@shared/components/ui/button/button.component';
 import { NAVIGATION_ITEMS } from '../navigation.config';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-topbar',
@@ -13,6 +14,7 @@ import { NAVIGATION_ITEMS } from '../navigation.config';
   styleUrl: './topbar.component.scss'
 })
 export class TopbarComponent {
+  private readonly themeService = inject(ThemeService);
   currentSection: string = 'NekoPlanner';
   isMenuOpen: boolean = false;
   navItems = NAVIGATION_ITEMS;
@@ -49,11 +51,7 @@ export class TopbarComponent {
   }
 
   toggleTheme() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    if (isDark) {
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
+    const pref = this.themeService.resolvedTheme() === 'dark' ? 'light' : 'dark';
+    this.themeService.setPreference(pref);
   }
 }

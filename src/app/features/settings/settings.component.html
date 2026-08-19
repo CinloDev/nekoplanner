@@ -1,7 +1,28 @@
-<app-card>
-  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-4);">
-    <h2 style="margin: 0;">Ajustes</h2>
-    <app-badge variant="subtle" color="primary">Próximamente</app-badge>
+<div class="settings-container">
+  <div class="settings-header">
+    <h2>Ajustes</h2>
+    <p>Personaliza tu experiencia en NekoPlanner.</p>
   </div>
-  <p style="color: var(--color-text-muted);">Las configuraciones y preferencias de la aplicación estarán disponibles aquí.</p>
-</app-card>
+
+  <app-card>
+    <div class="settings-section">
+      <div class="section-header">
+        <h3>Apariencia</h3>
+        <p>Configura cómo se ve la interfaz de la aplicación.</p>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-label">Tema</div>
+        <div class="setting-control">
+          <app-select
+            label="Tema de la aplicación"
+            placeholder="Seleccionar tema"
+            [options]="themeOptions"
+            [value]="themeService.preference()"
+            (valueChange)="onThemeChange($event)">
+          </app-select>
+        </div>
+      </div>
+    </div>
+  </app-card>
+</div>
