@@ -260,4 +260,13 @@ export class AppStateService {
     this._ideas.set(backup.ideas);
     this._settings.set(backup.settings);
   }
+
+  clearAllData(): void {
+    this._posts.set([]);
+    this._ideas.set([]);
+    this._settings.set({
+      theme: 'system',
+      navigation: 'sidebar'
+    });
+  }
 }

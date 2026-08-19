@@ -7,6 +7,9 @@ import { ConfirmDialogComponent } from '@shared/components/ui/confirm-dialog/con
 import { ThemeService } from '../../core/services/theme.service';
 import { DataExportService } from '../../core/services/data-export.service';
 import { DataImportService } from '../../core/services/data-import.service';
+import { AppStateService } from '../../core/state/app-state.service';
+import { StorageService } from '../../core/storage/storage.service';
+import { StorageKeys } from '../../core/storage/storage-keys';
 import { ThemePreference } from '../../core/models/settings.model';
 import { NekoPlannerBackup } from '../../core/models/backup.model';
 
@@ -21,6 +24,8 @@ export class SettingsComponent {
   readonly themeService = inject(ThemeService);
   private readonly dataExportService = inject(DataExportService);
   private readonly dataImportService = inject(DataImportService);
+  private readonly appState = inject(AppStateService);
+  private readonly storage = inject(StorageService);
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -28,6 +33,8 @@ export class SettingsComponent {
   isConfirmDialogOpen = false;
   confirmMessage = '';
   pendingBackup: NekoPlannerBackup | null = null;
+
+  isClearAllDialogOpen = false;
 
   readonly themeOptions: SelectOption<ThemePreference>[] = [
     { label: 'Light', value: 'light' },
@@ -86,5 +93,28 @@ Esta acción no se puede deshacer.`;
   onCancelImport(): void {
     this.isConfirmDialogOpen = false;
     this.pendingBackup = null;
+  }
+
+  requestClearAll(): void {
+    this.isClearAllDialogOpen = true;
+  }
+
+  onConfirmClearAll(): void {
+    this.isClearAllDialogOpen = false;
+    
+    // Clear state
+    this.appState.clearAllData();
+    
+    // Persist defaults
+    this.storage.save(StorageKeys.POSTS, []);
+    this.storage.save(StorageKeys.IDEAS, []);
+    this.storage.save(StorageKeys.SETTINGS, this.appState.settings());
+    
+    // Sync theme
+    this.themeService.recalculateTheme();
+  }
+
+  onCancelClearAll(): void {
+    this.isClearAllDialogOpen = false;
   }
 }
