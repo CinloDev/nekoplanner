@@ -61,4 +61,14 @@
       min-width: 200px;
     }
   }
+
+  .import-error-banner {
+    background-color: var(--color-danger-subtle, #fee2e2);
+    color: var(--color-danger-strong, #b91c1c);
+    padding: var(--spacing-4);
+    border-radius: var(--radius-md);
+    margin-top: var(--spacing-4);
+    font-size: var(--font-size-sm);
+    border: 1px solid var(--color-danger-border, #fca5a5);
+  }
 }

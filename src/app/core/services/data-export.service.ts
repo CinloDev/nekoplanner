@@ -27,9 +27,14 @@ export class DataExportService {
       a.download = 'neko-planner-backup.json';
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
+      a.remove();
+      
+      // Delay revocation to ensure browser has time to start download
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 200);
+    } else {
+      URL.revokeObjectURL(url);
     }
-    
-    URL.revokeObjectURL(url);
   }
 }

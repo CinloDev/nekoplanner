@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { Post, Idea, Settings, Platform, PostStatus, PlatformDistribution, StatusDistribution } from '../models';
+import { Post, Idea, Settings, Platform, PostStatus, PlatformDistribution, StatusDistribution, NekoPlannerBackup } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -253,5 +253,11 @@ export class AppStateService {
 
   updateSettings(settings: Settings): void {
     this._settings.set(settings);
+  }
+
+  importData(backup: NekoPlannerBackup): void {
+    this._posts.set(backup.posts);
+    this._ideas.set(backup.ideas);
+    this._settings.set(backup.settings);
   }
 }

@@ -77,4 +77,15 @@ describe('ThemeService', () => {
     expect(service.resolvedTheme()).toBe('dark');
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
   });
+
+  it('should recalculate theme without persisting', () => {
+    // Current app state preference is 'system', mock matches false -> 'light'
+    mockAppState.settings.and.returnValue({ theme: 'dark', navigation: 'sidebar' });
+    service.recalculateTheme();
+
+    expect(mockStorage.save).not.toHaveBeenCalled();
+    expect(mockAppState.updateSettings).not.toHaveBeenCalled();
+    expect(service.resolvedTheme()).toBe('dark');
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+  });
 });
