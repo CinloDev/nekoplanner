@@ -36,7 +36,7 @@ describe('ConfirmDialogComponent', () => {
 
   it('should emit cancel event on Cancel button click', () => {
     spyOn(component.cancel, 'emit');
-    const cancelBtn = fixture.debugElement.query(By.css('app-button[variant="ghost"]')).nativeElement;
+    const cancelBtn = fixture.debugElement.query(By.css('app-button[variant="secondary"]')).nativeElement;
     cancelBtn.click();
     expect(component.cancel.emit).toHaveBeenCalled();
   });

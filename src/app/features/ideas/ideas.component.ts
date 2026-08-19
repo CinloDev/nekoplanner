@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AppStateService } from '@core/state/app-state.service';
 import { StorageService } from '@core/storage/storage.service';
 import { StorageKeys } from '@core/storage/storage-keys';
-import { Idea } from '@core/models';
+import { Idea, Post } from '@core/models';
 import { ButtonComponent } from '@shared/components/ui/button/button.component';
 import { InputComponent } from '@shared/components/ui/input/input.component';
 import { SelectComponent, SelectOption } from '@shared/components/ui/select/select.component';
@@ -11,6 +11,8 @@ import { ConfirmDialogComponent } from '@shared/components/ui/confirm-dialog/con
 import { SideDrawerComponent } from '@shared/components/ui/side-drawer/side-drawer.component';
 import { IdeaCardComponent } from './components/idea-card/idea-card.component';
 import { IdeaFormComponent, IdeaFormValue } from './components/idea-form/idea-form.component';
+import { PostFormComponent, PostFormValue } from '../posts/components/post-form/post-form.component';
+import { createNewPost } from '@core/utils/post.utils';
 import { LucideAngularModule, Search as SearchIcon, X as XIcon, Plus as PlusIcon, Lightbulb as IdeaIcon } from 'lucide-angular';
 
 @Component({
@@ -25,6 +27,7 @@ import { LucideAngularModule, Search as SearchIcon, X as XIcon, Plus as PlusIcon
     SideDrawerComponent,
     IdeaCardComponent,
     IdeaFormComponent,
+    PostFormComponent,
     LucideAngularModule
   ],
   templateUrl: './ideas.component.html',
@@ -46,9 +49,27 @@ export class IdeasComponent {
   readonly isFormOpen = signal<boolean>(false);
   readonly editingIdea = signal<Idea | null>(null);
   readonly ideaToDelete = signal<Idea | null>(null);
+  readonly ideaToConvert = signal<Idea | null>(null);
 
   // Computed data
   readonly allIdeas = this.appState.ideas;
+
+  readonly initialPostForConversion = computed<Post | null>(() => {
+    const idea = this.ideaToConvert();
+    if (!idea) return null;
+    return {
+      title: idea.title,
+      content: idea.content,
+      tags: idea.tags,
+      // Default dummy values for other required fields, PostFormComponent will patch them but they are required by type
+      id: '',
+      platform: null as any,
+      status: null as any,
+      scheduledDate: '',
+      createdAt: '',
+      updatedAt: ''
+    } as Post;
+  });
 
   readonly tagOptions = computed<SelectOption<string>[]>(() => {
     const ideas = this.allIdeas();
@@ -121,6 +142,14 @@ export class IdeasComponent {
     this.editingIdea.set(null);
   }
 
+  openConvertForm(idea: Idea): void {
+    this.ideaToConvert.set(idea);
+  }
+
+  closeConvertForm(): void {
+    this.ideaToConvert.set(null);
+  }
+
   saveIdea(formValue: IdeaFormValue): void {
     const now = new Date().toISOString();
     const currentIdea = this.editingIdea();
@@ -169,5 +198,35 @@ export class IdeasComponent {
 
   private persistIdeas(): void {
     this.storageService.save(StorageKeys.IDEAS, this.allIdeas());
+  }
+
+  convertIdea(formValue: PostFormValue): void {
+    const idea = this.ideaToConvert();
+    if (!idea) return;
+
+    // 1. Create Post
+    const newPost = createNewPost({
+      title: formValue.title,
+      content: formValue.content,
+      platform: formValue.platform,
+      status: formValue.status,
+      scheduledDate: formValue.scheduledDate,
+      tags: formValue.tags,
+      media: formValue.media
+    });
+    
+    this.appState.createPost(newPost);
+
+    // 2. Mark Idea as converted
+    this.appState.markIdeaAsConverted(idea.id, newPost.id);
+
+    // 3. Persist POSTS
+    this.storageService.save(StorageKeys.POSTS, this.appState.posts());
+
+    // 4. Persist IDEAS
+    this.persistIdeas();
+
+    // 5. Close drawer
+    this.closeConvertForm();
   }
 }

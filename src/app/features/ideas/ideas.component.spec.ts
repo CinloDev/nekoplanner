@@ -24,7 +24,10 @@ describe('IdeasComponent', () => {
       ideas: ideasSignal,
       createIdea: jasmine.createSpy('createIdea'),
       updateIdea: jasmine.createSpy('updateIdea'),
-      deleteIdea: jasmine.createSpy('deleteIdea')
+      deleteIdea: jasmine.createSpy('deleteIdea'),
+      createPost: jasmine.createSpy('createPost'),
+      markIdeaAsConverted: jasmine.createSpy('markIdeaAsConverted'),
+      posts: jasmine.createSpy('posts').and.returnValue([])
     };
 
     mockStorageService = {
@@ -164,6 +167,45 @@ describe('IdeasComponent', () => {
       
       expect(mockAppState.deleteIdea).not.toHaveBeenCalled();
       expect(component.ideaToDelete()).toBeNull();
+    });
+
+    it('should open convert form', () => {
+      const idea = ideasSignal()[0];
+      component.openConvertForm(idea);
+      expect(component.ideaToConvert()).toEqual(idea);
+      
+      const initialPost = component.initialPostForConversion();
+      expect(initialPost?.title).toBe(idea.title);
+      expect(initialPost?.content).toBe(idea.content);
+      expect(initialPost?.tags).toEqual(idea.tags);
+      expect(initialPost?.platform).toBeNull();
+      expect(initialPost?.status).toBeNull();
+    });
+
+    it('should close convert form', () => {
+      component.openConvertForm(ideasSignal()[0]);
+      component.closeConvertForm();
+      expect(component.ideaToConvert()).toBeNull();
+    });
+
+    it('should convert idea to post', () => {
+      const idea = ideasSignal()[0];
+      component.openConvertForm(idea);
+      
+      const formValue = {
+        title: 'New Post',
+        content: 'Content',
+        platform: 'x',
+        status: 'published',
+        tags: []
+      } as any;
+      
+      component.convertIdea(formValue);
+      
+      expect(mockAppState.createPost).toHaveBeenCalled();
+      expect(mockAppState.markIdeaAsConverted).toHaveBeenCalled();
+      expect(mockStorageService.save).toHaveBeenCalledTimes(2); // One for POSTS, one for IDEAS
+      expect(component.ideaToConvert()).toBeNull();
     });
   });
 });

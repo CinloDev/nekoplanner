@@ -154,6 +154,16 @@ export class AppStateService {
     this._ideas.update(ideas => ideas.filter(idea => idea.id !== ideaId));
   }
 
+  markIdeaAsConverted(ideaId: string, postId: string): void {
+    this._ideas.update(ideas => 
+      ideas.map(idea => 
+        idea.id === ideaId 
+          ? { ...idea, convertedToPostId: postId, updatedAt: new Date().toISOString() } 
+          : idea
+      )
+    );
+  }
+
   createPost(post: Post): void {
     this._posts.set([...this._posts(), post]);
   }

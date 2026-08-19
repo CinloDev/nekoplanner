@@ -7,4 +7,5 @@ export interface Idea {
   tags?: Tag[];
   createdAt: string; // ISO date string para simplificar serialización
   updatedAt: string; // ISO date string
+  convertedToPostId?: string;
 }
