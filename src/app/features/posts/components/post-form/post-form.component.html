@@ -1,74 +1,74 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="post-form">
-  
-  <div class="form-group">
-    <app-input
-      id="post-title"
-      label="Título"
-      [value]="getControlValue('title')"
-      (valueChange)="updateControlValue('title', $event)"
-      placeholder="Ej: Nuevo lanzamiento"
-      [error]="hasError('title', 'required') ? 'El título es obligatorio.' : (hasError('title', 'minlength') ? 'El título debe tener al menos 3 caracteres.' : (hasError('title', 'maxlength') ? 'El título es demasiado largo (máximo 100 caracteres).' : ''))"
-    ></app-input>
-  </div>
-
-  <div class="form-row">
+  <div class="form-body">
     <div class="form-group">
-      <app-select
-        id="post-platform"
-        label="Plataforma"
-        [value]="getControlValue('platform')"
-        (valueChange)="updateControlValue('platform', $event)"
-        [options]="platformOptions"
-        placeholder="Selecciona red"
-        [error]="hasError('platform', 'required') ? 'Seleccioná una plataforma.' : ''"
-      ></app-select>
+      <app-input
+        id="post-title"
+        label="Título"
+        [value]="getControlValue('title')"
+        (valueChange)="updateControlValue('title', $event)"
+        placeholder="Ej: Nuevo lanzamiento"
+        [error]="hasError('title', 'required') ? 'El título es obligatorio.' : (hasError('title', 'minlength') ? 'El título debe tener al menos 3 caracteres.' : (hasError('title', 'maxlength') ? 'El título es demasiado largo (máximo 100 caracteres).' : ''))"
+      ></app-input>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <app-select
+          id="post-platform"
+          label="Plataforma"
+          [value]="getControlValue('platform')"
+          (valueChange)="updateControlValue('platform', $event)"
+          [options]="platformOptions"
+          placeholder="Selecciona red"
+          [error]="hasError('platform', 'required') ? 'Seleccioná una plataforma.' : ''"
+        ></app-select>
+      </div>
+
+      <div class="form-group">
+        <app-select
+          id="post-status"
+          label="Estado"
+          [value]="getControlValue('status')"
+          (valueChange)="updateControlValue('status', $event)"
+          [options]="statusOptions"
+          [error]="hasError('status', 'required') ? 'Seleccioná un estado.' : ''"
+        ></app-select>
+      </div>
     </div>
 
     <div class="form-group">
-      <app-select
-        id="post-status"
-        label="Estado"
-        [value]="getControlValue('status')"
-        (valueChange)="updateControlValue('status', $event)"
-        [options]="statusOptions"
-        [error]="hasError('status', 'required') ? 'Seleccioná un estado.' : ''"
-      ></app-select>
+      <app-date-picker
+        label="Fecha y hora (opcional)"
+        placeholder="dd/mm/aaaa --:--"
+        [value]="getControlValue('scheduledDate')"
+        (valueChange)="updateControlValue('scheduledDate', $event)"
+        [error]="hasError('scheduledDate', 'required') ? 'Indicá una fecha de programación.' : ''"
+      ></app-date-picker>
     </div>
-  </div>
 
-  <div class="form-group">
-    <app-date-picker
-      label="Fecha y hora (opcional)"
-      placeholder="dd/mm/aaaa --:--"
-      [value]="getControlValue('scheduledDate')"
-      (valueChange)="updateControlValue('scheduledDate', $event)"
-      [error]="hasError('scheduledDate', 'required') ? 'Indicá una fecha de programación.' : ''"
-    ></app-date-picker>
-  </div>
-
-  <div class="form-group">
-    <label for="post-content" class="form-label">Contenido</label>
-    <textarea 
-      id="post-content" 
-      class="form-control textarea"
-      formControlName="content"
-      placeholder="Escribe el contenido de la publicación..."
-      rows="4"
-      [class.has-error]="hasError('content', 'maxlength')"
-    ></textarea>
-    
-    <div class="char-counter">
-      {{ form.get('content')?.value?.length || 0 }} / 2200
+    <div class="form-group">
+      <label for="post-content" class="form-label">Contenido</label>
+      <textarea 
+        id="post-content" 
+        class="form-control textarea"
+        formControlName="content"
+        placeholder="Escribe el contenido de la publicación..."
+        rows="4"
+        [class.has-error]="hasError('content', 'maxlength')"
+      ></textarea>
+      
+      <div class="char-counter">
+        {{ form.get('content')?.value?.length || 0 }} / 2200
+      </div>
+      
+      @if (hasError('content', 'maxlength')) {
+        <div class="error-message">El contenido supera el límite permitido.</div>
+      }
     </div>
-    
-    @if (hasError('content', 'maxlength')) {
-      <div class="error-message">El contenido supera el límite permitido.</div>
-    }
   </div>
 
   <div class="form-actions">
     <app-button type="button" variant="secondary" (click)="onCancel()">Cancelar</app-button>
     <app-button type="submit" variant="primary">Guardar publicación</app-button>
   </div>
-
 </form>

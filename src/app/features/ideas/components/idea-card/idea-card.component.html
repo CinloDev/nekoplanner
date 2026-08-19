@@ -1,0 +1,66 @@
+<app-card class="idea-card" tabindex="0">
+  <div class="idea-card-content">
+    
+    <!-- Top Area: Icon and Actions -->
+    <div class="idea-card-top">
+      <div class="idea-icon-wrapper">
+        <lucide-icon [img]="IdeaIcon" size="20"></lucide-icon>
+      </div>
+      <div class="card-actions">
+        @if (!idea().convertedToPostId) {
+          <app-button variant="ghost" size="sm" class="action-btn convert-btn" (click)="convert.emit(idea())" aria-label="Convertir en publicación" title="Convertir en publicación">
+            <lucide-icon [img]="ArrowRightIcon" size="16"></lucide-icon>
+          </app-button>
+        }
+        <app-button variant="ghost" size="sm" class="action-btn edit-btn" (click)="edit.emit(idea())" aria-label="Editar idea" title="Editar">
+          <lucide-icon [img]="EditIcon" size="16"></lucide-icon>
+        </app-button>
+        <app-button variant="ghost" size="sm" class="action-btn delete-btn" (click)="delete.emit(idea())" aria-label="Eliminar idea" title="Eliminar">
+          <lucide-icon [img]="TrashIcon" size="16"></lucide-icon>
+        </app-button>
+      </div>
+    </div>
+    
+    <!-- Body: Title and Content -->
+    <div class="idea-card-body">
+      <h3 class="idea-title">{{ idea().title }}</h3>
+      @if (idea().content) {
+        <p class="idea-text">{{ idea().content }}</p>
+      }
+    </div>
+    
+    <!-- Tags -->
+    @if (displayTags().visible.length > 0) {
+      <div class="idea-tags">
+        @for (tag of displayTags().visible; track tag.id) {
+          <span class="tag">#{{ tag.name }}</span>
+        }
+        @if (displayTags().extraCount > 0) {
+          <span class="tag extra">+{{ displayTags().extraCount }}</span>
+        }
+      </div>
+    }
+
+    <!-- Footer: Metadata -->
+    <div class="idea-card-footer">
+      <div class="meta-dates">
+        @if (idea().createdAt && idea().createdAt !== idea().updatedAt) {
+          <span class="date created" title="Fecha de creación">
+            Creada {{ idea().createdAt | date:'d MMM yyyy' }}
+          </span>
+          <span class="separator">•</span>
+        }
+        <span class="date updated" title="Última actualización">
+          Actualizada {{ idea().updatedAt | date:'d MMM yyyy' }}
+        </span>
+      </div>
+      @if (idea().convertedToPostId) {
+        <div class="converted-badge" title="✓ Convertida en publicación">
+          <lucide-icon [img]="CheckCircleIcon" size="14"></lucide-icon>
+          <span>Convertida en publicación</span>
+        </div>
+      }
+    </div>
+
+  </div>
+</app-card>

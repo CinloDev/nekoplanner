@@ -16,12 +16,13 @@
     </div>
     
     <div class="dialog-actions">
-      <app-button variant="ghost" (click)="onCancel()">
+      <app-button variant="secondary" (click)="onCancel()" class="action-btn">
         {{ cancelText() }}
       </app-button>
       <app-button 
         [variant]="isDestructive() ? 'danger' : 'primary'" 
-        (click)="onConfirm()">
+        (click)="onConfirm()"
+        class="action-btn">
         {{ confirmText() }}
       </app-button>
     </div>

@@ -109,22 +109,15 @@
 
   <!-- Create/Edit Drawer -->
   @if (isDrawerOpen()) {
-    <div class="drawer-backdrop" (click)="closeDrawer()"></div>
-    <div class="side-drawer" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
-      <div class="drawer-header">
-        <h2>{{ editingPost() ? 'Editar publicación' : 'Nueva publicación' }}</h2>
-        <app-button variant="ghost" size="sm" (click)="closeDrawer()" aria-label="Cerrar">
-          <lucide-icon [img]="X" size="20"></lucide-icon>
-        </app-button>
-      </div>
-      <div class="drawer-body">
-        <app-post-form
-          [initialPost]="editingPost()"
-          (save)="onSavePost($event)"
-          (cancel)="closeDrawer()"
-        ></app-post-form>
-      </div>
-    </div>
+    <app-side-drawer 
+      [title]="editingPost() ? 'Editar publicación' : 'Nueva publicación'" 
+      (close)="closeDrawer()">
+      <app-post-form
+        [initialPost]="editingPost()"
+        (save)="onSavePost($event)"
+        (cancel)="closeDrawer()"
+      ></app-post-form>
+    </app-side-drawer>
   }
 
   <!-- Delete Confirmation Dialog -->

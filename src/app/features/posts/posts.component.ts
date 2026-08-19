@@ -10,11 +10,13 @@ import { SelectComponent, SelectOption } from '@shared/components/ui/select/sele
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { PostFormComponent, PostFormValue } from './components/post-form/post-form.component';
 import { ConfirmDialogComponent } from '@shared/components/ui/confirm-dialog/confirm-dialog.component';
+import { SideDrawerComponent } from '@shared/components/ui/side-drawer/side-drawer.component';
 import { AppStateService } from '@core/state/app-state.service';
 import { StorageService } from '@core/storage/storage.service';
 import { StorageKeys } from '@core/storage/storage-keys';
 import { Platform, PostStatus, Post } from '@core/models';
 import { PLATFORM_META } from '@core/config/platforms.config';
+import { createNewPost } from '@core/utils/post.utils';
 
 const STATUS_PRIORITY: Record<PostStatus, number> = {
   idea: 1,
@@ -38,7 +40,8 @@ const STATUS_PRIORITY: Record<PostStatus, number> = {
     SelectComponent,
     PostCardComponent,
     PostFormComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    SideDrawerComponent
   ],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.scss'
@@ -236,18 +239,15 @@ export class PostsComponent {
       this.appState.updatePost(updatedPost);
     } else {
       // Generate new Post object
-      const newPost: Post = {
-        id: crypto.randomUUID(),
+      const newPost = createNewPost({
         title: formValue.title,
         content: formValue.content,
         platform: formValue.platform,
         status: formValue.status,
         scheduledDate: formValue.scheduledDate,
-        tags: formValue.tags || [],
-        media: formValue.media || [],
-        createdAt: now,
-        updatedAt: now
-      };
+        tags: formValue.tags,
+        media: formValue.media
+      });
       
       this.appState.createPost(newPost);
     }

@@ -1,4 +1,4 @@
-import { Component, input, output, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, input, output, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ButtonComponent } from '../button/button.component';
