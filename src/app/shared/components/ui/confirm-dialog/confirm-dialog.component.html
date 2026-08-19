@@ -11,17 +11,21 @@
     (click)="onDialogClick($event)">
     
     <div class="dialog-content">
+      <div class="icon-container" [class.destructive]="isDestructive()">
+        <lucide-icon [img]="isDestructive() ? AlertTriangle : Info" size="28"></lucide-icon>
+      </div>
       <h2 id="dialog-title">{{ title() }}</h2>
       <p id="dialog-message">{{ message() }}</p>
     </div>
     
     <div class="dialog-actions">
-      <app-button variant="ghost" (click)="onCancel()">
+      <app-button variant="secondary" (click)="onCancel()" class="action-btn">
         {{ cancelText() }}
       </app-button>
       <app-button 
         [variant]="isDestructive() ? 'danger' : 'primary'" 
-        (click)="onConfirm()">
+        (click)="onConfirm()"
+        class="action-btn">
         {{ confirmText() }}
       </app-button>
     </div>

@@ -61,6 +61,68 @@ describe('AppStateService', () => {
     });
   });
 
+  describe('createIdea', () => {
+    it('should add a new idea to the beginning of the list', () => {
+      service.setIdeas([{ id: '1', title: 'Existing Idea' } as Idea]);
+      const newIdea: Idea = { id: '2', title: 'New Idea', content: '', createdAt: '', updatedAt: '' };
+      
+      service.createIdea(newIdea);
+      
+      const ideas = service.ideas();
+      expect(ideas.length).toBe(2);
+      expect(ideas[0]).toEqual(newIdea);
+      expect(ideas[1].id).toBe('1');
+    });
+  });
+
+  describe('updateIdea', () => {
+    it('should update an existing idea', () => {
+      const initialIdea: Idea = { id: '1', title: 'Idea 1', content: 'Old content', createdAt: '', updatedAt: '' };
+      service.setIdeas([initialIdea, { id: '2', title: 'Idea 2' } as Idea]);
+      
+      const updatedIdea: Idea = { ...initialIdea, content: 'New content', updatedAt: '2026-08-18' };
+      service.updateIdea(updatedIdea);
+      
+      const ideas = service.ideas();
+      expect(ideas.length).toBe(2);
+      expect(ideas[0]).toEqual(updatedIdea);
+      expect(ideas[1].id).toBe('2');
+    });
+
+    it('should do nothing if idea ID does not exist', () => {
+      const initialIdeas = [{ id: '1', title: 'Idea 1' } as Idea];
+      service.setIdeas(initialIdeas);
+      
+      service.updateIdea({ id: '999', title: 'Nonexistent' } as Idea);
+      
+      expect(service.ideas()).toEqual(initialIdeas);
+    });
+  });
+
+  describe('deleteIdea', () => {
+    it('should remove existing idea and leave others intact', () => {
+      service.setIdeas([
+        { id: '1', title: 'Idea 1' } as Idea,
+        { id: '2', title: 'Idea 2' } as Idea,
+        { id: '3', title: 'Idea 3' } as Idea
+      ]);
+      service.deleteIdea('2');
+      expect(service.ideas().length).toBe(2);
+      expect(service.ideas().map(i => i.id)).toEqual(['1', '3']);
+    });
+
+    it('should do nothing if idea ID does not exist', () => {
+      const initialIdeas = [
+        { id: '1', title: 'Idea 1' } as Idea,
+        { id: '2', title: 'Idea 2' } as Idea
+      ];
+      service.setIdeas(initialIdeas);
+      service.deleteIdea('3');
+      expect(service.ideas().length).toBe(2);
+      expect(service.ideas()).toEqual(initialIdeas);
+    });
+  });
+
   describe('deletePost', () => {
     it('should remove existing post and leave others intact', () => {
       service.setPosts([
