@@ -76,4 +76,22 @@ describe('IdeaCardComponent', () => {
     deleteBtn.click();
     expect(component.delete.emit).toHaveBeenCalledWith(mockIdea);
   });
+
+  it('should emit convert event', () => {
+    spyOn(component.convert, 'emit');
+    const convertBtn = fixture.nativeElement.querySelector('.convert-btn');
+    convertBtn.click();
+    expect(component.convert.emit).toHaveBeenCalledWith(mockIdea);
+  });
+
+  it('should hide convert button and show badge if already converted', () => {
+    componentRef.setInput('idea', { ...mockIdea, convertedToPostId: 'p1' });
+    fixture.detectChanges();
+    
+    const convertBtn = fixture.nativeElement.querySelector('.convert-btn');
+    expect(convertBtn).toBeNull();
+    
+    const badge = fixture.nativeElement.querySelector('.converted-badge');
+    expect(badge).toBeTruthy();
+  });
 });

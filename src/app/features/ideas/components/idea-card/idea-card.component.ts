@@ -3,7 +3,7 @@ import { DatePipe, CommonModule } from '@angular/common';
 import { CardComponent } from '@shared/components/ui/card/card.component';
 import { ButtonComponent } from '@shared/components/ui/button/button.component';
 import { Idea } from '@core/models';
-import { LucideAngularModule, Edit as EditIcon, Trash2 as TrashIcon, Lightbulb as IdeaIcon } from 'lucide-angular';
+import { LucideAngularModule, Edit as EditIcon, Trash2 as TrashIcon, Lightbulb as IdeaIcon, ArrowRight as ArrowRightIcon, CheckCircle as CheckCircleIcon } from 'lucide-angular';
 
 @Component({
   selector: 'app-idea-card',
@@ -17,10 +17,13 @@ export class IdeaCardComponent {
 
   readonly edit = output<Idea>();
   readonly delete = output<Idea>();
+  readonly convert = output<Idea>();
 
   readonly EditIcon = EditIcon;
   readonly TrashIcon = TrashIcon;
   readonly IdeaIcon = IdeaIcon;
+  readonly ArrowRightIcon = ArrowRightIcon;
+  readonly CheckCircleIcon = CheckCircleIcon;
   
   readonly displayTags = computed(() => {
     const tags = this.idea().tags || [];

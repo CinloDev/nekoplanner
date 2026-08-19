@@ -99,6 +99,30 @@ describe('AppStateService', () => {
     });
   });
 
+  describe('markIdeaAsConverted', () => {
+    it('should mark an existing idea as converted with the given postId', () => {
+      const initialIdea: Idea = { id: '1', title: 'Idea 1', content: 'Old', createdAt: '2026-08-01', updatedAt: '2026-08-01' };
+      service.setIdeas([initialIdea]);
+
+      service.markIdeaAsConverted('1', 'post-123');
+
+      const ideas = service.ideas();
+      expect(ideas.length).toBe(1);
+      expect(ideas[0].convertedToPostId).toBe('post-123');
+      expect(ideas[0].updatedAt).not.toBe('2026-08-01'); // updatedAt should be changed
+      expect(ideas[0].title).toBe('Idea 1'); // other props preserved
+    });
+
+    it('should do nothing if idea ID does not exist', () => {
+      const initialIdeas = [{ id: '1', title: 'Idea 1' } as Idea];
+      service.setIdeas(initialIdeas);
+
+      service.markIdeaAsConverted('999', 'post-123');
+
+      expect(service.ideas()).toEqual(initialIdeas);
+    });
+  });
+
   describe('deleteIdea', () => {
     it('should remove existing idea and leave others intact', () => {
       service.setIdeas([

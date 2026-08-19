@@ -16,6 +16,7 @@ import { StorageService } from '@core/storage/storage.service';
 import { StorageKeys } from '@core/storage/storage-keys';
 import { Platform, PostStatus, Post } from '@core/models';
 import { PLATFORM_META } from '@core/config/platforms.config';
+import { createNewPost } from '@core/utils/post.utils';
 
 const STATUS_PRIORITY: Record<PostStatus, number> = {
   idea: 1,
@@ -238,18 +239,15 @@ export class PostsComponent {
       this.appState.updatePost(updatedPost);
     } else {
       // Generate new Post object
-      const newPost: Post = {
-        id: crypto.randomUUID(),
+      const newPost = createNewPost({
         title: formValue.title,
         content: formValue.content,
         platform: formValue.platform,
         status: formValue.status,
         scheduledDate: formValue.scheduledDate,
-        tags: formValue.tags || [],
-        media: formValue.media || [],
-        createdAt: now,
-        updatedAt: now
-      };
+        tags: formValue.tags,
+        media: formValue.media
+      });
       
       this.appState.createPost(newPost);
     }
