@@ -1,7 +1,39 @@
-<app-card>
-  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-4);">
-    <h2 style="margin: 0;">Estadísticas</h2>
-    <app-badge variant="subtle" color="primary">Próximamente</app-badge>
+<div class="analytics-header">
+  <div class="analytics-header-text">
+    <h2>Analytics</h2>
+    <p>Entendé cómo se distribuye y evoluciona tu contenido.</p>
   </div>
-  <p style="color: var(--color-text-muted);">El rendimiento del contenido y las estadísticas estarán disponibles aquí.</p>
-</app-card>
+</div>
+
+@if (totalPosts() === 0) {
+  <div class="empty-state">
+    <h3>No hay suficientes datos</h3>
+    <p>Todavía no hay datos suficientes para mostrar analytics.</p>
+  </div>
+} @else {
+  <!-- KPIs -->
+  <div class="analytics-metrics">
+    <app-analytics-kpi-card label="Total Posts" [value]="totalPosts()"></app-analytics-kpi-card>
+    <app-analytics-kpi-card label="Completed" [value]="completedPosts()"></app-analytics-kpi-card>
+    <app-analytics-kpi-card label="Scheduled" [value]="scheduledPosts()"></app-analytics-kpi-card>
+    <app-analytics-kpi-card label="Completion" [value]="completedPercentage() + '%'"></app-analytics-kpi-card>
+  </div>
+
+  <div class="analytics-main">
+    <!-- Distributions -->
+    <div class="analytics-row-2">
+      <app-platform-distribution [data]="analyticsData.postsByPlatform()"></app-platform-distribution>
+      <app-status-distribution [data]="analyticsData.postsByStatus()"></app-status-distribution>
+    </div>
+
+    <!-- Monthly Trend -->
+    <div class="analytics-row-1">
+      <app-monthly-trend [data]="analyticsData.postsByMonth()"></app-monthly-trend>
+    </div>
+
+    <!-- Content Flow -->
+    <div class="analytics-row-1">
+      <app-content-flow [data]="analyticsData.contentFlow()"></app-content-flow>
+    </div>
+  </div>
+}
