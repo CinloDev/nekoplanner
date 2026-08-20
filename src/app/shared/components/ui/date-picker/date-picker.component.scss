@@ -121,6 +121,7 @@
     transform: translate(-50%, -50%);
     width: 90vw;
     max-width: 360px;
+    animation: fadeInMobile 0.15s ease-out;
   }
 }
 
@@ -318,5 +319,16 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeInMobile {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
   }
 }
