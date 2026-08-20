@@ -31,27 +31,14 @@ export class ThemeService {
   }
 
   initialize(): void {
-    // 1. Load from storage
-    const storedSettings = this.storage.load<Settings>(StorageKeys.SETTINGS);
+    // 1. AppStateService.hydrate() has already populated AppState with Settings.
+    // We just need to read the initial preference and resolve the theme.
+    const currentSettings = this.appState.settings();
+    let initialPreference: ThemePreference = currentSettings?.theme || 'system';
     
-    let initialPreference: ThemePreference = 'system';
-    
-    if (storedSettings && storedSettings.theme) {
-      // Validate the preference
-      if (['light', 'dark', 'system'].includes(storedSettings.theme)) {
-        initialPreference = storedSettings.theme as ThemePreference;
-      } else {
-        storedSettings.theme = 'system';
-      }
-      
-      // Load entire settings to AppState
-      this.appState.updateSettings(storedSettings);
-    } else {
-      // Create default settings if not exists
-      this.appState.updateSettings({
-        theme: 'system',
-        navigation: 'sidebar'
-      });
+    // Validate the preference
+    if (!['light', 'dark', 'system'].includes(initialPreference)) {
+      initialPreference = 'system';
     }
 
     // 2. Resolve theme
@@ -59,15 +46,12 @@ export class ThemeService {
   }
 
   setPreference(preference: ThemePreference): void {
-    // 1. Update Settings in AppState
+    // 1. Update Settings in AppState (which automatically persists to Storage)
     const currentSettings = this.appState.settings();
     const newSettings: Settings = { ...currentSettings, theme: preference };
     this.appState.updateSettings(newSettings);
 
-    // 2. Persist to Storage
-    this.storage.save(StorageKeys.SETTINGS, newSettings);
-
-    // 3. Resolve and apply theme
+    // 2. Resolve and apply theme
     this.updateResolvedTheme(preference);
   }
 

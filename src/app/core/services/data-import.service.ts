@@ -95,15 +95,11 @@ export class DataImportService {
   }
 
   import(backup: NekoPlannerBackup): void {
-    // 1. Atomic state update
+    // 1. Atomically replace the state in memory. 
+    // This will now automatically persist all keys.
     this.appState.importData(backup);
 
-    // 2. Persist cleanly
-    this.storage.save(StorageKeys.POSTS, backup.posts);
-    this.storage.save(StorageKeys.IDEAS, backup.ideas);
-    this.storage.save(StorageKeys.SETTINGS, backup.settings);
-
-    // 3. Inform ThemeService to re-evaluate based on the newly imported settings.
+    // 2. Inform ThemeService to re-evaluate based on the newly imported settings.
     this.themeService.recalculateTheme();
   }
 }

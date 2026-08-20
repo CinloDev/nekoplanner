@@ -4,8 +4,13 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { ThemeService } from './core/services/theme.service';
 
-function initializeTheme(themeService: ThemeService) {
-  return () => themeService.initialize();
+import { AppStateService } from './core/state/app-state.service';
+
+function initializeApp(appState: AppStateService, themeService: ThemeService) {
+  return () => {
+    appState.hydrate();
+    themeService.initialize();
+  };
 }
 
 export const appConfig: ApplicationConfig = {
@@ -14,8 +19,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     {
       provide: APP_INITIALIZER,
-      useFactory: initializeTheme,
-      deps: [ThemeService],
+      useFactory: initializeApp,
+      deps: [AppStateService, ThemeService],
       multi: true
     }
   ]
