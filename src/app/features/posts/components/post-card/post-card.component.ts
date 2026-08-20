@@ -16,7 +16,6 @@ import { LucideAngularModule, Image as ImageIcon, Edit as EditIcon, Trash2 as Tr
 })
 export class PostCardComponent {
   readonly post = input.required<Post>();
-  readonly variant = input<'grid' | 'list'>('grid');
 
   readonly duplicate = output<Post>();
   readonly edit = output<void>();

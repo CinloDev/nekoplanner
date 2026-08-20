@@ -51,27 +51,7 @@
       </div>
 
       <div class="toolbar-actions">
-        <div class="view-toggles">
-          <app-button 
-            variant="ghost" 
-            [class.active]="viewMode() === 'grid'"
-            (click)="toggleViewMode('grid')"
-            aria-label="Vista en cuadrícula"
-            title="Cuadrícula">
-            <!-- Grid icon svg -->
-            <lucide-icon [img]="LayoutGrid" size="20"></lucide-icon>
-          </app-button>
-          <app-button 
-            variant="ghost" 
-            [class.active]="viewMode() === 'list'"
-            (click)="toggleViewMode('list')"
-            aria-label="Vista en lista"
-            title="Lista">
-            <!-- List icon svg -->
-            <lucide-icon [img]="List" size="20"></lucide-icon>
-          </app-button>
-        </div>
-        
+
         <app-button variant="secondary" (click)="clearFilters()">Limpiar filtros</app-button>
       </div>
     </div>
@@ -79,11 +59,10 @@
 
   <div class="posts-content">
     @if (visiblePosts().length > 0) {
-      <div class="posts-view" [ngClass]="viewMode()">
+      <div class="posts-view">
         @for (post of visiblePosts(); track post.id) {
           <app-post-card 
-            [post]="post" 
-            [variant]="viewMode()"
+            [post]="post"
             (duplicate)="duplicatePost(post)"
             (edit)="editPost(post)"
             (delete)="confirmDelete(post)"
