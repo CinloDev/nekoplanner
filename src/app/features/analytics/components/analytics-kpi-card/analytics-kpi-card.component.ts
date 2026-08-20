@@ -11,9 +11,9 @@ import {
 @Component({
   selector: 'app-analytics-kpi-card',
   standalone: true,
-  imports: [CardComponent, LucideAngularModule],
+  imports: [LucideAngularModule],
   template: `
-    <app-card class="kpi-card" [class]="'kpi-card kpi-card--' + variant()">
+    <article class="kpi-card" [class]="'kpi-card kpi-card--' + variant()">
       <div class="kpi-top">
         <div class="kpi-icon" aria-hidden="true">
           @switch (variant()) {
@@ -51,7 +51,7 @@ import {
           </span>
         }
       </div>
-    </app-card>
+    </article>
   `,
   styles: [`
     .kpi-card {
@@ -161,8 +161,9 @@ import {
 
     @media (max-width: 639px) {
       .kpi-card {
-        min-height: 116px;
+        min-height: auto;
         padding: var(--spacing-3);
+        gap: var(--spacing-2);
       }
 
       .kpi-value {
