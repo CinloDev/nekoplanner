@@ -20,19 +20,19 @@
   </div>
 
   <div class="analytics-main">
-    <!-- Distributions -->
-    <div class="analytics-row-2">
+    <div class="chart-monthly">
+      <app-monthly-trend [data]="analyticsData.postsByMonth()"></app-monthly-trend>
+    </div>
+    
+    <div class="chart-platform">
       <app-platform-distribution [data]="analyticsData.postsByPlatform()"></app-platform-distribution>
+    </div>
+
+    <div class="chart-status">
       <app-status-distribution [data]="analyticsData.postsByStatus()"></app-status-distribution>
     </div>
 
-    <!-- Monthly Trend -->
-    <div class="analytics-row-1">
-      <app-monthly-trend [data]="analyticsData.postsByMonth()"></app-monthly-trend>
-    </div>
-
-    <!-- Content Flow -->
-    <div class="analytics-row-1">
+    <div class="chart-flow">
       <app-content-flow [data]="analyticsData.contentFlow()"></app-content-flow>
     </div>
   </div>

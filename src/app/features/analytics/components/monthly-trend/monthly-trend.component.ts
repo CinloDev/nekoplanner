@@ -1,4 +1,4 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AnalyticsMonthlyPoint } from '../../models/analytics.model';
 import { CardComponent } from '@shared/components/ui/card/card.component';
@@ -8,132 +8,313 @@ import { CardComponent } from '@shared/components/ui/card/card.component';
   standalone: true,
   imports: [CommonModule, CardComponent],
   template: `
-    <app-card class="h-full w-full">
-      <section aria-labelledby="monthly-title" class="p-6">
-        <h2 id="monthly-title" class="text-lg font-semibold mb-4 text-primary">Evolución mensual</h2>
-        
-        <div class="chart-container">
-          <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet" class="w-full h-auto" role="img" aria-label="Gráfico de línea de evolución mensual">
-            <!-- Grid lines -->
-            @for (line of gridLines(); track line) {
-              <line x1="40" [attr.y1]="line.y" x2="580" [attr.y2]="line.y" class="grid-line" />
-              <text x="30" [attr.y]="line.y" class="grid-text" dominant-baseline="middle" text-anchor="end">{{ line.value }}</text>
-            }
-
-            <!-- Trend Line -->
-            <path [attr.d]="linePath()" class="trend-line" fill="none" />
-            
-            <!-- Area under line -->
-            <path [attr.d]="areaPath()" class="trend-area" />
-
-            <!-- Points and X-axis Labels -->
-            @for (pt of points(); track pt.label; let i = $index) {
-              <!-- X axis label -->
-              <text [attr.x]="pt.x" y="280" class="x-label" text-anchor="middle">{{ pt.label }}</text>
-              
-              <!-- Data point -->
-              <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="6" class="data-point">
-                <title>{{ pt.label }}: {{ pt.value }} publicaciones</title>
-              </circle>
-            }
-          </svg>
+    <app-card class="monthly-card">
+      <section aria-labelledby="monthly-title">
+        <div class="chart-header">
+          <div>
+            <h2 id="monthly-title">Evolución mensual</h2>
+            <p>Publicaciones de los últimos 6 meses.</p>
+          </div>
         </div>
+
+        @if (points().length > 0) {
+          <div class="chart-container">
+            <svg
+              viewBox="0 0 600 220"
+              preserveAspectRatio="xMidYMid meet"
+              class="chart"
+              role="img"
+              aria-labelledby="monthly-title"
+            >
+              <!-- Baseline -->
+              <line
+                x1="40"
+                y1="170"
+                x2="560"
+                y2="170"
+                class="axis-line"
+              />
+
+              <!-- Optional max guide -->
+              @if (maxCount() > 1) {
+                <line
+                  x1="40"
+                  y1="25"
+                  x2="560"
+                  y2="25"
+                  class="grid-line"
+                />
+
+                <text
+                  x="32"
+                  y="25"
+                  class="axis-label"
+                  dominant-baseline="middle"
+                  text-anchor="end"
+                >
+                  {{ maxCount() }}
+                </text>
+              }
+
+              @for (pt of points(); track pt.label) {
+                <!-- Hover zone -->
+                <rect
+                  [attr.x]="pt.x - pt.barWidth / 2 - 8"
+                  y="18"
+                  [attr.width]="pt.barWidth + 16"
+                  height="156"
+                  rx="8"
+                  class="hover-zone"
+                />
+
+                <!-- Bar -->
+                <rect
+                  [attr.x]="pt.x - pt.barWidth / 2"
+                  [attr.y]="pt.y"
+                  [attr.width]="pt.barWidth"
+                  [attr.height]="pt.height"
+                  rx="6"
+                  class="data-bar"
+                >
+                  <title>
+                    {{ pt.label }}: {{ pt.value }} publicaciones
+                  </title>
+                </rect>
+
+                <!-- Value -->
+                <text
+                  [attr.x]="pt.x"
+                  [attr.y]="pt.value > 0 ? pt.y - 10 : 160"
+                  class="bar-value"
+                  text-anchor="middle"
+                >
+                  {{ pt.value }}
+                </text>
+
+                <!-- Month -->
+                <text
+                  [attr.x]="pt.x"
+                  y="197"
+                  class="month-label"
+                  text-anchor="middle"
+                >
+                  {{ pt.label }}
+                </text>
+              }
+            </svg>
+          </div>
+        } @else {
+          <div class="chart-empty">
+            <span>No hay datos mensuales disponibles.</span>
+          </div>
+        }
       </section>
     </app-card>
+
+    <div class="sr-only">
+      <table>
+        <caption>Datos de evolución mensual</caption>
+        <thead>
+          <tr>
+            <th scope="col">Mes</th>
+            <th scope="col">Publicaciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (month of sixMonthsData(); track month.month) {
+            <tr>
+              <td>{{ month.month }}</td>
+              <td>{{ month.count }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   `,
   styles: [`
+    .monthly-card {
+      width: 100%;
+      height: 100%;
+    }
+
+    section {
+      width: 100%;
+      padding: var(--spacing-5);
+    }
+
+    .chart-header {
+      margin-bottom: var(--spacing-4);
+    }
+
+    .chart-header h2 {
+      margin: 0;
+      color: var(--color-text-main);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      line-height: var(--line-height-tight);
+    }
+
+    .chart-header p {
+      margin: var(--spacing-1) 0 0;
+      color: var(--color-text-muted);
+      font-size: var(--font-size-xs);
+      line-height: var(--line-height-normal);
+    }
+
     .chart-container {
       width: 100%;
+      overflow: visible;
     }
+
+    .chart {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    .axis-line {
+      stroke: var(--color-border-strong);
+      stroke-width: 1.25;
+    }
+
     .grid-line {
-      stroke: var(--border-color, var(--color-border-subtle, #CBDAD7));
+      stroke: var(--color-border-subtle);
       stroke-width: 1;
-      stroke-dasharray: 4;
+      stroke-dasharray: 4 4;
     }
-    .grid-text {
+
+    .axis-label {
+      fill: var(--color-text-muted);
+      font-size: 11px;
+    }
+
+    .month-label {
+      fill: var(--color-text-muted);
+      font-size: 11px;
+      font-weight: var(--font-weight-medium);
+    }
+
+    .bar-value {
+      fill: var(--color-text-main);
       font-size: 12px;
-      fill: var(--text-muted);
+      font-weight: var(--font-weight-semibold);
     }
-    .x-label {
-      font-size: 12px;
-      fill: var(--text-secondary);
-      font-weight: 500;
+
+    .hover-zone {
+      fill: transparent;
+      transition: fill 0.18s ease;
     }
-    .trend-line {
-      stroke: var(--color-primary);
-      stroke-width: 3;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+
+    .hover-zone:hover {
+      fill: var(--color-surface-hover);
     }
-    .trend-area {
+
+    .data-bar {
       fill: var(--color-primary);
-      opacity: 0.1;
+      transition:
+        y 0.2s ease,
+        height 0.2s ease,
+        fill 0.18s ease;
     }
-    .data-point {
-      fill: var(--color-surface, #fff);
-      stroke: var(--color-primary);
-      stroke-width: 2;
-      transition: r 0.2s ease, fill 0.2s ease;
-      cursor: pointer;
+
+    .hover-zone:hover + .data-bar {
+      fill: var(--color-primary-hover);
     }
-    .data-point:hover {
-      r: 8;
-      fill: var(--color-primary);
+
+    .chart-empty {
+      min-height: 150px;
+      display: grid;
+      place-items: center;
+      color: var(--color-text-muted);
+      font-size: var(--font-size-sm);
+      text-align: center;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 639px) {
+      section {
+        padding: var(--spacing-4);
+      }
+
+      .chart-header {
+        margin-bottom: var(--spacing-3);
+      }
+
+      .month-label {
+        font-size: 10px;
+      }
+
+      .bar-value {
+        font-size: 11px;
+      }
     }
   `]
 })
 export class MonthlyTrendComponent {
   data = input.required<AnalyticsMonthlyPoint[]>();
 
-  maxCount = computed(() => {
-    const max = Math.max(...this.data().map(d => d.count));
-    return max > 0 ? max : 10; // default to 10 if all 0 to maintain grid
-  });
+  sixMonthsData = computed(() => this.data().slice(-6));
 
-  gridLines = computed(() => {
-    const max = this.maxCount();
-    // 3 grid lines (0, half, max)
-    const mid = Math.ceil(max / 2);
-    return [
-      { value: max, y: 20 },
-      { value: mid, y: 130 },
-      { value: 0, y: 240 }
-    ];
+  maxCount = computed(() => {
+    const max = Math.max(
+      ...this.sixMonthsData().map(point => point.count),
+      0
+    );
+
+    return Math.max(max, 1);
   });
 
   points = computed(() => {
-    const data = this.data();
-    if (!data || data.length === 0) return [];
-    
+    const data = this.sixMonthsData();
+
+    if (data.length === 0) {
+      return [];
+    }
+
     const max = this.maxCount();
-    const xStep = 540 / Math.max(1, data.length - 1);
-    
-    return data.map((d, i) => {
-      const x = 40 + (i * xStep);
-      // y ranges from 240 (0) to 20 (max)
-      const y = 240 - ((d.count / max) * 220);
-      
+
+    const chartLeft = 56;
+    const chartRight = 560;
+    const chartTop = 25;
+    const chartBottom = 170;
+    const chartWidth = chartRight - chartLeft;
+    const step = chartWidth / data.length;
+
+    return data.map((point, index) => {
+      const x = chartLeft + step * index + step / 2;
+      const height = point.count === 0
+        ? 0
+        : (point.count / max) * (chartBottom - chartTop);
+
+      const y = chartBottom - height;
+
+      const barWidth = Math.min(
+        44,
+        Math.max(24, step * 0.52)
+      );
+
       return {
         x,
         y,
-        value: d.count,
-        label: d.month
+        height,
+        barWidth,
+        value: point.count,
+        label: point.month,
       };
     });
-  });
-
-  linePath = computed(() => {
-    const pts = this.points();
-    if (pts.length === 0) return '';
-    return pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
-  });
-
-  areaPath = computed(() => {
-    const pts = this.points();
-    if (pts.length === 0) return '';
-    const line = this.linePath();
-    const lastX = pts[pts.length - 1].x;
-    const firstX = pts[0].x;
-    return `${line} L ${lastX} 240 L ${firstX} 240 Z`;
   });
 }

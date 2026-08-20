@@ -59,7 +59,19 @@
   }
 
   &.active {
-    background-color: var(--color-primary-muted);
+    background-color: var(--color-surface-hover);
     color: var(--color-primary);
+    position: relative;
+    
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 10%;
+      height: 80%;
+      width: 3px;
+      border-radius: 0 4px 4px 0;
+      background-color: var(--color-primary);
+    }
   }
 }
