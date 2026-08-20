@@ -39,8 +39,8 @@
   }
 
   .toolbar-search {
-    flex: 1;
-    min-width: 250px;
+    flex: 1 1 100%;
+    min-width: 0;
   }
 
   .toolbar-filters {
@@ -90,13 +90,16 @@
 .posts-view {
   display: grid;
   gap: var(--spacing-5);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   
-  &.grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  
-  &.list {
-    grid-template-columns: 1fr;
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (max-width: 600px) {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

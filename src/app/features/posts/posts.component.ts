@@ -59,8 +59,7 @@ export class PostsComponent {
   readonly selectedPlatform = signal<Platform | null>(null);
   readonly selectedStatus = signal<PostStatus | null>(null);
   readonly sortBy = signal<'date' | 'title' | 'status'>('date');
-  readonly sortDirection = signal<'asc' | 'desc'>('desc');
-  readonly viewMode = signal<'grid' | 'list'>('grid');
+    readonly sortDirection = signal<'asc' | 'desc'>('desc');
 
   // Computed state
   readonly visiblePosts = computed(() => {
@@ -162,8 +161,6 @@ export class PostsComponent {
   readonly platformMeta = PLATFORM_META;
 
   // Icons
-  readonly LayoutGrid = LayoutGrid;
-  readonly List = List;
   readonly FileText = FileText;
   readonly Search = Search;
   readonly X = X;
@@ -176,9 +173,6 @@ export class PostsComponent {
     this.sortDirection.set('desc');
   }
 
-  toggleViewMode(mode: 'grid' | 'list'): void {
-    this.viewMode.set(mode);
-  }
 
   openDrawer(): void {
     this.editingPost.set(null);
