@@ -146,10 +146,12 @@
 
     .chart-status {
       grid-column: span 5;
+      order: 2;
     }
 
     .chart-flow {
       grid-column: span 7;
+      order: 1;
     }
   }
 }

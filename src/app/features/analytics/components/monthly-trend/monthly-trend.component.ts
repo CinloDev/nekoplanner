@@ -39,15 +39,15 @@ import { CardComponent } from '@shared/components/ui/card/card.component';
               @if (maxCount() > 1) {
                 <line
                   x1="40"
-                  y1="25"
+                  y1="45"
                   x2="560"
-                  y2="25"
+                  y2="45"
                   class="grid-line"
                 />
 
                 <text
                   x="32"
-                  y="25"
+                  y="45"
                   class="axis-label"
                   dominant-baseline="middle"
                   text-anchor="end"
@@ -94,11 +94,20 @@ import { CardComponent } from '@shared/components/ui/card/card.component';
                 <!-- Month -->
                 <text
                   [attr.x]="pt.x"
-                  y="197"
-                  class="month-label"
+                  y="200"
+                  class="month-label desktop-only"
                   text-anchor="middle"
                 >
                   {{ pt.label }}
+                </text>
+
+                <text
+                  [attr.x]="pt.x"
+                  y="200"
+                  class="month-label mobile-only"
+                  text-anchor="middle"
+                >
+                  {{ pt.shortLabel }}
                 </text>
               }
             </svg>
@@ -140,7 +149,7 @@ import { CardComponent } from '@shared/components/ui/card/card.component';
 
     section {
       width: 100%;
-      padding: var(--spacing-5);
+      /* padding removed to prevent double padding with app-card */
     }
 
     .chart-header {
@@ -245,21 +254,33 @@ import { CardComponent } from '@shared/components/ui/card/card.component';
       border: 0;
     }
 
+    .mobile-only {
+      display: none;
+    }
+
     @media (max-width: 639px) {
-      section {
-        padding: var(--spacing-4);
+      .desktop-only {
+        display: none;
+      }
+
+      .mobile-only {
+        display: inline;
       }
 
       .chart-header {
         margin-bottom: var(--spacing-3);
       }
 
+      .axis-label {
+        font-size: 20px;
+      }
+
       .month-label {
-        font-size: 10px;
+        font-size: 20px;
       }
 
       .bar-value {
-        font-size: 11px;
+        font-size: 22px;
       }
     }
   `]
@@ -287,15 +308,15 @@ export class MonthlyTrendComponent {
 
     const max = this.maxCount();
 
-    const chartLeft = 56;
-    const chartRight = 560;
-    const chartTop = 25;
+    const chartLeft = 50;
+    const chartRight = 570;
+    const chartTop = 45;
     const chartBottom = 170;
     const chartWidth = chartRight - chartLeft;
-    const step = chartWidth / data.length;
+    const step = chartWidth / (data.length > 1 ? data.length - 1 : 1);
 
     return data.map((point, index) => {
-      const x = chartLeft + step * index + step / 2;
+      const x = chartLeft + step * index;
       const height = point.count === 0
         ? 0
         : (point.count / max) * (chartBottom - chartTop);
@@ -314,6 +335,7 @@ export class MonthlyTrendComponent {
         barWidth,
         value: point.count,
         label: point.month,
+        shortLabel: point.month.split(' ')[0],
       };
     });
   });

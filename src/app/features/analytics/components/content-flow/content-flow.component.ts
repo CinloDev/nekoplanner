@@ -65,7 +65,7 @@ import { LucideAngularModule, ArrowRight } from 'lucide-angular';
 
     section {
       width: 100%;
-      padding: var(--spacing-5);
+      /* padding removed to prevent double padding with app-card */
     }
 
     .flow-header {
@@ -181,10 +181,6 @@ import { LucideAngularModule, ArrowRight } from 'lucide-angular';
     }
 
     @media (max-width: 639px) {
-      section {
-        padding: var(--spacing-4);
-      }
-
       .flow-header {
         margin-bottom: var(--spacing-4);
       }

@@ -84,7 +84,7 @@ import { CardComponent } from '@shared/components/ui/card/card.component';
     }
 
     section {
-      padding: var(--spacing-5);
+      /* padding removed to prevent double padding with app-card */
     }
 
     .section-header {
@@ -250,10 +250,6 @@ import { CardComponent } from '@shared/components/ui/card/card.component';
     }
 
     @media (max-width: 639px) {
-      section {
-        padding: var(--spacing-4);
-      }
-
       .status-item {
         grid-template-columns: minmax(0, 1fr) auto;
       }

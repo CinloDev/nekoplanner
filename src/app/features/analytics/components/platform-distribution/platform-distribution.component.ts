@@ -83,7 +83,7 @@ import { LucideAngularModule, Globe } from 'lucide-angular';
     }
 
     section {
-      padding: var(--spacing-5);
+      /* padding removed to prevent double padding with app-card */
     }
 
     .section-header {
@@ -204,10 +204,6 @@ import { LucideAngularModule, Globe } from 'lucide-angular';
     }
 
     @media (max-width: 639px) {
-      section {
-        padding: var(--spacing-4);
-      }
-
       .distribution-list {
         gap: var(--spacing-3);
       }
