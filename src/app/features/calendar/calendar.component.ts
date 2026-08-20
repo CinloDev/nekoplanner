@@ -12,11 +12,13 @@ import { ButtonComponent } from '@shared/components/ui/button/button.component';
 import { getMonthDays, getPreviousMonth, getNextMonth, getToday, formatCalendarDate } from '@core/utils/calendar';
 import { Post, Platform, PostStatus } from '@core/models';
 import { PLATFORM_META } from '@core/config/platforms.config';
+import { PostCardComponent } from '@features/posts/components/post-card/post-card.component';
+import { isSameDay } from 'date-fns';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, CalendarHeaderComponent, CalendarGridComponent, CalendarDayComponent, InputComponent, SelectComponent, ButtonComponent],
+  imports: [CommonModule, CalendarHeaderComponent, CalendarGridComponent, CalendarDayComponent, InputComponent, SelectComponent, ButtonComponent, PostCardComponent],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss'
 })
@@ -26,6 +28,7 @@ export class CalendarComponent {
 
   readonly currentMonth = signal<Date>(getToday());
   readonly todayDate = getToday();
+  readonly selectedDate = signal<Date | null>(null);
 
   // Filters state
   readonly selectedPlatform = signal<Platform | null>(null);
@@ -96,6 +99,15 @@ export class CalendarComponent {
     return map;
   });
 
+  readonly selectedDayPosts = computed(() => {
+    const selected = this.selectedDate();
+    if (!selected) return [];
+    
+    return this.filteredPosts()
+      .filter(p => p.scheduledDate && isSameDay(new Date(p.scheduledDate), selected))
+      .sort((a, b) => new Date(a.scheduledDate!).getTime() - new Date(b.scheduledDate!).getTime());
+  });
+
   readonly gridData = computed(() => {
     const days = this.calendarDays();
     const postsMap = this.postsByDay();
@@ -137,8 +149,11 @@ export class CalendarComponent {
     this.searchQuery.set('');
   }
 
-  onPostDropped(event: { post: Post, targetDate: Date }) {
-    this.appState.updatePostScheduledDate(event.post.id, event.targetDate.toISOString());
-    this.storageService.save(StorageKeys.POSTS, this.appState.posts());
+  onDaySelected(date: Date) {
+    if (this.selectedDate() && isSameDay(this.selectedDate()!, date)) {
+      this.selectedDate.set(null);
+    } else {
+      this.selectedDate.set(date);
+    }
   }
 }

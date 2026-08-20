@@ -166,19 +166,38 @@ describe('CalendarComponent', () => {
       expect(component.filteredPosts().length).toBe(2);
     });
   });
-  describe('Drag & Drop', () => {
-    it('should update post scheduledDate and persist state on drop', () => {
-      const mockPost: Post = {
-        id: '1', title: 'Post 1', content: '', platform: 'x', 
-        status: 'published', createdAt: '2026-08-10T10:00:00Z', updatedAt: '2026-08-10T10:00:00Z',
-        scheduledDate: '2026-08-15T10:30:00Z', tags: []
-      };
-      const targetDate = new Date('2026-08-20T00:00:00Z');
+  describe('Day Selection and Details', () => {
+    it('should toggle selectedDate on daySelected', () => {
+      const date1 = new Date('2026-08-15T00:00:00Z');
+      const date2 = new Date('2026-08-16T00:00:00Z');
       
-      component.onPostDropped({ post: mockPost, targetDate });
+      expect(component.selectedDate()).toBeNull();
       
-      expect(mockAppState.updatePostScheduledDate).toHaveBeenCalledWith('1', targetDate.toISOString());
-      expect(mockStorageService.save).toHaveBeenCalled();
+      component.onDaySelected(date1);
+      expect(component.selectedDate()).toEqual(date1);
+      
+      component.onDaySelected(date2);
+      expect(component.selectedDate()).toEqual(date2);
+      
+      // Click same day -> toggle off
+      component.onDaySelected(date2);
+      expect(component.selectedDate()).toBeNull();
+    });
+
+    it('should compute selectedDayPosts correctly ordered by time', () => {
+      const targetDate = new Date('2026-08-15T12:00:00Z');
+      component.selectedDate.set(targetDate);
+      
+      const dayPosts = component.selectedDayPosts();
+      
+      // Debe traer post 1 (10:30) y post 3 (18:00) y descartar el post 2 sin scheduled
+      expect(dayPosts.length).toBe(2);
+      expect(dayPosts[0].id).toBe('1');
+      expect(dayPosts[1].id).toBe('3');
+    });
+
+    it('should return empty selectedDayPosts if no date selected', () => {
+      expect(component.selectedDayPosts().length).toBe(0);
     });
   });
 });

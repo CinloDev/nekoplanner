@@ -3,17 +3,21 @@
      [class.is-today]="isToday()"
      [class.is-weekend]="isWeekend()"
      [class.is-current-week]="isCurrentWeek()"
-     cdkDropList
-     [cdkDropListData]="date"
-     (cdkDropListDropped)="onDrop($event)">
+     [class.is-selected]="isSelected"
+     (click)="onDayClick()">
   
   <div class="day-header">
     <span class="day-number">{{ dayNumber }}</span>
   </div>
 
   <div class="day-posts">
-    @for (post of posts; track post.id) {
-      <app-calendar-post [post]="post"></app-calendar-post>
+    @for (iconInfo of displayIcons(); track iconInfo.id) {
+      <div class="platform-icon-wrapper">
+        <img *ngIf="iconInfo.icon" [src]="iconInfo.icon" [alt]="iconInfo.platform" class="platform-icon">
+      </div>
+    }
+    @if (extraCount() > 0) {
+      <div class="extra-count">+{{ extraCount() }}</div>
     }
   </div>
 
