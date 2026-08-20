@@ -102,13 +102,8 @@ Esta acción no se puede deshacer.`;
   onConfirmClearAll(): void {
     this.isClearAllDialogOpen = false;
     
-    // Clear state
+    // Clear state (which automatically persists defaults)
     this.appState.clearAllData();
-    
-    // Persist defaults
-    this.storage.save(StorageKeys.POSTS, []);
-    this.storage.save(StorageKeys.IDEAS, []);
-    this.storage.save(StorageKeys.SETTINGS, this.appState.settings());
     
     // Sync theme
     this.themeService.recalculateTheme();
