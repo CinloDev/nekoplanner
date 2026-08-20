@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { DragDropModule } from '@angular/cdk/drag-drop';
+
 
 @Component({
   selector: 'app-calendar-grid',
   standalone: true,
-  imports: [DragDropModule],
+  imports: [],
   templateUrl: './calendar-grid.component.html',
   styleUrl: './calendar-grid.component.scss'
 })

@@ -50,7 +50,8 @@
         [referenceMonth]="currentMonth()"
         [today]="todayDate"
         [posts]="cell.posts"
-        (postDropped)="onPostDropped($event)">
+        [isSelected]="selectedDate() !== null && cell.date.getTime() === selectedDate()!.getTime()"
+        (daySelected)="onDaySelected($event)">
       </app-calendar-day>
     }
   </app-calendar-grid>
@@ -63,6 +64,24 @@
     <div class="empty-state">
       <p>No se encontraron publicaciones con los filtros actuales.</p>
       <app-button variant="primary" (click)="clearFilters()">Limpiar filtros</app-button>
+    </div>
+  }
+
+  @if (selectedDate()) {
+    <div class="day-details-section">
+      <h3 class="day-details-title">{{ selectedDate() | date:'d \'de\' MMMM \'de\' yyyy':'':'es' }}</h3>
+      
+      @if (selectedDayPosts().length === 0) {
+        <div class="empty-state">
+          <p>No hay publicaciones para este día.</p>
+        </div>
+      } @else {
+        <div class="day-details-posts">
+          @for (post of selectedDayPosts(); track post.id) {
+            <app-post-card [post]="post"></app-post-card>
+          }
+        </div>
+      }
     </div>
   }
 

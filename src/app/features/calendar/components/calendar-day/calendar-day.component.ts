@@ -1,15 +1,14 @@
 import { Component, Input, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DragDropModule, CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Post } from '@core/models';
-import { CalendarPostComponent } from '../calendar-post/calendar-post.component';
+import { Post, Platform } from '@core/models';
 import { isCurrentMonth, isSameDay } from '@core/utils/calendar';
 import { isSameWeek } from 'date-fns';
+import { PLATFORM_META } from '@core/config/platforms.config';
 
 @Component({
   selector: 'app-calendar-day',
   standalone: true,
-  imports: [CommonModule, DragDropModule, CalendarPostComponent],
+  imports: [CommonModule],
   templateUrl: './calendar-day.component.html',
   styleUrl: './calendar-day.component.scss'
 })
@@ -18,6 +17,21 @@ export class CalendarDayComponent {
   @Input({ required: true }) referenceMonth!: Date;
   @Input({ required: true }) today!: Date;
   @Input() posts: Post[] = [];
+  @Input() isSelected = false;
+
+  readonly daySelected = output<Date>();
+
+  readonly displayIcons = computed(() => {
+    return this.posts.slice(0, 3).map(post => ({
+      id: post.id,
+      platform: post.platform,
+      icon: PLATFORM_META[post.platform! || 'other']?.icon
+    }));
+  });
+
+  readonly extraCount = computed(() => {
+    return this.posts.length > 3 ? this.posts.length - 3 : 0;
+  });
 
   readonly isOtherMonth = computed(() => {
     return !isCurrentMonth(this.date, this.referenceMonth);
@@ -40,11 +54,7 @@ export class CalendarDayComponent {
     return this.date.getDate();
   }
 
-  readonly postDropped = output<{ post: Post, targetDate: Date }>();
-
-  onDrop(event: CdkDragDrop<Date>) {
-    const post = event.item.data as Post;
-    const targetDate = event.container.data as Date;
-    this.postDropped.emit({ post, targetDate });
+  onDayClick() {
+    this.daySelected.emit(this.date);
   }
 }
