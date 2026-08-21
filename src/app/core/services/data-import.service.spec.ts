@@ -154,7 +154,6 @@ describe('DataImportService', () => {
       service.import(backup);
 
       expect(mockAppState.importData).toHaveBeenCalledWith(backup);
-      expect(mockStorage.save).toHaveBeenCalledTimes(3);
       expect(mockThemeService.recalculateTheme).toHaveBeenCalled();
     });
   });

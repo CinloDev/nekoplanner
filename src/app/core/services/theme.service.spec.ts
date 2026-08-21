@@ -70,10 +70,9 @@ describe('ThemeService', () => {
     // Let me fix this in ThemeService after tests.
   });
 
-  it('should set preference and persist', () => {
+  it('should set preference and persist via appState', () => {
     service.setPreference('dark');
     expect(mockAppState.updateSettings).toHaveBeenCalledWith({ theme: 'dark', navigation: 'sidebar' });
-    expect(mockStorage.save).toHaveBeenCalledWith(StorageKeys.SETTINGS, { theme: 'dark', navigation: 'sidebar' });
     expect(service.resolvedTheme()).toBe('dark');
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
   });

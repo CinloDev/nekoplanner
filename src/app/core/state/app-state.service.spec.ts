@@ -1,19 +1,66 @@
 import { TestBed } from '@angular/core/testing';
 import { AppStateService } from './app-state.service';
 import { Post, Idea, Platform, PostStatus } from '../models';
+import { StorageService } from '../storage/storage.service';
+import { StorageKeys } from '../storage/storage-keys';
 
 describe('AppStateService', () => {
   let service: AppStateService;
+  let mockStorage: {
+    load: jasmine.Spy;
+    save: jasmine.Spy;
+    remove: jasmine.Spy;
+    clear: jasmine.Spy;
+    _store: Map<string, unknown>;
+  };
 
   beforeEach(() => {
+    // In-memory fake storage service
+    const store = new Map<string, unknown>();
+    mockStorage = {
+      load: jasmine.createSpy('load').and.callFake((key: string) => store.get(key) ?? null),
+      save: jasmine.createSpy('save').and.callFake((key: string, value: unknown) => store.set(key, value)),
+      remove: jasmine.createSpy('remove').and.callFake((key: string) => store.delete(key)),
+      clear: jasmine.createSpy('clear').and.callFake(() => store.clear()),
+      _store: store // expose for direct inspection if needed
+    };
+
     TestBed.configureTestingModule({
-      providers: [AppStateService]
+      providers: [
+        AppStateService,
+        { provide: StorageService, useValue: mockStorage }
+      ]
     });
     service = TestBed.inject(AppStateService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('should find a post by ID and return undefined for an unknown ID', () => {
+    const post = { id: 'post-1', title: 'Post' } as Post;
+    service.setPosts([post]);
+
+    expect(service.getPostById('post-1')).toEqual(post);
+    expect(service.getPostById('missing')).toBeUndefined();
+  });
+
+  it('should hydrate posts from storage during construction', () => {
+    const storedPosts = [{ id: 'stored-1', title: 'Stored post' } as Post];
+    mockStorage.load.and.returnValue(storedPosts);
+
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        AppStateService,
+        { provide: StorageService, useValue: mockStorage }
+      ]
+    });
+    const hydratedService = TestBed.inject(AppStateService);
+
+    expect(mockStorage.load).toHaveBeenCalledWith(StorageKeys.POSTS);
+    expect(hydratedService.posts()).toEqual(storedPosts);
   });
 
   describe('postCounts', () => {
@@ -70,6 +117,7 @@ describe('AppStateService', () => {
       expect(service.posts()).toEqual([{ id: '1', title: 'Imported Post' } as any]);
       expect(service.ideas()).toEqual([{ id: '1', title: 'Imported Idea' } as any]);
       expect(service.settings()).toEqual({ theme: 'system', navigation: 'sidebar' });
+      expect(mockStorage.save).toHaveBeenCalledTimes(3);
     });
 
     it('should reset state on clearAllData', () => {
@@ -84,6 +132,9 @@ describe('AppStateService', () => {
       expect(service.posts()).toEqual([]);
       expect(service.ideas()).toEqual([]);
       expect(service.settings()).toEqual({ theme: 'system', navigation: 'sidebar' });
+      // Should persist the reset
+      expect(mockStorage.save).toHaveBeenCalledWith(StorageKeys.POSTS, []);
+      expect(mockStorage.save).toHaveBeenCalledWith(StorageKeys.IDEAS, []);
     });
 
     it('should count ideas correctly', () => {
@@ -453,6 +504,62 @@ describe('AppStateService', () => {
       const ideaDist = dist.find(d => d.status === 'idea');
       expect(ideaDist?.count).toBe(0);
       expect(ideaDist?.percentage).toBe(0);
+    });
+  });
+
+  describe('Hydration and Round-trip persistence', () => {
+    it('should hydrate from empty storage with defaults safely', () => {
+      // storage is empty
+      service.hydrate();
+      expect(service.posts()).toEqual([]);
+      expect(service.ideas()).toEqual([]);
+      expect(service.settings().theme).toBe('system');
+    });
+
+    it('should hydrate posts persisted by the post actions facade', () => {
+      // PostActionsService owns persistence for post mutations. Simulate its save.
+      const post: Post = { id: 'p1', title: 'A post', status: 'draft' } as any;
+      service.createPost(post);
+      expect(mockStorage.save).not.toHaveBeenCalledWith(StorageKeys.POSTS, [post]);
+      mockStorage.save(StorageKeys.POSTS, [post]);
+
+      // Simulate reload and hydration.
+      TestBed.runInInjectionContext(() => {
+        const serviceC = new AppStateService();
+        serviceC.hydrate();
+        
+        // 3. Verify it was restored
+        expect(serviceC.posts()).toEqual([post]);
+      });
+    });
+
+    it('should round-trip an idea creation and conversion', () => {
+      TestBed.runInInjectionContext(() => {
+        const serviceA = new AppStateService();
+        const idea: Idea = { id: 'i1', title: 'An idea' } as any;
+        
+        // Create Idea
+        serviceA.createIdea(idea);
+        
+        // Convert to post
+        const post: Post = { id: 'p2', title: 'Converted', status: 'draft' } as any;
+        serviceA.createPost(post);
+        mockStorage.save(StorageKeys.POSTS, [post]);
+        serviceA.markIdeaAsConverted('i1', 'p2');
+        
+        // Reload simulation
+        const serviceB = new AppStateService();
+        serviceB.hydrate();
+        
+        // Verify
+        const restoredIdeas = serviceB.ideas();
+        expect(restoredIdeas.length).toBe(1);
+        expect(restoredIdeas[0].convertedToPostId).toBe('p2');
+        
+        const restoredPosts = serviceB.posts();
+        expect(restoredPosts.length).toBe(1);
+        expect(restoredPosts[0].id).toBe('p2');
+      });
     });
   });
 });

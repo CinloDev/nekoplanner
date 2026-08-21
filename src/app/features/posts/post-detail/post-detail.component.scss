@@ -1,0 +1,23 @@
+.post-detail { display: grid; gap: var(--spacing-6); }
+.detail-header, .detail-actions, .title-row, .metadata { display: flex; align-items: center; gap: var(--spacing-3); }
+.detail-header, .title-row { justify-content: space-between; }
+.detail-actions { flex-wrap: wrap; justify-content: flex-end; }
+.detail-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); gap: var(--spacing-6); }
+.detail-card, .actions-card, .edit-card { padding: var(--spacing-6); }
+.eyebrow { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+h1 { margin-top: var(--spacing-2); font-size: var(--font-size-3xl); }
+h2 { margin: var(--spacing-6) 0 var(--spacing-3); font-size: var(--font-size-lg); }
+.metadata { color: var(--color-text-muted); flex-wrap: wrap; margin-top: var(--spacing-5); }
+.platform { display: inline-flex; align-items: center; gap: var(--spacing-2); font-weight: var(--font-weight-medium); }
+.platform img { width: 20px; height: 20px; }
+.caption { white-space: pre-wrap; line-height: var(--line-height-relaxed); }
+.media-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--spacing-3); margin-top: var(--spacing-6); }
+.media-grid img { width: 100%; max-height: 320px; object-fit: cover; border-radius: var(--radius-md); }
+.tags { display: flex; flex-wrap: wrap; gap: var(--spacing-2); }
+.tags span { color: var(--color-primary-active); background: var(--color-primary-muted); border-radius: var(--radius-full); padding: var(--spacing-1) var(--spacing-3); }
+.assets { display: grid; gap: var(--spacing-2); color: var(--color-text-muted); }
+.assets small { margin-left: var(--spacing-2); }
+.actions-card { display: grid; gap: var(--spacing-3); align-content: start; }
+.actions-card h2 { margin-top: 0; }
+.post-not-found { display: grid; gap: var(--spacing-3); place-items: start; padding: var(--spacing-12) 0; }
+@media (max-width: 760px) { .detail-grid { grid-template-columns: 1fr; } .detail-header { align-items: flex-start; flex-direction: column; } .detail-actions { justify-content: flex-start; } .title-row { align-items: flex-start; flex-direction: column; } }

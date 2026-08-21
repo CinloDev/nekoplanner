@@ -1,4 +1,4 @@
-<div class="upcoming-item">
+<a class="upcoming-item" [routerLink]="['/posts', post().id]">
   <div class="upcoming-media" *ngIf="post().media && post().media!.length > 0; else noMedia">
     <img [src]="post().media![0].url" [alt]="post().title" class="media-preview">
   </div>
@@ -21,4 +21,4 @@
     </p>
     <app-badge variant="subtle" [color]="statusColor()">{{ statusLabel() }}</app-badge>
   </div>
-</div>
+</a>

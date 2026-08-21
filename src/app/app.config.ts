@@ -1,11 +1,20 @@
-import { ApplicationConfig, provideZoneChangeDetection, APP_INITIALIZER } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, APP_INITIALIZER, LOCALE_ID } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
 
 import { routes } from './app.routes';
 import { ThemeService } from './core/services/theme.service';
 
-function initializeTheme(themeService: ThemeService) {
-  return () => themeService.initialize();
+import { AppStateService } from './core/state/app-state.service';
+
+registerLocaleData(localeEs, 'es');
+
+function initializeApp(appState: AppStateService, themeService: ThemeService) {
+  return () => {
+    appState.hydrate();
+    themeService.initialize();
+  };
 }
 
 export const appConfig: ApplicationConfig = {
@@ -14,9 +23,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     {
       provide: APP_INITIALIZER,
-      useFactory: initializeTheme,
-      deps: [ThemeService],
+      useFactory: initializeApp,
+      deps: [AppStateService, ThemeService],
       multi: true
-    }
+    },
+    { provide: LOCALE_ID, useValue: 'es' }
   ]
 };

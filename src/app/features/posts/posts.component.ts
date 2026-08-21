@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, LayoutGrid, List, FileText, Search, X } from 'lucide-angular';
+import { LucideAngularModule, FileText, Search, X } from 'lucide-angular';
 import { A11yModule } from '@angular/cdk/a11y';
 import { CardComponent } from '@shared/components/ui/card/card.component';
 import { ButtonComponent } from '@shared/components/ui/button/button.component';
@@ -12,11 +12,9 @@ import { PostFormComponent, PostFormValue } from './components/post-form/post-fo
 import { ConfirmDialogComponent } from '@shared/components/ui/confirm-dialog/confirm-dialog.component';
 import { SideDrawerComponent } from '@shared/components/ui/side-drawer/side-drawer.component';
 import { AppStateService } from '@core/state/app-state.service';
-import { StorageService } from '@core/storage/storage.service';
-import { StorageKeys } from '@core/storage/storage-keys';
 import { Platform, PostStatus, Post } from '@core/models';
 import { PLATFORM_META } from '@core/config/platforms.config';
-import { createNewPost } from '@core/utils/post.utils';
+import { PostActionsService } from '@core/services/post-actions.service';
 
 const STATUS_PRIORITY: Record<PostStatus, number> = {
   idea: 1,
@@ -48,7 +46,7 @@ const STATUS_PRIORITY: Record<PostStatus, number> = {
 })
 export class PostsComponent {
   private readonly appState = inject(AppStateService);
-  private readonly storageService = inject(StorageService);
+  private readonly postActions = inject(PostActionsService);
 
   readonly isDrawerOpen = signal(false);
   readonly editingPost = signal<Post | null>(null);
@@ -59,8 +57,7 @@ export class PostsComponent {
   readonly selectedPlatform = signal<Platform | null>(null);
   readonly selectedStatus = signal<PostStatus | null>(null);
   readonly sortBy = signal<'date' | 'title' | 'status'>('date');
-  readonly sortDirection = signal<'asc' | 'desc'>('desc');
-  readonly viewMode = signal<'grid' | 'list'>('grid');
+    readonly sortDirection = signal<'asc' | 'desc'>('desc');
 
   // Computed state
   readonly visiblePosts = computed(() => {
@@ -162,8 +159,6 @@ export class PostsComponent {
   readonly platformMeta = PLATFORM_META;
 
   // Icons
-  readonly LayoutGrid = LayoutGrid;
-  readonly List = List;
   readonly FileText = FileText;
   readonly Search = Search;
   readonly X = X;
@@ -176,9 +171,6 @@ export class PostsComponent {
     this.sortDirection.set('desc');
   }
 
-  toggleViewMode(mode: 'grid' | 'list'): void {
-    this.viewMode.set(mode);
-  }
 
   openDrawer(): void {
     this.editingPost.set(null);
@@ -208,52 +200,22 @@ export class PostsComponent {
     const post = this.postToDelete();
     if (!post) return;
     
-    this.appState.deletePost(post.id);
-    this.storageService.save(StorageKeys.POSTS, this.appState.posts());
+    this.postActions.delete(post.id);
     this.postToDelete.set(null);
   }
 
   duplicatePost(post: Post): void {
-    this.appState.duplicatePost(post.id);
-    this.storageService.save(StorageKeys.POSTS, this.appState.posts());
+    this.postActions.duplicate(post.id);
   }
 
   onSavePost(formValue: PostFormValue): void {
-    const now = new Date().toISOString();
     const editing = this.editingPost();
     
     if (editing) {
-      // Generate updated Post object
-      const updatedPost: Post = {
-        ...editing,
-        title: formValue.title,
-        content: formValue.content,
-        platform: formValue.platform,
-        status: formValue.status,
-        scheduledDate: formValue.scheduledDate,
-        tags: formValue.tags || editing.tags || [],
-        media: formValue.media || editing.media || [],
-        updatedAt: now
-      };
-      
-      this.appState.updatePost(updatedPost);
+      this.postActions.update(editing, formValue);
     } else {
-      // Generate new Post object
-      const newPost = createNewPost({
-        title: formValue.title,
-        content: formValue.content,
-        platform: formValue.platform,
-        status: formValue.status,
-        scheduledDate: formValue.scheduledDate,
-        tags: formValue.tags,
-        media: formValue.media
-      });
-      
-      this.appState.createPost(newPost);
+      this.postActions.create(formValue);
     }
-    
-    // Persist
-    this.storageService.save(StorageKeys.POSTS, this.appState.posts());
 
     // Close drawer
     this.closeDrawer();

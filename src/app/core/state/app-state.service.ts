@@ -1,10 +1,13 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Post, Idea, Settings, Platform, PostStatus, PlatformDistribution, StatusDistribution, NekoPlannerBackup } from '../models';
+import { StorageService } from '../storage/storage.service';
+import { StorageKeys } from '../storage/storage-keys';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppStateService {
+  private readonly storage = inject(StorageService);
   // --- Private Writable Signals ---
   private readonly _posts = signal<Post[]>([]);
   private readonly _ideas = signal<Idea[]>([]);
@@ -18,6 +21,11 @@ export class AppStateService {
   private readonly _searchQuery = signal<string>('');
   private readonly _currentDate = signal<string>(new Date().toISOString());
 
+  constructor() {
+    const storedPosts = this.storage.load<Post[]>(StorageKeys.POSTS);
+    if (Array.isArray(storedPosts)) this._posts.set(storedPosts);
+  }
+
   // --- Public Readonly Signals ---
   readonly posts = this._posts.asReadonly();
   readonly ideas = this._ideas.asReadonly();
@@ -27,6 +35,10 @@ export class AppStateService {
   readonly selectedStatus = this._selectedStatus.asReadonly();
   readonly searchQuery = this._searchQuery.asReadonly();
   readonly currentDate = this._currentDate.asReadonly();
+
+  getPostById(id: string): Post | undefined {
+    return this.posts().find(post => post.id === id);
+  }
 
   // --- Derived State (Computed) ---
   readonly filteredPosts = computed(() => {
@@ -131,27 +143,54 @@ export class AppStateService {
     }));
   });
 
+  // --- Hydration ---
+  hydrate(): void {
+    const storedPosts = this.storage.load<Post[]>(StorageKeys.POSTS);
+    if (Array.isArray(storedPosts)) {
+      this._posts.set(storedPosts);
+    }
+
+    const storedIdeas = this.storage.load<Idea[]>(StorageKeys.IDEAS);
+    if (Array.isArray(storedIdeas)) {
+      this._ideas.set(storedIdeas);
+    }
+
+    const storedSettings = this.storage.load<Settings>(StorageKeys.SETTINGS);
+    if (storedSettings && typeof storedSettings === 'object') {
+      const currentSettings = this._settings();
+      this._settings.set({
+        ...currentSettings,
+        ...storedSettings
+      });
+    }
+  }
+
   // --- Modifiers ---
   setPosts(posts: Post[]): void {
     this._posts.set(posts);
+    this.storage.save(StorageKeys.POSTS, this._posts());
   }
 
   setIdeas(ideas: Idea[]): void {
     this._ideas.set(ideas);
+    this.storage.save(StorageKeys.IDEAS, this._ideas());
   }
 
   createIdea(idea: Idea): void {
     this._ideas.set([idea, ...this._ideas()]);
+    this.storage.save(StorageKeys.IDEAS, this._ideas());
   }
 
   updateIdea(updatedIdea: Idea): void {
     this._ideas.update(ideas =>
       ideas.map(idea => idea.id === updatedIdea.id ? updatedIdea : idea)
     );
+    this.storage.save(StorageKeys.IDEAS, this._ideas());
   }
 
   deleteIdea(ideaId: string): void {
     this._ideas.update(ideas => ideas.filter(idea => idea.id !== ideaId));
+    this.storage.save(StorageKeys.IDEAS, this._ideas());
   }
 
   markIdeaAsConverted(ideaId: string, postId: string): void {
@@ -162,6 +201,7 @@ export class AppStateService {
           : idea
       )
     );
+    this.storage.save(StorageKeys.IDEAS, this._ideas());
   }
 
   createPost(post: Post): void {
@@ -253,12 +293,17 @@ export class AppStateService {
 
   updateSettings(settings: Settings): void {
     this._settings.set(settings);
+    this.storage.save(StorageKeys.SETTINGS, this._settings());
   }
 
   importData(backup: NekoPlannerBackup): void {
     this._posts.set(backup.posts);
     this._ideas.set(backup.ideas);
     this._settings.set(backup.settings);
+    
+    this.storage.save(StorageKeys.POSTS, this._posts());
+    this.storage.save(StorageKeys.IDEAS, this._ideas());
+    this.storage.save(StorageKeys.SETTINGS, this._settings());
   }
 
   clearAllData(): void {
@@ -268,5 +313,9 @@ export class AppStateService {
       theme: 'system',
       navigation: 'sidebar'
     });
+    
+    this.storage.save(StorageKeys.POSTS, this._posts());
+    this.storage.save(StorageKeys.IDEAS, this._ideas());
+    this.storage.save(StorageKeys.SETTINGS, this._settings());
   }
 }

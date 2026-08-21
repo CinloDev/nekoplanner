@@ -82,7 +82,6 @@ describe('PostsComponent', () => {
       expect(component.selectedStatus()).toBeNull();
       expect(component.sortBy()).toBe('date');
       expect(component.sortDirection()).toBe('desc');
-      expect(component.viewMode()).toBe('grid');
     });
 
     it('should show all posts initially', () => {
@@ -199,22 +198,13 @@ describe('PostsComponent', () => {
     });
   });
 
-  describe('View Mode', () => {
-    it('should toggle view mode', () => {
-      expect(component.viewMode()).toBe('grid');
-      component.toggleViewMode('list');
-      expect(component.viewMode()).toBe('list');
-    });
-  });
-
   describe('Reset', () => {
-    it('should clear all filters except viewMode', () => {
+    it('should clear all filters and restore the default sorting', () => {
       component.searchQuery.set('angular');
       component.selectedPlatform.set('instagram');
       component.selectedStatus.set('published');
       component.sortBy.set('title');
       component.sortDirection.set('asc');
-      component.viewMode.set('list');
 
       component.clearFilters();
 
@@ -223,7 +213,6 @@ describe('PostsComponent', () => {
       expect(component.selectedStatus()).toBeNull();
       expect(component.sortBy()).toBe('date');
       expect(component.sortDirection()).toBe('desc');
-      expect(component.viewMode()).toBe('list'); // Preserved
     });
   });
 

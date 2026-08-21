@@ -129,14 +129,13 @@ describe('SettingsComponent', () => {
     expect(component.isClearAllDialogOpen).toBeTrue();
   });
 
-  it('should clear data, persist defaults, and recalculate theme on confirm clear all', () => {
+  it('should clear data and recalculate theme on confirm clear all', () => {
     component.isClearAllDialogOpen = true;
 
     component.onConfirmClearAll();
 
     expect(component.isClearAllDialogOpen).toBeFalse();
     expect(mockAppState.clearAllData).toHaveBeenCalled();
-    expect(mockStorage.save).toHaveBeenCalledTimes(3);
     expect(mockThemeService.recalculateTheme).toHaveBeenCalled();
   });
 
