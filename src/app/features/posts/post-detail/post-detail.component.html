@@ -1,0 +1,47 @@
+@if (post(); as currentPost) {
+  <div class="post-detail">
+    <div class="detail-header">
+      <app-button variant="ghost" (click)="router.navigate(['/posts'])"><lucide-icon [img]="ArrowLeft" size="18"></lucide-icon> Volver</app-button>
+      <div class="detail-actions">
+        <app-button variant="secondary" (click)="duplicate()"><lucide-icon [img]="Copy" size="16"></lucide-icon> Duplicar</app-button>
+        <app-button variant="primary" (click)="isEditing.set(true)"><lucide-icon [img]="Edit" size="16"></lucide-icon> Editar</app-button>
+        <app-button variant="danger" (click)="showDeleteDialog.set(true)"><lucide-icon [img]="Trash2" size="16"></lucide-icon> Eliminar</app-button>
+      </div>
+    </div>
+
+    @if (isEditing()) {
+      <app-card class="edit-card"><app-post-form [initialPost]="currentPost" (save)="saveEdit($event)" (cancel)="isEditing.set(false)"></app-post-form></app-card>
+    } @else {
+      <div class="detail-grid">
+        <main>
+          <app-card class="detail-card">
+            <div class="title-row">
+              <div><p class="eyebrow">Detalle de publicación</p><h1>{{ currentPost.title }}</h1></div>
+              <app-badge [color]="currentPost.status === 'published' ? 'success' : 'primary'">{{ statusLabels[currentPost.status] || currentPost.status }}</app-badge>
+            </div>
+            <div class="metadata">
+              <span class="platform"><img *ngIf="platformIcon()" [src]="platformIcon()" [alt]="platformLabel()"> {{ platformLabel() }}</span>
+              <span>{{ currentPost.scheduledDate ? (currentPost.scheduledDate | date:'d MMM yyyy, HH:mm') : 'Sin fecha programada' }}</span>
+            </div>
+            @if (currentPost.media?.length) {
+              <div class="media-grid">@for (asset of currentPost.media; track asset.id) {<img [src]="asset.url" [alt]="asset.name || currentPost.title">}</div>
+            }
+            <section><h2>Caption</h2><p class="caption">{{ currentPost.content || 'Sin caption.' }}</p></section>
+            @if (currentPost.tags?.length) {<section><h2>Tags</h2><div class="tags">@for (tag of currentPost.tags; track tag.id) {<span>#{{ tag.name }}</span>}</div></section>}
+            @if (currentPost.media?.length) {<section><h2>Assets</h2><ul class="assets">@for (asset of currentPost.media; track asset.id) {<li>{{ asset.name }} <small>{{ asset.type }}</small></li>}</ul></section>}
+          </app-card>
+        </main>
+        <aside>
+          <app-card class="actions-card"><h2>Acciones rápidas</h2>
+            <app-button variant="secondary" (click)="copyContent()"><lucide-icon [img]="clipboardMessage() ? CopyCheck : Copy" size="16"></lucide-icon> {{ clipboardMessage() || 'Copiar contenido' }}</app-button>
+            <app-select [options]="statusOptions" [value]="currentPost.status" (valueChange)="changeStatus($event)" placeholder="Cambiar estado"></app-select>
+            <app-date-picker label="Cambiar fecha y hora" [value]="dateValue() || currentPost.scheduledDate || null" (valueChange)="changeDate($event)"></app-date-picker>
+          </app-card>
+        </aside>
+      </div>
+    }
+    <app-confirm-dialog [isOpen]="showDeleteDialog()" title="Eliminar publicación" message="¿Querés eliminar esta publicación? Esta acción no se puede deshacer." confirmText="Eliminar" cancelText="Cancelar" [isDestructive]="true" (confirm)="delete()" (cancel)="showDeleteDialog.set(false)"></app-confirm-dialog>
+  </div>
+} @else {
+  <div class="post-not-found"><h1>Publicación no encontrada</h1><p>La publicación solicitada no existe o fue eliminada.</p><app-button variant="primary" routerLink="/posts">Volver a publicaciones</app-button></div>
+}

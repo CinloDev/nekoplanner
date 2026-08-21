@@ -19,6 +19,10 @@ export const routes: Routes = [
         path: 'posts', 
         loadComponent: () => import('@features/posts/posts.component').then(m => m.PostsComponent)
       },
+      {
+        path: 'posts/:id',
+        loadComponent: () => import('@features/posts/post-detail/post-detail.component').then(m => m.PostDetailComponent)
+      },
       { 
         path: 'ideas', 
         loadComponent: () => import('@features/ideas/ideas.component').then(m => m.IdeasComponent)
