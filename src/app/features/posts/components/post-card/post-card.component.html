@@ -8,8 +8,8 @@
   <div class="post-card-content">
     <div class="post-card-header">
       <div class="platform-info">
-        <img class="platform-icon" [src]="PLATFORM_META[post().platform].icon" [alt]="PLATFORM_META[post().platform].label">
-        <span>{{ PLATFORM_META[post().platform].label }}</span>
+        <img *ngIf="platformIcon()" class="platform-icon" [src]="platformIcon()" [alt]="platformLabel()">
+        <span>{{ platformLabel() }}</span>
       </div>
       <div class="header-actions">
         <app-button variant="ghost" size="sm" class="duplicate-btn" (click)="duplicate.emit(post())" aria-label="Duplicar publicación" title="Duplicar">
@@ -24,7 +24,7 @@
       </div>
     </div>
     
-    <h3 class="post-card-title">{{ post().title }}</h3>
+    <h3 class="post-card-title"><a [routerLink]="['/posts', post().id]">{{ post().title }}</a></h3>
     
     @if (displayTags().visible.length > 0) {
       <div class="post-card-tags">

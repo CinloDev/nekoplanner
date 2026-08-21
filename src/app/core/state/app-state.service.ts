@@ -1,4 +1,4 @@
-import { Injectable, computed, signal, inject } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Post, Idea, Settings, Platform, PostStatus, PlatformDistribution, StatusDistribution, NekoPlannerBackup } from '../models';
 import { StorageService } from '../storage/storage.service';
 import { StorageKeys } from '../storage/storage-keys';
@@ -21,6 +21,11 @@ export class AppStateService {
   private readonly _searchQuery = signal<string>('');
   private readonly _currentDate = signal<string>(new Date().toISOString());
 
+  constructor() {
+    const storedPosts = this.storage.load<Post[]>(StorageKeys.POSTS);
+    if (Array.isArray(storedPosts)) this._posts.set(storedPosts);
+  }
+
   // --- Public Readonly Signals ---
   readonly posts = this._posts.asReadonly();
   readonly ideas = this._ideas.asReadonly();
@@ -30,6 +35,10 @@ export class AppStateService {
   readonly selectedStatus = this._selectedStatus.asReadonly();
   readonly searchQuery = this._searchQuery.asReadonly();
   readonly currentDate = this._currentDate.asReadonly();
+
+  getPostById(id: string): Post | undefined {
+    return this.posts().find(post => post.id === id);
+  }
 
   // --- Derived State (Computed) ---
   readonly filteredPosts = computed(() => {
@@ -197,19 +206,16 @@ export class AppStateService {
 
   createPost(post: Post): void {
     this._posts.set([...this._posts(), post]);
-    this.storage.save(StorageKeys.POSTS, this._posts());
   }
 
   updatePost(updatedPost: Post): void {
     this._posts.update(posts => 
       posts.map(post => post.id === updatedPost.id ? updatedPost : post)
     );
-    this.storage.save(StorageKeys.POSTS, this._posts());
   }
 
   deletePost(postId: string): void {
     this._posts.update(posts => posts.filter(post => post.id !== postId));
-    this.storage.save(StorageKeys.POSTS, this._posts());
   }
 
   duplicatePost(postId: string): void {
@@ -232,7 +238,6 @@ export class AppStateService {
     };
 
     this._posts.update(posts => [duplicate, ...posts]);
-    this.storage.save(StorageKeys.POSTS, this._posts());
   }
 
   updatePostScheduledDate(postId: string, newDateIso: string): void {
@@ -268,7 +273,6 @@ export class AppStateService {
     newPosts[postIndex] = updatedPost;
     
     this._posts.set(newPosts);
-    this.storage.save(StorageKeys.POSTS, this._posts());
   }
 
   setSelectedPlatform(platform: Platform | null): void {

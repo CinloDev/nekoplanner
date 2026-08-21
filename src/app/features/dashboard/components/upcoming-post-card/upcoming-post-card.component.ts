@@ -1,5 +1,6 @@
 import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Post } from '@core/models';
 import { BadgeComponent } from '@shared/components/ui/badge/badge.component';
 import { PLATFORM_META } from '@core/config/platforms.config';
@@ -7,7 +8,7 @@ import { PLATFORM_META } from '@core/config/platforms.config';
 @Component({
   selector: 'app-upcoming-post-card',
   standalone: true,
-  imports: [CommonModule, BadgeComponent],
+   imports: [CommonModule, RouterModule, BadgeComponent],
   templateUrl: './upcoming-post-card.component.html',
   styleUrl: './upcoming-post-card.component.scss'
 })

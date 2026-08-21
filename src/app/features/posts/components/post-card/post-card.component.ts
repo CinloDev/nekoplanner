@@ -6,11 +6,12 @@ import { ButtonComponent } from '@shared/components/ui/button/button.component';
 import { Post, PostStatus } from '@core/models';
 import { PLATFORM_META } from '@core/config/platforms.config';
 import { LucideAngularModule, Image as ImageIcon, Edit as EditIcon, Trash2 as TrashIcon, Copy as CopyIcon } from 'lucide-angular';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-post-card',
   standalone: true,
-  imports: [DatePipe, CommonModule, CardComponent, BadgeComponent, ButtonComponent, LucideAngularModule],
+   imports: [DatePipe, CommonModule, RouterModule, CardComponent, BadgeComponent, ButtonComponent, LucideAngularModule],
   templateUrl: './post-card.component.html',
   styleUrl: './post-card.component.scss'
 })
@@ -26,6 +27,9 @@ export class PostCardComponent {
   readonly EditIcon = EditIcon;
   readonly TrashIcon = TrashIcon;
   readonly CopyIcon = CopyIcon;
+
+  platformLabel(): string { return PLATFORM_META[this.post().platform]?.label || this.post().platform; }
+  platformIcon(): string | null { return PLATFORM_META[this.post().platform]?.icon || null; }
   
   readonly STATUS_LABELS: Record<PostStatus, string> = {
     idea: 'Idea',

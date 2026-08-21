@@ -6,14 +6,20 @@ import { StorageKeys } from '../storage/storage-keys';
 
 describe('AppStateService', () => {
   let service: AppStateService;
-  let mockStorage: any;
+  let mockStorage: {
+    load: jasmine.Spy;
+    save: jasmine.Spy;
+    remove: jasmine.Spy;
+    clear: jasmine.Spy;
+    _store: Map<string, unknown>;
+  };
 
   beforeEach(() => {
     // In-memory fake storage service
-    const store = new Map<string, any>();
+    const store = new Map<string, unknown>();
     mockStorage = {
-      load: jasmine.createSpy('load').and.callFake((key: string) => store.get(key) || null),
-      save: jasmine.createSpy('save').and.callFake((key: string, value: any) => store.set(key, value)),
+      load: jasmine.createSpy('load').and.callFake((key: string) => store.get(key) ?? null),
+      save: jasmine.createSpy('save').and.callFake((key: string, value: unknown) => store.set(key, value)),
       remove: jasmine.createSpy('remove').and.callFake((key: string) => store.delete(key)),
       clear: jasmine.createSpy('clear').and.callFake(() => store.clear()),
       _store: store // expose for direct inspection if needed
@@ -30,6 +36,31 @@ describe('AppStateService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('should find a post by ID and return undefined for an unknown ID', () => {
+    const post = { id: 'post-1', title: 'Post' } as Post;
+    service.setPosts([post]);
+
+    expect(service.getPostById('post-1')).toEqual(post);
+    expect(service.getPostById('missing')).toBeUndefined();
+  });
+
+  it('should hydrate posts from storage during construction', () => {
+    const storedPosts = [{ id: 'stored-1', title: 'Stored post' } as Post];
+    mockStorage.load.and.returnValue(storedPosts);
+
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        AppStateService,
+        { provide: StorageService, useValue: mockStorage }
+      ]
+    });
+    const hydratedService = TestBed.inject(AppStateService);
+
+    expect(mockStorage.load).toHaveBeenCalledWith(StorageKeys.POSTS);
+    expect(hydratedService.posts()).toEqual(storedPosts);
   });
 
   describe('postCounts', () => {
@@ -485,18 +516,14 @@ describe('AppStateService', () => {
       expect(service.settings().theme).toBe('system');
     });
 
-    it('should round-trip a post creation', () => {
-      // 1. Create in Service A
+    it('should hydrate posts persisted by the post actions facade', () => {
+      // PostActionsService owns persistence for post mutations. Simulate its save.
       const post: Post = { id: 'p1', title: 'A post', status: 'draft' } as any;
       service.createPost(post);
-      
-      // Verify it was saved
-      expect(mockStorage.save).toHaveBeenCalledWith(StorageKeys.POSTS, [post]);
+      expect(mockStorage.save).not.toHaveBeenCalledWith(StorageKeys.POSTS, [post]);
+      mockStorage.save(StorageKeys.POSTS, [post]);
 
-      // 2. Simulate reload by creating Service B
-      const serviceB = new AppStateService();
-      // Need to inject the mockStorage manually for this test since we are instantiating manually
-      // We can use TestBed.runInInjectionContext
+      // Simulate reload and hydration.
       TestBed.runInInjectionContext(() => {
         const serviceC = new AppStateService();
         serviceC.hydrate();
@@ -517,6 +544,7 @@ describe('AppStateService', () => {
         // Convert to post
         const post: Post = { id: 'p2', title: 'Converted', status: 'draft' } as any;
         serviceA.createPost(post);
+        mockStorage.save(StorageKeys.POSTS, [post]);
         serviceA.markIdeaAsConverted('i1', 'p2');
         
         // Reload simulation
